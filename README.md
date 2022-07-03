@@ -8,8 +8,6 @@ This project explains the steps done to modify a Hafele &reg; Standing Desk
 
 ## Table of contents
 
-[[_TOC_]]
-
 ### Materials
 
 * Printing fillament:
@@ -35,6 +33,13 @@ This project explains the steps done to modify a Hafele &reg; Standing Desk
   * Thickness of the lid
   * Diameter length and separation of bolts
   * Inner diameter of bolt nuts
+
+### Firmware Compilation
+
+Install arduino CLI with: curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+
+And Arduino makefile with sudo apt install arduino-mk
+
 
 ### Contribuiting
 
