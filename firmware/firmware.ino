@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <ESP32Encoder.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -18,20 +19,24 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define STATE_MENU_CALIBRATION = 3
 #define STATE_MENU_MEMORIES = 4
 
+#define ENCODER_PIN_A 18
+#define ENCODER_PIN_B 19
+
+ESP32Encoder encoder;
 WiFiManager wifiManager;
 
 void draw_starting(void) {
-  display.clearDisplay();
-  display.setTextSize(1.5);             // Draw 2X-scale text
-  
-  display.setTextColor(SSD1306_WHITE);        // Draw white text
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("WIFI STANDING DESK"));
+    display.clearDisplay();
+    display.setTextSize(1.8);             // Draw 2X-scale text
+    
+    display.setTextColor(SSD1306_WHITE);        // Draw white text
+    display.setCursor(0,0);             // Start at top-left corner
+    display.println(F("WIFI STANDING DESK"));
 
-//  display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
- 
-  display.display();
-  delay(2000);
+    //  display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
+  
+    display.display();
+    delay(200);
 }
 
 void draw_menu() {
@@ -53,18 +58,18 @@ void initialize_display() {
     // Show initial display buffer contents on the screen --
     // the library initializes this with an Adafruit splash screen.
     display.display();
-    delay(2000); // Pause for 2 seconds
+    delay(200); // Pause for 2 seconds
   
     // Clear the buffer
     display.clearDisplay();
   
     // Draw a single pixel in white
-    display.drawPixel(10, 10, SSD1306_WHITE);
+    // display.drawPixel(10, 10, SSD1306_WHITE);
   
     // Show the display buffer on the screen. You MUST call display() after
     // drawing commands to make them visible on screen!
     display.display();
-    delay(2000);
+    delay(200);
     // display.display() is NOT necessary after every single drawing command,
     // unless that's what you want...rather, you can batch up a bunch of
     // drawing operations and then update the screen all at once by calling
@@ -84,17 +89,17 @@ void setup() {
     Serial.println();
     Serial.println("Prueba...");
 
-    pinMode(encoder0Press, INPUT_PULLUP);
-    pinMode(encoder0PinA, INPUT);
-    pinMode(encoder0PinB, INPUT);
-
     initialize_display();
     draw_starting();
     draw_menu();
+    
+    ESP32Encoder::useInternalWeakPullResistors=UP;
+  	encoder.attachHalfQuad(ENCODER_PIN_A, ENCODER_PIN_B);
 }
 
 
 void loop() {
-  
-   
+    Serial.println("Encoder count = " + String((int32_t)encoder.getCount()));
+	  delay(100);
+    draw_menu();
 }
