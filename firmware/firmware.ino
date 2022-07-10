@@ -27,7 +27,7 @@
 #define ENCODER_PIN_A 18
 #define ENCODER_PIN_B 19
 
-#define ARRAY_SIZE(array) (sizeof(array)/sizeof((array)[0])) 
+#define ARRAY_SIZE(array) (sizeof(array)/sizeof((array)[0]))
 
 ESP32Encoder encoder;
 WiFiManager wifiManager;
@@ -39,14 +39,14 @@ int next_state = 1;
 void draw_starting(void) {
     display.clearDisplay();
     display.setTextSize(DEFAULT_TEXT_SIZE);             // Draw 2X-scale text
-    
+
     display.setTextColor(SSD1306_WHITE);        // Draw white text
     display.setCursor(0,0);             // Start at top-left corner
     display.println(F("WIFI"));
     display.println(F("STANDING DESK"));
 
     //  display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
-  
+
     display.display();
     delay(500);
 }
@@ -57,26 +57,31 @@ void show_message(String input) {
     display.println(input);
     display.display();
 }
-// void draw_menu() {
-//     display.clearDisplay();
-//     display.setCursor(0,0);
-//     display.println(F("MENU:"));
-//     draw_menu_item("WiFi Conf.", current_menu_item == STATE_MENU_WIFI);
-//     draw_menu_item("Calibr.", current_menu_item == STATE_MENU_CALIBRATION);
-//     draw_menu_item("Memories", current_menu_item == STATE_MENU_MEMORIES);
-//     display.display();
-// }
+
+String pad_string(String input, String cPadWith, const unsigned char cMaxLen) {
+	String strTemp = input;
+	while (strTemp.length() < cMaxLen)
+		strTemp += cPadWith;
+	return strTemp;
+}
 
 void draw_menu_item(String item, bool selected = false) {
     Serial.println("Drawing menu item: " + item);
+    if (selected) {
+        set_highlighted_color();
+    } else {
+        set_normal_color();
+    }
+    display.println(pad_string(item, " ", 20 / DEFAULT_TEXT_SIZE));
+    set_normal_color();
+}
 
-    if (selected) {
-        display.setTextColor(SSD1306_BLACK, SSD1306_WHITE);
-    }
-    display.println(item);
-    if (selected) {
-        display.setTextColor(SSD1306_WHITE);
-    }
+void set_highlighted_color() {
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE);
+}
+
+void set_normal_color() {
+    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
 }
 
 void initialize_display() {
@@ -86,7 +91,6 @@ void initialize_display() {
     }
     display.display();
     delay(200);
-  
 }
 
 void setup() {
@@ -104,15 +108,22 @@ void setup() {
     initialize_display();
     draw_starting();
     //draw_menu();
-    
+
     ESP32Encoder::useInternalWeakPullResistors=UP;
   	encoder.attachHalfQuad(ENCODER_PIN_B, ENCODER_PIN_A);
 
     pinMode(BACK_BUTTON_PIN, INPUT);
     pinMode(ENTER_BUTTON_PIN, INPUT);
-    
+
+    esp_register_shutdown_handler([]() {
+        on_reset_routine();
+    });
 }
 
+void on_reset_routine() {
+    display.clearDisplay();
+    display.display();
+}
 
 void test_buttons() {
     // display.clearDisplay();
@@ -125,18 +136,18 @@ void test_buttons() {
 
 void handle_states_machine() {
     current_state = next_state;
-    
+
     switch (current_state) {
         case STATE_MENU: {
             Serial.println("Menu...");
             int selected_item;
 
             String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Up/Down"};
-            
+
             selected_item = draw_menu_and_get_current_item(main_menu, ARRAY_SIZE(main_menu));
 
             Serial.println("printed_menu");
-            
+
             display.clearDisplay();
 
             if (selected_item == -1) next_state = STATE_CLOCK;
@@ -154,9 +165,9 @@ void handle_states_machine() {
             set_next_state(STATE_CLOCK);
         }
         break;
-        case STATE_WIFI_CONFIG: { 
+        case STATE_WIFI_CONFIG: {
             Serial.println("Wifi...");
-            show_message("WIFI!");            
+            show_message("WIFI!");
             set_next_state(STATE_WIFI_CONFIG);
         }
         break;
@@ -170,6 +181,12 @@ void handle_states_machine() {
             Serial.println("Mem...");
             show_message("MEMORIES!");
             set_next_state(STATE_MEMORIES);
+        }
+        break;
+        case STATE_UPDOWN: {
+            Serial.println("UP/DOWN...");
+            show_message("UP/DOWN!");
+            set_next_state(STATE_UPDOWN);
         }
         break;
     }
@@ -188,7 +205,6 @@ void set_next_state(int state) {
 }
 
 void show_menu_header() {
-    display.clearDisplay();
     display.setCursor(0,0);             // Start at top-left corner
     show_message("Menu:");
 }
@@ -196,22 +212,23 @@ void show_menu_header() {
 void show_menu_items(String *arrayMenu,  int total_menu_size, int extra_option = 0, int selected_option = 1) {
     show_menu_header();
     for(int x = extra_option; x < total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option) ; x++) {
-        draw_menu_item(arrayMenu[x], selected_option -1 - extra_option == x);
+        draw_menu_item(arrayMenu[x], (selected_option - 1) == x );
     }
     display.display();
 }
 
 int draw_menu_and_get_current_item(String *arrayMenu, int total_menu_size) {
+    display.clearDisplay();
+
     //Vamos a marcar en que tiempo se hizo cualquier cambio y si se hizo un cambio hace muy poco tiempo y se pulso, ese cambio le damos por malo. ok?
     //Pintamos el cursor y marcamos la primera selected_option
 
-    show_menu_header();
     float selected_option = 1;  //del 1 al 1.75 selected_option 1  //Del 2  al 2.75 selected_option 2
     int extra_option = 0;
     float increment = 0.5;
 
     show_menu_items(arrayMenu, total_menu_size);
-    
+
     delay(500);
 
     int64_t current_dial_position = 0;
@@ -222,12 +239,9 @@ int draw_menu_and_get_current_item(String *arrayMenu, int total_menu_size) {
 
     //Si pulsamos el boton central sale del bucle
     while (digitalRead(ENTER_BUTTON_PIN) == LOW) {
-        //Read the status of the dial
         current_dial_position = encoder.getCount();
 
-        // If the dial Position has changed
         if (current_dial_position != last_dial_position) {
-            //Is the dial being turned clockwise ?
             if (current_dial_position > last_dial_position) {
                 if (selected_option < total_menu_size) {
                     selected_option += increment;
@@ -240,29 +254,22 @@ int draw_menu_and_get_current_item(String *arrayMenu, int total_menu_size) {
                 }
             }
 
-            //Si sobrepasamos el limite por debajo
             if(selected_option < 1 + extra_option)
                 extra_option--;
-            //Si sobrepasamos el limite por encima
             if(selected_option > MENU_TOTAL_DISPLAYABLE_ITEMS + extra_option)
                 extra_option++;
-            
 
             show_menu_items(arrayMenu, total_menu_size, extra_option, selected_option);
         }
-        // Si pulsamos el boton de atras, salimos del bucle y devolvemos -1
-        if(digitalRead(BACK_BUTTON_PIN) == HIGH) {    
+        if(digitalRead(BACK_BUTTON_PIN) == HIGH) {
             return -1;  //break
         }
 
-        // Remember the last position of the dial so we know when it has changed
         last_dial_position = current_dial_position;
     }
 
-    //Aqui hemos salido del bucle ya que hemos pulsado el boton Enter o ATRAS
-    //En cualquier caso no debería haberse movido ninguna tecla en 250ms?
     if (millis() - increment_change_time < 250)
-        selected_option -= increment;//Corregimos aunque no de tiempo a pintarla, ya que salimos del bucle y cambiamos de estado
+        selected_option -= increment;
     else if(millis() - decrement_change_time < 250)
         selected_option += increment;
 
