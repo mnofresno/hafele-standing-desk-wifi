@@ -4,6 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <ESP32Encoder.h>
+#include "MenuInstance.h"
 
 #define DEFAULT_TEXT_SIZE 2
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -33,6 +34,8 @@
 ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Up/Down"};
+MenuInstance main_menu_instance(&display, &Serial, main_menu, ARRAY_SIZE(main_menu));
 
 int current_state = 1;
 int next_state = 1;
@@ -60,32 +63,6 @@ void show_message(String input) {
     display.setCursor(0, 0);
     display.println(input);
     display.display();
-}
-
-String pad_string(String input, String cPadWith, const unsigned char cMaxLen) {
-	String strTemp = input;
-	while (strTemp.length() < cMaxLen)
-		strTemp += cPadWith;
-	return strTemp;
-}
-
-void draw_menu_item(String item, bool selected = false) {
-    Serial.println("Drawing menu item: " + item);
-    if (selected) {
-        set_highlighted_color();
-    } else {
-        set_normal_color();
-    }
-    display.println(pad_string(item, " ", 20 / DEFAULT_TEXT_SIZE));
-    set_normal_color();
-}
-
-void set_highlighted_color() {
-    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE);
-}
-
-void set_normal_color() {
-    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
 }
 
 void initialize_display() {
@@ -120,10 +97,15 @@ void setup() {
     pinMode(ENTER_BUTTON_PIN, INPUT);
     WiFi.mode(WIFI_STA);
     tryToConnectWifi();
+
+    display.clearDisplay();
+
 }
 
 void test_buttons() {
-    // display.clearDisplay();
+    if (current_state == STATE_MENU) {
+        return;
+    }
     display.setCursor(50,50);
     display.setTextSize(1);
     display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(digitalRead(ENTER_BUTTON_PIN)));
@@ -139,13 +121,11 @@ void handle_states_machine() {
             Serial.println("Menu...");
             int selected_item;
 
-            String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Up/Down"};
-
-            selected_item = draw_menu_and_get_current_item(main_menu, ARRAY_SIZE(main_menu));
+            main_menu_instance.show();
 
             Serial.println("printed_menu");
 
-            display.clearDisplay();
+            selected_item = main_menu_instance.get_selection();
 
             if (selected_item == -1) next_state = STATE_CLOCK;
 
@@ -154,6 +134,10 @@ void handle_states_machine() {
             if (selected_item == 3) next_state = STATE_MEMORIES;
             if (selected_item == 4) next_state = STATE_CLOCK;
             if (selected_item == 5) next_state = STATE_UPDOWN;
+
+            if (selected_item == 0) next_state = STATE_MENU;
+            // set_next_state(STATE_MENU);
+
         }
         break;
         case STATE_CLOCK: {
@@ -198,12 +182,17 @@ void handle_states_machine() {
         }
         break;
     }
+
+    if (next_state != current_state) {
+        display.clearDisplay();
+    }
 }
 
 void loop() {
     wifiManager.process();
     handle_states_machine();
     test_buttons();
+    main_menu_instance.process(encoder.getCount());
 }
 
 void set_next_state(int state) {
@@ -211,77 +200,6 @@ void set_next_state(int state) {
     if (digitalRead(BACK_BUTTON_PIN) == HIGH) {
         next_state = STATE_MENU;
     }
-}
-
-void show_menu_header() {
-    display.setCursor(0,0);             // Start at top-left corner
-    show_message("Menu:");
-}
-
-void show_menu_items(String *arrayMenu,  int total_menu_size, int extra_option = 0, int selected_option = 1) {
-    show_menu_header();
-    for(int x = extra_option; x < total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option) ; x++) {
-        draw_menu_item(arrayMenu[x], (selected_option - 1) == x );
-    }
-    display.display();
-}
-
-int draw_menu_and_get_current_item(String *arrayMenu, int total_menu_size) {
-    display.clearDisplay();
-
-    //Vamos a marcar en que tiempo se hizo cualquier cambio y si se hizo un cambio hace muy poco tiempo y se pulso, ese cambio le damos por malo. ok?
-    //Pintamos el cursor y marcamos la primera selected_option
-
-    float selected_option = 1;  //del 1 al 1.75 selected_option 1  //Del 2  al 2.75 selected_option 2
-    int extra_option = 0;
-    float increment = 0.5;
-
-    show_menu_items(arrayMenu, total_menu_size);
-
-    delay(500);
-
-    int64_t current_dial_position = 0;
-    int64_t last_dial_position = 0;
-
-    unsigned long increment_change_time = 0;
-    unsigned long decrement_change_time = 0;
-
-    while (digitalRead(ENTER_BUTTON_PIN) == LOW) {
-        current_dial_position = encoder.getCount();
-
-        if (current_dial_position != last_dial_position) {
-            if (current_dial_position < last_dial_position) {
-                if (selected_option < total_menu_size) {
-                    selected_option += increment;
-                    increment_change_time = millis();
-                }
-            } else if (current_dial_position > last_dial_position) {
-                if(selected_option > 1) {
-                    selected_option -= increment;
-                    decrement_change_time = millis();
-                }
-            }
-
-            if(selected_option < 1 + extra_option)
-                extra_option--;
-            if(selected_option > MENU_TOTAL_DISPLAYABLE_ITEMS + extra_option)
-                extra_option++;
-
-            show_menu_items(arrayMenu, total_menu_size, extra_option, selected_option);
-        }
-        if(digitalRead(BACK_BUTTON_PIN) == HIGH) {
-            return -1;  //break
-        }
-
-        last_dial_position = current_dial_position;
-    }
-
-    if (millis() - increment_change_time < 250)
-        selected_option -= increment;
-    else if(millis() - decrement_change_time < 250)
-        selected_option += increment;
-
-    return selected_option;
 }
 
 void tryToConnectWifi() {
