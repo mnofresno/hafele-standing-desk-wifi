@@ -23,6 +23,7 @@
 #define BACK_BUTTON_PIN 35
 
 #define MENU_TOTAL_DISPLAYABLE_ITEMS 3
+#define MENU_IDLE_TIME 10
 
 #define ENCODER_PIN_A 18
 #define ENCODER_PIN_B 19
@@ -35,6 +36,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 int current_state = 1;
 int next_state = 1;
+int retriesToConnectWifi = 10;
+bool successConnectingWifi;
 
 void draw_starting(void) {
     display.clearDisplay();
@@ -43,7 +46,8 @@ void draw_starting(void) {
     display.setTextColor(SSD1306_WHITE);        // Draw white text
     display.setCursor(0,0);             // Start at top-left corner
     display.println(F("WIFI"));
-    display.println(F("STANDING DESK"));
+    display.println(F("STANDING"));
+    display.println(F("DESK"));
 
     //  display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
 
@@ -94,7 +98,7 @@ void initialize_display() {
 }
 
 void setup() {
-    wifiManager.autoConnect("WIFI_STANDING_DESK", "PASSWORD");
+    // wifiManager.autoConnect("WIFI_STANDING_DESK", "PASSWORD");
     // Menu options:
     // Calibration
     // Memories
@@ -114,15 +118,8 @@ void setup() {
 
     pinMode(BACK_BUTTON_PIN, INPUT);
     pinMode(ENTER_BUTTON_PIN, INPUT);
-
-    esp_register_shutdown_handler([]() {
-        on_reset_routine();
-    });
-}
-
-void on_reset_routine() {
-    display.clearDisplay();
-    display.display();
+    WiFi.mode(WIFI_STA);
+    tryToConnectWifi();
 }
 
 void test_buttons() {
@@ -167,7 +164,18 @@ void handle_states_machine() {
         break;
         case STATE_WIFI_CONFIG: {
             Serial.println("Wifi...");
-            show_message("WIFI!");
+            display.setTextSize(1);
+            String wifi_output = "WiFi Status:\n";
+            if (WiFi.isConnected()) {
+                wifi_output += "Connected to:\n" + String(WiFi.SSID());
+                wifi_output += "\nIP Address:\n" + WiFi.localIP().toString();
+
+            } else {
+                wifi_output += "Not connected :(";
+            }
+            show_message(wifi_output);
+
+            display.setTextSize(DEFAULT_TEXT_SIZE);
             set_next_state(STATE_WIFI_CONFIG);
         }
         break;
@@ -193,6 +201,7 @@ void handle_states_machine() {
 }
 
 void loop() {
+    wifiManager.process();
     handle_states_machine();
     test_buttons();
 }
@@ -237,17 +246,16 @@ int draw_menu_and_get_current_item(String *arrayMenu, int total_menu_size) {
     unsigned long increment_change_time = 0;
     unsigned long decrement_change_time = 0;
 
-    //Si pulsamos el boton central sale del bucle
     while (digitalRead(ENTER_BUTTON_PIN) == LOW) {
         current_dial_position = encoder.getCount();
 
         if (current_dial_position != last_dial_position) {
-            if (current_dial_position > last_dial_position) {
+            if (current_dial_position < last_dial_position) {
                 if (selected_option < total_menu_size) {
                     selected_option += increment;
                     increment_change_time = millis();
                 }
-            } else if (current_dial_position < last_dial_position) {
+            } else if (current_dial_position > last_dial_position) {
                 if(selected_option > 1) {
                     selected_option -= increment;
                     decrement_change_time = millis();
@@ -274,4 +282,15 @@ int draw_menu_and_get_current_item(String *arrayMenu, int total_menu_size) {
         selected_option += increment;
 
     return selected_option;
+}
+
+void tryToConnectWifi() {
+    wifiManager.setConfigPortalBlocking(false);
+    wifiManager.startConfigPortal();
+    successConnectingWifi = wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+    if(!successConnectingWifi) {
+        delay(250);
+        retriesToConnectWifi--;
+        tryToConnectWifi();
+    }
 }
