@@ -209,7 +209,26 @@ void handle_states_machine() {
             Serial.println("Move...");
             // show_message("UP/DOWN!");
 
+            int selected_direction;
+
             up_down_menu_instance.show();
+
+            selected_direction = up_down_menu_instance.get_selection();
+
+            if (!digitalRead(ENTER_BUTTON_PIN)) {
+                if (selected_direction == 1) {
+                    digitalWrite(UP_RELAY_PIN, HIGH);
+                    digitalWrite(DOWN_RELAY_PIN, LOW);
+                } else if (selected_direction == 2) {
+                    digitalWrite(DOWN_RELAY_PIN, HIGH);
+                    digitalWrite(UP_RELAY_PIN, LOW);
+
+                }
+            } else {
+                digitalWrite(UP_RELAY_PIN, LOW);
+                digitalWrite(DOWN_RELAY_PIN, LOW);
+            }
+
             set_next_state(STATE_UPDOWN);
         }
         break;
