@@ -4,8 +4,9 @@
 #include <Adafruit_SSD1306.h>
 #include <HardwareSerial.h>
 
-#define MENU_TOTAL_DISPLAYABLE_ITEMS 3
 #define DEFAULT_TEXT_SIZE 2
+#define PADDING 20 / DEFAULT_TEXT_SIZE
+#define MENU_TOTAL_DISPLAYABLE_ITEMS 6 / DEFAULT_TEXT_SIZE
 
 class MenuInstance {
     private:
@@ -29,7 +30,6 @@ class MenuInstance {
         String pad_string(String input, String cPadWith, const unsigned char cMaxLen);
         void set_highlighted_color();
         void set_normal_color();
-        void show_message(String input);
 
     public:
         MenuInstance(
