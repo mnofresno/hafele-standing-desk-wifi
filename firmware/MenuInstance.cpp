@@ -26,7 +26,7 @@ void MenuInstance::show() {
     last_render_time = millis();
     show_menu_items();
 
-    if (digitalRead(ENTER_BUTTON_PIN) == LOW) {
+    if (!digitalRead(ENTER_BUTTON_PIN) == LOW) {
         if (current_dial_position != last_dial_position) {
             if (current_dial_position < last_dial_position) {
                 if (selected_option < _total_menu_size) {
@@ -112,7 +112,7 @@ void MenuInstance::set_normal_color() {
 }
 
 int MenuInstance::get_selection() {
-    if (digitalRead(ENTER_BUTTON_PIN) == HIGH) {
+    if (!digitalRead(ENTER_BUTTON_PIN) == HIGH) {
         return selected_option;
     }
     return 0;
