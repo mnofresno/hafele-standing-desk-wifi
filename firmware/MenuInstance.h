@@ -23,6 +23,7 @@ class MenuInstance {
         unsigned long decrement_change_time = 0;
         float selected_option = 0;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
         int extra_option = 0;
+        String _title;
         void show_menu_items();
         void show_menu_header();
         void draw_menu_item(String item, bool selected = false);
@@ -32,8 +33,13 @@ class MenuInstance {
         void show_message(String input);
 
     public:
-        MenuInstance(Adafruit_SSD1306 *display, String *arrayMenu, unsigned int total_menu_size);
-        MenuInstance(Adafruit_SSD1306 *display, HardwareSerial *debug_print, String *arrayMenu, unsigned int total_menu_size);
+        MenuInstance(
+            Adafruit_SSD1306 *display,
+            HardwareSerial *debug_print,
+            String *arrayMenu,
+            unsigned int total_menu_size,
+            String title
+        );
         void process(int64_t dialPosition);
         void show();
         int get_selection();

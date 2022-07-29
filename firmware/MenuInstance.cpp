@@ -1,16 +1,17 @@
 #include "MenuInstance.h"
 
-MenuInstance::MenuInstance(Adafruit_SSD1306 *display, String *arrayMenu, unsigned int total_menu_size) {
-    _display = display;
-    _arrayMenu = arrayMenu;
-    _total_menu_size = total_menu_size;
-}
-
-MenuInstance::MenuInstance(Adafruit_SSD1306 *display, HardwareSerial *debug_print, String *arrayMenu, unsigned int total_menu_size) {
+MenuInstance::MenuInstance(
+    Adafruit_SSD1306 *display,
+    HardwareSerial *debug_print,
+    String *arrayMenu,
+    unsigned int total_menu_size,
+    String title
+) {
     _display = display;
     _debug_print = debug_print;
     _arrayMenu = arrayMenu;
     _total_menu_size = total_menu_size;
+    _title = title;
 }
 
 void MenuInstance::process(int64_t dialPosition) {
@@ -71,7 +72,7 @@ void MenuInstance::show_message(String input) {
 
 void MenuInstance::show_menu_header() {
     _display->setCursor(0,0);             // Start at top-left corner
-    show_message(pad_string("Menu:", " ", 20 / DEFAULT_TEXT_SIZE));
+    show_message(pad_string(_title, " ", 20 / DEFAULT_TEXT_SIZE));
 }
 
 void MenuInstance::show_menu_items() {
@@ -92,7 +93,7 @@ String MenuInstance::pad_string(String input, String cPadWith, const unsigned ch
 
 void MenuInstance::draw_menu_item(String item, bool selected) {
     if (_debug_print != NULL) {
-        Serial.println("Drawing menu item: " + item);
+        // Serial.println("Drawing menu item: " + item);
     }
     if (selected) {
         set_highlighted_color();

@@ -5,6 +5,10 @@
 #include <Adafruit_SSD1306.h>
 #include <ESP32Encoder.h>
 #include "MenuInstance.h"
+// #include "soc/soc.h"
+// #include "soc/rtc_cntl_reg.h"
+
+
 
 #define DEFAULT_TEXT_SIZE 2
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -37,8 +41,24 @@
 ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Up/Down"};
-MenuInstance main_menu_instance(&display, &Serial, main_menu, ARRAY_SIZE(main_menu));
+String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Move"};
+
+MenuInstance main_menu_instance(
+    &display,
+    &Serial,
+    main_menu,
+    ARRAY_SIZE(main_menu),
+    "Menu:"
+);
+
+String up_down_menu[] = {"Up", "Down"};
+MenuInstance up_down_menu_instance(
+    &display,
+    &Serial,
+    up_down_menu,
+    ARRAY_SIZE(up_down_menu),
+    "Move:"
+);
 
 int current_state = 1;
 int next_state = 1;
@@ -78,6 +98,8 @@ void initialize_display() {
 }
 
 void setup() {
+    // WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+
     // wifiManager.autoConnect("WIFI_STANDING_DESK", "PASSWORD");
     // Menu options:
     // Calibration
@@ -91,7 +113,6 @@ void setup() {
 
     initialize_display();
     draw_starting();
-    //draw_menu();
 
     ESP32Encoder::useInternalWeakPullResistors=UP;
   	encoder.attachHalfQuad(ENCODER_PIN_B, ENCODER_PIN_A);
@@ -123,12 +144,12 @@ void handle_states_machine() {
 
     switch (current_state) {
         case STATE_MENU: {
-            Serial.println("Menu...");
+            // Serial.println("Menu...");
             int selected_item;
 
             main_menu_instance.show();
 
-            Serial.println("printed_menu");
+            // Serial.println("printed_menu");
 
             selected_item = main_menu_instance.get_selection();
 
@@ -181,8 +202,10 @@ void handle_states_machine() {
         }
         break;
         case STATE_UPDOWN: {
-            Serial.println("UP/DOWN...");
-            show_message("UP/DOWN!");
+            Serial.println("Move...");
+            // show_message("UP/DOWN!");
+
+            up_down_menu_instance.show();
             set_next_state(STATE_UPDOWN);
         }
         break;
@@ -198,6 +221,7 @@ void loop() {
     handle_states_machine();
     test_buttons();
     main_menu_instance.process(encoder.getCount());
+    up_down_menu_instance.process(encoder.getCount());
 }
 
 void set_next_state(int state) {
