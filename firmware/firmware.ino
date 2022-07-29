@@ -23,6 +23,7 @@
 #define STATE_CALIBRATION 3
 #define STATE_MEMORIES 4
 #define STATE_UPDOWN 5
+#define STATE_DEBUG_CONFIG 6
 
 #define UP_RELAY_PIN 32
 #define DOWN_RELAY_PIN 33
@@ -41,7 +42,7 @@
 ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Move"};
+String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Move", "Debug"};
 
 MenuInstance main_menu_instance(
     &display,
@@ -68,6 +69,7 @@ int current_state = 1;
 int next_state = 1;
 int retriesToConnectWifi = 10;
 bool successConnectingWifi;
+bool show_buttons_debug;
 
 void draw_starting(void) {
     display.clearDisplay();
@@ -132,15 +134,17 @@ void setup() {
 
 }
 
-void test_buttons() {
+void print_debug_info() {
     if (current_state == STATE_MENU) {
         return;
     }
-    display.setCursor(50,50);
-    display.setTextSize(1);
-    display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(!digitalRead(ENTER_BUTTON_PIN)));
-    display.display();
-    display.setTextSize(DEFAULT_TEXT_SIZE);
+    if (show_buttons_debug) {
+        display.setCursor(50,50);
+        display.setTextSize(1);
+        display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(!digitalRead(ENTER_BUTTON_PIN)));
+        display.display();
+        display.setTextSize(DEFAULT_TEXT_SIZE);
+    }
 }
 
 void handle_states_machine() {
@@ -164,10 +168,9 @@ void handle_states_machine() {
             if (selected_item == 3) next_state = STATE_MEMORIES;
             if (selected_item == 4) next_state = STATE_CLOCK;
             if (selected_item == 5) next_state = STATE_UPDOWN;
+            if (selected_item == 6) next_state = STATE_DEBUG_CONFIG;
 
             if (selected_item == 0) next_state = STATE_MENU;
-            // set_next_state(STATE_MENU);
-
         }
         break;
         case STATE_CLOCK: {
@@ -232,6 +235,14 @@ void handle_states_machine() {
             set_next_state(STATE_UPDOWN);
         }
         break;
+        case STATE_DEBUG_CONFIG: {
+            if (!digitalRead(ENTER_BUTTON_PIN)) {
+                show_buttons_debug = !show_buttons_debug;
+            }
+            show_message("Dbg: " + String(show_buttons_debug ? "ON ": "OFF"));
+            set_next_state(STATE_DEBUG_CONFIG);
+        }
+        break;
     }
 
     if (next_state != current_state) {
@@ -242,7 +253,7 @@ void handle_states_machine() {
 void loop() {
     wifiManager.process();
     handle_states_machine();
-    test_buttons();
+    print_debug_info();
     main_menu_instance.process(encoder.getCount());
     up_down_menu_instance.process(encoder.getCount());
 }
