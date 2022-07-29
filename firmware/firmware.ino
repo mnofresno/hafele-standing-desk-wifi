@@ -20,6 +20,9 @@
 #define STATE_MEMORIES 4
 #define STATE_UPDOWN 5
 
+#define UP_RELAY_PIN 32
+#define DOWN_RELAY_PIN 33
+
 #define ENTER_BUTTON_PIN 34
 #define BACK_BUTTON_PIN 35
 
@@ -95,6 +98,8 @@ void setup() {
 
     pinMode(BACK_BUTTON_PIN, INPUT);
     pinMode(ENTER_BUTTON_PIN, INPUT);
+    pinMode(DOWN_RELAY_PIN, OUTPUT);
+    pinMode(UP_RELAY_PIN, OUTPUT);
     WiFi.mode(WIFI_STA);
     tryToConnectWifi();
 
@@ -108,7 +113,7 @@ void test_buttons() {
     }
     display.setCursor(50,50);
     display.setTextSize(1);
-    display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(digitalRead(ENTER_BUTTON_PIN)));
+    display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(!digitalRead(ENTER_BUTTON_PIN)));
     display.display();
     display.setTextSize(DEFAULT_TEXT_SIZE);
 }
@@ -209,6 +214,6 @@ void tryToConnectWifi() {
     if(!successConnectingWifi) {
         delay(250);
         retriesToConnectWifi--;
-        tryToConnectWifi();
+        // tryToConnectWifi();
     }
 }
