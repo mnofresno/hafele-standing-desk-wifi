@@ -48,7 +48,9 @@ MenuInstance main_menu_instance(
     &Serial,
     main_menu,
     ARRAY_SIZE(main_menu),
-    "Menu:"
+    "Menu:",
+    ENTER_BUTTON_PIN,
+    BACK_BUTTON_PIN
 );
 
 String up_down_menu[] = {"Up", "Down"};
@@ -57,7 +59,9 @@ MenuInstance up_down_menu_instance(
     &Serial,
     up_down_menu,
     ARRAY_SIZE(up_down_menu),
-    "Move:"
+    "Move:",
+    ENTER_BUTTON_PIN,
+    BACK_BUTTON_PIN
 );
 
 int current_state = 1;

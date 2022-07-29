@@ -5,13 +5,17 @@ MenuInstance::MenuInstance(
     HardwareSerial *debug_print,
     String *arrayMenu,
     unsigned int total_menu_size,
-    String title
+    String title,
+    uint8_t enter_button_pin,
+    uint8_t back_button_pin
 ) {
     _display = display;
     _debug_print = debug_print;
     _arrayMenu = arrayMenu;
     _total_menu_size = total_menu_size;
     _title = title;
+    _enter_button_pin = enter_button_pin;
+    _back_button_pin = back_button_pin;
 }
 
 void MenuInstance::process(int64_t dialPosition) {
@@ -27,7 +31,7 @@ void MenuInstance::show() {
     last_render_time = millis();
     show_menu_items();
 
-    if (!digitalRead(ENTER_BUTTON_PIN) == LOW) {
+    if (!digitalRead(_enter_button_pin) == LOW) {
         if (current_dial_position != last_dial_position) {
             if (current_dial_position < last_dial_position) {
                 if (selected_option < _total_menu_size) {
@@ -49,7 +53,7 @@ void MenuInstance::show() {
             show_menu_items();
 
         }
-        if(digitalRead(BACK_BUTTON_PIN) == HIGH) {
+        if(digitalRead(_back_button_pin) == HIGH) {
             selected_option = -1;
             return;  //break
         }
@@ -93,7 +97,7 @@ String MenuInstance::pad_string(String input, String cPadWith, const unsigned ch
 
 void MenuInstance::draw_menu_item(String item, bool selected) {
     if (_debug_print != NULL) {
-        // Serial.println("Drawing menu item: " + item);
+        _debug_print->println("Drawing menu item: " + item);
     }
     if (selected) {
         set_highlighted_color();
@@ -113,7 +117,7 @@ void MenuInstance::set_normal_color() {
 }
 
 int MenuInstance::get_selection() {
-    if (!digitalRead(ENTER_BUTTON_PIN) == HIGH) {
+    if (!digitalRead(_enter_button_pin) == HIGH) {
         return selected_option;
     }
     return 0;
