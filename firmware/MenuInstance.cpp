@@ -68,15 +68,10 @@ void MenuInstance::show() {
     last_dial_position = current_dial_position;
 }
 
-void MenuInstance::show_message(String input) {
-    _display->setCursor(0, 0);
-    _display->println(input);
-    _display->display();
-}
-
 void MenuInstance::show_menu_header() {
+    _display->setTextSize(DEFAULT_TEXT_SIZE);
     _display->setCursor(0,0);             // Start at top-left corner
-    show_message(pad_string(_title, " ", 20 / DEFAULT_TEXT_SIZE));
+    _display->println(pad_string(_title, " ", PADDING));
 }
 
 void MenuInstance::show_menu_items() {
@@ -96,6 +91,9 @@ String MenuInstance::pad_string(String input, String cPadWith, const unsigned ch
 }
 
 void MenuInstance::draw_menu_item(String item, bool selected) {
+    if (item.isEmpty()) {
+        return;
+    }
     if (_debug_print != NULL) {
         _debug_print->println("Drawing menu item: " + item);
     }
@@ -104,7 +102,7 @@ void MenuInstance::draw_menu_item(String item, bool selected) {
     } else {
         set_normal_color();
     }
-    _display->println(pad_string(item, " ", 20 / DEFAULT_TEXT_SIZE));
+    _display->println(pad_string(item, " ", PADDING));
     set_normal_color();
 }
 

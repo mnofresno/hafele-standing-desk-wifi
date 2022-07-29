@@ -8,9 +8,7 @@
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
 
-
-
-#define DEFAULT_TEXT_SIZE 2
+#define FW_TEXT_SIZE 2
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -31,9 +29,6 @@
 #define ENTER_BUTTON_PIN 34
 #define BACK_BUTTON_PIN 35
 
-#define MENU_TOTAL_DISPLAYABLE_ITEMS 3
-#define MENU_IDLE_TIME 10
-
 #define ENCODER_PIN_A 18
 #define ENCODER_PIN_B 19
 
@@ -42,7 +37,8 @@
 ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-String main_menu[] = {"WiFi Conf.", "Calibr.", "Memories", "Clock", "Move", "Debug"};
+// String main_menu[] = {"WiFi Cfg.", "Calibr.", "Memories", "Clock", "Move", "Debug"};
+String main_menu[] = {"WiFi Cfg.", "Move", "Debug"};
 
 MenuInstance main_menu_instance(
     &display,
@@ -73,7 +69,7 @@ bool show_buttons_debug;
 
 void draw_starting(void) {
     display.clearDisplay();
-    display.setTextSize(DEFAULT_TEXT_SIZE);             // Draw 2X-scale text
+    display.setTextSize(FW_TEXT_SIZE);             // Draw 2X-scale text
 
     display.setTextColor(SSD1306_WHITE);        // Draw white text
     display.setCursor(0,0);             // Start at top-left corner
@@ -143,7 +139,7 @@ void print_debug_info() {
         display.setTextSize(1);
         display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(!digitalRead(ENTER_BUTTON_PIN)));
         display.display();
-        display.setTextSize(DEFAULT_TEXT_SIZE);
+        display.setTextSize(FW_TEXT_SIZE);
     }
 }
 
@@ -163,12 +159,16 @@ void handle_states_machine() {
 
             if (selected_item == -1) next_state = STATE_CLOCK;
 
+            // if (selected_item == 1) next_state = STATE_WIFI_CONFIG;
+            // if (selected_item == 2) next_state = STATE_CALIBRATION;
+            // if (selected_item == 3) next_state = STATE_MEMORIES;
+            // if (selected_item == 4) next_state = STATE_CLOCK;
+            // if (selected_item == 5) next_state = STATE_UPDOWN;
+            // if (selected_item == 6) next_state = STATE_DEBUG_CONFIG;
+
             if (selected_item == 1) next_state = STATE_WIFI_CONFIG;
-            if (selected_item == 2) next_state = STATE_CALIBRATION;
-            if (selected_item == 3) next_state = STATE_MEMORIES;
-            if (selected_item == 4) next_state = STATE_CLOCK;
-            if (selected_item == 5) next_state = STATE_UPDOWN;
-            if (selected_item == 6) next_state = STATE_DEBUG_CONFIG;
+            if (selected_item == 2) next_state = STATE_UPDOWN;
+            if (selected_item == 3) next_state = STATE_DEBUG_CONFIG;
 
             if (selected_item == 0) next_state = STATE_MENU;
         }
@@ -192,7 +192,7 @@ void handle_states_machine() {
             }
             show_message(wifi_output);
 
-            display.setTextSize(DEFAULT_TEXT_SIZE);
+            display.setTextSize(FW_TEXT_SIZE);
             set_next_state(STATE_WIFI_CONFIG);
         }
         break;
@@ -254,8 +254,9 @@ void loop() {
     wifiManager.process();
     handle_states_machine();
     print_debug_info();
-    main_menu_instance.process(encoder.getCount());
-    up_down_menu_instance.process(encoder.getCount());
+    int64_t encoder_count = encoder.getCount();
+    main_menu_instance.process(encoder_count);
+    up_down_menu_instance.process(encoder_count);
 }
 
 void set_next_state(int state) {
