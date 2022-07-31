@@ -10,6 +10,8 @@
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
 
+#define VERSION_STRING "v1.0.4"
+
 #define FW_TEXT_SIZE 2
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -35,8 +37,7 @@
 #define ENCODER_PIN_B 19
 
 #define ARRAY_SIZE(array) (sizeof(array)/sizeof((array)[0]))
-#define SSD1306_NO_SPLASH
-#define WDT_TIMEOUT 3
+#define WDT_TIMEOUT 2
 
 ESP32Encoder encoder;
 WiFiManager wifiManager;
@@ -67,10 +68,8 @@ MenuInstance up_down_menu_instance(
 
 int current_state = 1;
 int next_state = 1;
-int retriesToConnectWifi = 10;
-bool successConnectingWifi;
-bool show_buttons_debug;
-int last_wdt_reset = millis();
+bool show_buttons_debug = false;
+static bool wdt_is_enabled = false;
 
 void draw_starting(void) {
     display.clearDisplay();
@@ -81,11 +80,13 @@ void draw_starting(void) {
     display.println(F("WIFI"));
     display.println(F("STANDING"));
     display.println(F("DESK"));
-
-    //  display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
+    display.setTextSize(1);             // Draw 2X-scale text
+    display.println(F(VERSION_STRING));
+    display.setTextSize(FW_TEXT_SIZE);             // Draw 2X-scale text
 
     display.display();
-    delay(500);
+    delay(1000);
+    display.clearDisplay();
 }
 
 void show_message(String input) {
@@ -115,28 +116,32 @@ void setup() {
     // Initialising the UI will init the display too.
     Serial.begin(115200);
     Serial.println();
-    Serial.println();
     Serial.println("Starting Serial Port...");
 
     initialize_display();
     draw_starting();
+    config_inputs_and_outputs();
 
     ESP32Encoder::useInternalWeakPullResistors=UP;
   	encoder.attachHalfQuad(ENCODER_PIN_B, ENCODER_PIN_A);
 
+    WiFi.mode(WIFI_STA);
+    wifiManager.setPreOtaUpdateCallback(&disable_wdt);
+}
+
+void config_inputs_and_outputs() {
     pinMode(BACK_BUTTON_PIN, INPUT);
     pinMode(ENTER_BUTTON_PIN, INPUT);
     pinMode(DOWN_RELAY_PIN, OUTPUT);
     pinMode(UP_RELAY_PIN, OUTPUT);
-    WiFi.mode(WIFI_STA);
-    tryToConnectWifi();
-
-    display.clearDisplay();
-    config_wdt();
-    config_api_endpoints();
 }
 
 void config_api_endpoints() {
+    static bool already_configured_endpoints = false;
+
+    if (already_configured_endpoints) {
+        return;
+    }
     wifiManager.server->on("/up", [&]() {
         moveUpForMillis(500);
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
@@ -146,17 +151,27 @@ void config_api_endpoints() {
         moveDownForMillis(500);
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
     });
+
+    already_configured_endpoints = true;
 }
 
-void config_wdt() {
-    esp_task_wdt_init(WDT_TIMEOUT, true); //enable panic so ESP32 restarts
-    esp_task_wdt_add(NULL); //add current thread to WDT watch
+void enable_wdt() {
+    if (!wdt_is_enabled) {
+        esp_task_wdt_init(WDT_TIMEOUT, true); //enable panic so ESP32 restarts
+        esp_task_wdt_add(NULL); //add current thread to WDT watch
+        wdt_is_enabled = true;
+    }
+}
+
+void disable_wdt() {
+    if (wdt_is_enabled) {
+        esp_task_wdt_init(60, false); //enable panic so ESP32 restarts
+        esp_task_wdt_add(NULL); //add current thread to WDT watch
+        wdt_is_enabled = false;
+    }
 }
 
 void print_debug_info() {
-    if (current_state == STATE_MENU) {
-        return;
-    }
     if (show_buttons_debug) {
         display.setCursor(50,50);
         display.setTextSize(1);
@@ -167,7 +182,7 @@ void print_debug_info() {
 }
 
 void moveUpForMillis(int duration) {
-//     static int last_millis;
+//     static unsigned long last_millis;
 //     if (millist() - last_millis >)
 
 //     last_millis = millis();
@@ -183,11 +198,13 @@ void moveDownForMillis(int duration) {
 }
 
 void moveUp() {
+    enable_wdt();
     digitalWrite(UP_RELAY_PIN, HIGH);
     digitalWrite(DOWN_RELAY_PIN, LOW);
 }
 
 void moveDown() {
+    enable_wdt();
     digitalWrite(DOWN_RELAY_PIN, HIGH);
     digitalWrite(UP_RELAY_PIN, LOW);
 }
@@ -195,6 +212,7 @@ void moveDown() {
 void moveStop() {
     digitalWrite(UP_RELAY_PIN, LOW);
     digitalWrite(DOWN_RELAY_PIN, LOW);
+    disable_wdt();
 }
 
 void handle_states_machine() {
@@ -286,8 +304,10 @@ void handle_states_machine() {
         }
         break;
         case STATE_DEBUG_CONFIG: {
-            if (!digitalRead(ENTER_BUTTON_PIN)) {
+            static unsigned long last_change_debug_config = millis();
+            if (!digitalRead(ENTER_BUTTON_PIN) && millis() - last_change_debug_config >= 1000) {
                 show_buttons_debug = !show_buttons_debug;
+                last_change_debug_config = millis();
             }
             show_message("Dbg: " + String(show_buttons_debug ? "ON ": "OFF"));
             set_next_state(STATE_DEBUG_CONFIG);
@@ -308,14 +328,16 @@ void loop() {
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
     reset_wdt();
+    tryToConnectWifi();
 }
 
 void reset_wdt() {
-    if (millis() - last_wdt_reset >= WDT_TIMEOUT / 2) {
+    static unsigned long last_wdt_reset = millis();
+    if (millis() - last_wdt_reset >= (1000 * WDT_TIMEOUT) / 2) {
         esp_task_wdt_reset();
         last_wdt_reset = millis();
     }
-  }
+}
 
 void set_next_state(int state) {
     next_state = state;
@@ -325,12 +347,16 @@ void set_next_state(int state) {
 }
 
 void tryToConnectWifi() {
-    wifiManager.setConfigPortalBlocking(false);
-    wifiManager.startConfigPortal();
-    successConnectingWifi = wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
-    if(!successConnectingWifi) {
-        delay(250);
-        retriesToConnectWifi--;
-        // tryToConnectWifi();
+    static unsigned long last_wifi_check = 0;
+    if (!WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
+        wifiManager.setConfigPortalBlocking(false);
+        wifiManager.startConfigPortal();
+        wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+        config_api_endpoints();
+        last_wifi_check = millis();
     }
+}
+
+bool wifi_check_timed_out(int last_wifi_check) {
+    return millis() - last_wifi_check >= 2000;
 }
