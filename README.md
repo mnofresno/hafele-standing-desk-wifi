@@ -34,12 +34,25 @@ This project explains the steps done to modify a Hafele &reg; Standing Desk
   * Diameter length and separation of bolts
   * Inner diameter of bolt nuts
 
-### Firmware Compilation
+### Firmware Compilation & Deploy
 
 Install arduino CLI with: curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 
 And Arduino makefile with sudo apt install arduino-mk
 
+Then to compile the source code use this commands:
+
+```bash
+cd firmware
+arduino-cli compile --fqbn esp32:esp32:esp32 . --build-path ./build
+
+```
+
+And to upload the file use the following:
+
+```bash
+arduino-cli upload -p /dev/ttyUSB0 --fqbn esp32:esp32:esp32 . --build-path ./build
+```
 
 ### Contribuiting
 
