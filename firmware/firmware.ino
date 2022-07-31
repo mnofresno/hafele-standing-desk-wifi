@@ -5,6 +5,8 @@
 #include <Adafruit_SSD1306.h>
 #include <ESP32Encoder.h>
 #include "MenuInstance.h"
+#include <esp_task_wdt.h>
+
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
 
@@ -33,6 +35,8 @@
 #define ENCODER_PIN_B 19
 
 #define ARRAY_SIZE(array) (sizeof(array)/sizeof((array)[0]))
+#define SSD1306_NO_SPLASH
+#define WDT_TIMEOUT 3
 
 ESP32Encoder encoder;
 WiFiManager wifiManager;
@@ -66,6 +70,7 @@ int next_state = 1;
 int retriesToConnectWifi = 10;
 bool successConnectingWifi;
 bool show_buttons_debug;
+int last_wdt_reset = millis();
 
 void draw_starting(void) {
     display.clearDisplay();
@@ -127,7 +132,25 @@ void setup() {
     tryToConnectWifi();
 
     display.clearDisplay();
+    config_wdt();
+    config_api_endpoints();
+}
 
+void config_api_endpoints() {
+    wifiManager.server->on("/up", [&]() {
+        moveUpForMillis(500);
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
+    });
+
+    wifiManager.server->on("/down", [&]() {
+        moveDownForMillis(500);
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
+    });
+}
+
+void config_wdt() {
+    esp_task_wdt_init(WDT_TIMEOUT, true); //enable panic so ESP32 restarts
+    esp_task_wdt_add(NULL); //add current thread to WDT watch
 }
 
 void print_debug_info() {
@@ -141,6 +164,37 @@ void print_debug_info() {
         display.display();
         display.setTextSize(FW_TEXT_SIZE);
     }
+}
+
+void moveUpForMillis(int duration) {
+//     static int last_millis;
+//     if (millist() - last_millis >)
+
+//     last_millis = millis();
+    moveUp();
+    delay(duration);
+    moveStop();
+}
+
+void moveDownForMillis(int duration) {
+    moveDown();
+    delay(duration);
+    moveStop();
+}
+
+void moveUp() {
+    digitalWrite(UP_RELAY_PIN, HIGH);
+    digitalWrite(DOWN_RELAY_PIN, LOW);
+}
+
+void moveDown() {
+    digitalWrite(DOWN_RELAY_PIN, HIGH);
+    digitalWrite(UP_RELAY_PIN, LOW);
+}
+
+void moveStop() {
+    digitalWrite(UP_RELAY_PIN, LOW);
+    digitalWrite(DOWN_RELAY_PIN, LOW);
 }
 
 void handle_states_machine() {
@@ -220,16 +274,12 @@ void handle_states_machine() {
 
             if (!digitalRead(ENTER_BUTTON_PIN)) {
                 if (selected_direction == 1) {
-                    digitalWrite(UP_RELAY_PIN, HIGH);
-                    digitalWrite(DOWN_RELAY_PIN, LOW);
+                    moveUp();
                 } else if (selected_direction == 2) {
-                    digitalWrite(DOWN_RELAY_PIN, HIGH);
-                    digitalWrite(UP_RELAY_PIN, LOW);
-
+                    moveDown();
                 }
             } else {
-                digitalWrite(UP_RELAY_PIN, LOW);
-                digitalWrite(DOWN_RELAY_PIN, LOW);
+                moveStop();
             }
 
             set_next_state(STATE_UPDOWN);
@@ -257,7 +307,15 @@ void loop() {
     int64_t encoder_count = encoder.getCount();
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
+    reset_wdt();
 }
+
+void reset_wdt() {
+    if (millis() - last_wdt_reset >= WDT_TIMEOUT / 2) {
+        esp_task_wdt_reset();
+        last_wdt_reset = millis();
+    }
+  }
 
 void set_next_state(int state) {
     next_state = state;
