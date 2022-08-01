@@ -12,6 +12,9 @@
 
 #define VERSION_STRING "v1.0.2"
 
+#define DEFAULT_FULL_UP_TIME_IN_SECS 18
+#define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
+
 #define FW_TEXT_SIZE 2
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -32,6 +35,8 @@
 #define ITEM_INDEX_DEBUG 3
 #define ITEM_INDEX_MOVE_UP 4
 #define ITEM_INDEX_MOVE_DOWN 5
+#define ITEM_INDEX_MOVE_FULL_UP 6
+#define ITEM_INDEX_MOVE_FULL_DOWN 7
 
 #define UP_RELAY_PIN 32
 #define DOWN_RELAY_PIN 33
@@ -55,7 +60,7 @@ MenuItem main_menu[] = {
     // {.index = ITEM_INDEX_MEMORIES, .title = "Memories"},
     // {.index = ITEM_INDEX_CLOCK, .title = "Clock"},
     {.index = ITEM_INDEX_MOVE, .title = "Move"},
-    {.index = ITEM_INDEX_DEBUG, .title = "Debug"}
+    {.index = ITEM_INDEX_DEBUG, .title = "Debug"},
 };
 
 MenuInstance main_menu_instance(
@@ -70,7 +75,9 @@ MenuInstance main_menu_instance(
 
 MenuItem up_down_menu[] = {
     {.index = ITEM_INDEX_MOVE_UP, .title = "Up"},
-    {.index = ITEM_INDEX_MOVE_DOWN, .title = "Down"}
+    {.index = ITEM_INDEX_MOVE_DOWN, .title = "Down"},
+    {.index = ITEM_INDEX_MOVE_FULL_UP, .title = "Full-Up"},
+    {.index = ITEM_INDEX_MOVE_FULL_DOWN, .title = "Full-Down"},
 };
 
 MenuInstance up_down_menu_instance(
@@ -295,17 +302,26 @@ void handle_states_machine() {
         case STATE_UPDOWN: {
             Serial.println("Move...");
 
-            int selected_direction;
+            int selected_movement;
 
             up_down_menu_instance.show();
 
-            selected_direction = up_down_menu_instance.get_selection();
+            selected_movement = up_down_menu_instance.get_selection();
 
             if (!digitalRead(ENTER_BUTTON_PIN)) {
-                if (selected_direction == ITEM_INDEX_MOVE_UP) {
-                    moveUp();
-                } else if (selected_direction == ITEM_INDEX_MOVE_DOWN) {
-                    moveDown();
+                switch (selected_movement) {
+                    case ITEM_INDEX_MOVE_UP:
+                        moveUp();
+                        break;
+                    case ITEM_INDEX_MOVE_DOWN:
+                        moveDown();
+                        break;
+                    case ITEM_INDEX_MOVE_FULL_UP:
+                        moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
+                        break;
+                    case ITEM_INDEX_MOVE_FULL_DOWN:
+                        moveDownForMillis(DEFAULT_FULL_DOWN_TIME_IN_SECS * 1000);
+                        break;
                 }
             } else {
                 moveStop();
@@ -365,7 +381,8 @@ void tryToConnectWifi() {
     if (!WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
         wifiManager.setConfigPortalBlocking(false);
         wifiManager.startConfigPortal();
-        wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+        WiFi.begin();
+        // wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
         config_api_endpoints();
         last_wifi_check = millis();
     }
