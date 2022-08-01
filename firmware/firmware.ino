@@ -27,6 +27,12 @@
 #define STATE_UPDOWN 5
 #define STATE_DEBUG_CONFIG 6
 
+#define ITEM_INDEX_WIFI 1
+#define ITEM_INDEX_MOVE 2
+#define ITEM_INDEX_DEBUG 3
+#define ITEM_INDEX_MOVE_UP 4
+#define ITEM_INDEX_MOVE_DOWN 5
+
 #define UP_RELAY_PIN 32
 #define DOWN_RELAY_PIN 33
 
@@ -42,8 +48,15 @@
 ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-// String main_menu[] = {"WiFi Cfg.", "Calibr.", "Memories", "Clock", "Move", "Debug"};
-String main_menu[] = {"WiFi Cfg.", "Move", "Debug"};
+
+MenuItem main_menu[] = {
+    {.index = ITEM_INDEX_WIFI, .title = "WiFi Cfg."},
+    // {.index = ITEM_INDEX_CALIBRATION, .title = "Calibr."},
+    // {.index = ITEM_INDEX_MEMORIES, .title = "Memories"},
+    // {.index = ITEM_INDEX_CLOCK, .title = "Clock"},
+    {.index = ITEM_INDEX_MOVE, .title = "Move"},
+    {.index = ITEM_INDEX_DEBUG, .title = "Debug"}
+};
 
 MenuInstance main_menu_instance(
     &display,
@@ -55,7 +68,11 @@ MenuInstance main_menu_instance(
     BACK_BUTTON_PIN
 );
 
-String up_down_menu[] = {"Up", "Down"};
+MenuItem up_down_menu[] = {
+    {.index = ITEM_INDEX_MOVE_UP, .title = "Up"},
+    {.index = ITEM_INDEX_MOVE_DOWN, .title = "Down"}
+};
+
 MenuInstance up_down_menu_instance(
     &display,
     NULL,
@@ -81,6 +98,7 @@ void draw_starting(void) {
     display.println(F("STANDING"));
     display.println(F("DESK"));
     display.setTextSize(1);             // Draw 2X-scale text
+    display.println("--------------------");
     display.println(F(VERSION_STRING));
     display.setTextSize(FW_TEXT_SIZE);             // Draw 2X-scale text
 
@@ -108,12 +126,6 @@ void initialize_display() {
 void setup() {
     // WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
 
-    // wifiManager.autoConnect("WIFI_STANDING_DESK", "PASSWORD");
-    // Menu options:
-    // Calibration
-    // Memories
-    // Wifi
-    // Initialising the UI will init the display too.
     Serial.begin(115200);
     Serial.println();
     Serial.println("Starting Serial Port...");
@@ -194,10 +206,6 @@ void clear_debug_info() {
 }
 
 void moveUpForMillis(int duration) {
-//     static unsigned long last_millis;
-//     if (millist() - last_millis >)
-
-//     last_millis = millis();
     moveUp();
     delay(duration);
     moveStop();
@@ -240,16 +248,12 @@ void handle_states_machine() {
 
             if (selected_item == -1) next_state = STATE_CLOCK;
 
-            // if (selected_item == 1) next_state = STATE_WIFI_CONFIG;
-            // if (selected_item == 2) next_state = STATE_CALIBRATION;
-            // if (selected_item == 3) next_state = STATE_MEMORIES;
-            // if (selected_item == 4) next_state = STATE_CLOCK;
-            // if (selected_item == 5) next_state = STATE_UPDOWN;
-            // if (selected_item == 6) next_state = STATE_DEBUG_CONFIG;
-
-            if (selected_item == 1) next_state = STATE_WIFI_CONFIG;
-            if (selected_item == 2) next_state = STATE_UPDOWN;
-            if (selected_item == 3) next_state = STATE_DEBUG_CONFIG;
+            if (selected_item == ITEM_INDEX_WIFI) next_state = STATE_WIFI_CONFIG;
+            // if (selected_item == ITEM_INDEX_CALIBRATION) next_state = STATE_CALIBRATION;
+            // if (selected_item == ITEM_INDEX_MEMORIES) next_state = STATE_MEMORIES;
+            // if (selected_item == ITEM_INDEX_CLOCK) next_state = STATE_CLOCK;
+            if (selected_item == ITEM_INDEX_MOVE) next_state = STATE_UPDOWN;
+            if (selected_item == ITEM_INDEX_DEBUG) next_state = STATE_DEBUG_CONFIG;
 
             if (selected_item == 0) next_state = STATE_MENU;
         }
@@ -267,7 +271,6 @@ void handle_states_machine() {
             if (WiFi.isConnected()) {
                 wifi_output += "Connected to:\n" + String(WiFi.SSID());
                 wifi_output += "\nIP Address:\n" + WiFi.localIP().toString();
-
             } else {
                 wifi_output += "Not connected :(";
             }
@@ -291,7 +294,6 @@ void handle_states_machine() {
         break;
         case STATE_UPDOWN: {
             Serial.println("Move...");
-            // show_message("UP/DOWN!");
 
             int selected_direction;
 
@@ -300,9 +302,9 @@ void handle_states_machine() {
             selected_direction = up_down_menu_instance.get_selection();
 
             if (!digitalRead(ENTER_BUTTON_PIN)) {
-                if (selected_direction == 1) {
+                if (selected_direction == ITEM_INDEX_MOVE_UP) {
                     moveUp();
-                } else if (selected_direction == 2) {
+                } else if (selected_direction == ITEM_INDEX_MOVE_DOWN) {
                     moveDown();
                 }
             } else {
