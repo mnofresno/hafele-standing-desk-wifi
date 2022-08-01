@@ -10,7 +10,7 @@
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
 
-#define VERSION_STRING "v1.0.4"
+#define VERSION_STRING "v1.0.2"
 
 #define FW_TEXT_SIZE 2
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -47,7 +47,7 @@ String main_menu[] = {"WiFi Cfg.", "Move", "Debug"};
 
 MenuInstance main_menu_instance(
     &display,
-    &Serial,
+    NULL,
     main_menu,
     ARRAY_SIZE(main_menu),
     "Menu:",
@@ -58,7 +58,7 @@ MenuInstance main_menu_instance(
 String up_down_menu[] = {"Up", "Down"};
 MenuInstance up_down_menu_instance(
     &display,
-    &Serial,
+    NULL,
     up_down_menu,
     ARRAY_SIZE(up_down_menu),
     "Move:",
@@ -181,6 +181,18 @@ void print_debug_info() {
     }
 }
 
+void clear_debug_info() {
+    static unsigned long last_time_update = millis();
+    if (millis() - last_time_update > 250) {
+        display.setCursor(50,50);
+        display.setTextSize(1);
+        display.println("          ");
+        display.display();
+        display.setTextSize(FW_TEXT_SIZE);
+        last_time_update = millis();
+    }
+}
+
 void moveUpForMillis(int duration) {
 //     static unsigned long last_millis;
 //     if (millist() - last_millis >)
@@ -220,12 +232,9 @@ void handle_states_machine() {
 
     switch (current_state) {
         case STATE_MENU: {
-            // Serial.println("Menu...");
             int selected_item;
 
             main_menu_instance.show();
-
-            // Serial.println("printed_menu");
 
             selected_item = main_menu_instance.get_selection();
 
@@ -304,12 +313,15 @@ void handle_states_machine() {
         }
         break;
         case STATE_DEBUG_CONFIG: {
-            static unsigned long last_change_debug_config = millis();
-            if (!digitalRead(ENTER_BUTTON_PIN) && millis() - last_change_debug_config >= 1000) {
-                show_buttons_debug = !show_buttons_debug;
-                last_change_debug_config = millis();
-            }
             show_message("Dbg: " + String(show_buttons_debug ? "ON ": "OFF"));
+            static int64_t last_encoder_position = encoder.getCount();
+            if (last_encoder_position != encoder.getCount()) {
+                show_buttons_debug = !show_buttons_debug;
+                last_encoder_position = encoder.getCount();
+            }
+            if (!show_buttons_debug) {
+                clear_debug_info();
+            }
             set_next_state(STATE_DEBUG_CONFIG);
         }
         break;
