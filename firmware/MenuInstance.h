@@ -19,7 +19,7 @@ class MenuInstance {
         unsigned long increment_change_time = 0;
         unsigned long last_render_time = 0;
         unsigned long decrement_change_time = 0;
-        float selected_option = 0;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
+        float selected_option = 1;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
         int extra_option = 0;
         String _title;
         uint8_t _enter_button_pin;
