@@ -3,7 +3,7 @@
 MenuInstance::MenuInstance(
     Adafruit_SSD1306 *display,
     HardwareSerial *debug_print,
-    String *arrayMenu,
+    MenuItem *menu_items,
     unsigned int total_menu_size,
     String title,
     uint8_t enter_button_pin,
@@ -11,7 +11,7 @@ MenuInstance::MenuInstance(
 ) {
     _display = display;
     _debug_print = debug_print;
-    _arrayMenu = arrayMenu;
+    _menu_items = menu_items;
     _total_menu_size = total_menu_size;
     _title = title;
     _enter_button_pin = enter_button_pin;
@@ -55,14 +55,8 @@ void MenuInstance::show() {
         }
         if(digitalRead(_back_button_pin) == HIGH) {
             selected_option = -1;
-            return;  //break
+            return;
         }
-
-    // } else {
-    //     if (millis() - increment_change_time < 250)
-    //         selected_option -= increment;
-    //     else if(millis() - decrement_change_time < 250)
-    //         selected_option += increment;
     }
 
     last_dial_position = current_dial_position;
@@ -77,11 +71,10 @@ void MenuInstance::show_menu_header() {
 void MenuInstance::show_menu_items() {
     show_menu_header();
     for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option) ; x++) {
-        draw_menu_item(_arrayMenu[x], ((int)selected_option - 1) == x );
+        draw_menu_item(_menu_items[x], ((int)selected_option - 1) == x );
     }
     _display->display();
 }
-
 
 String MenuInstance::pad_string(String input, String cPadWith, const unsigned char cMaxLen) {
 	String strTemp = input;
@@ -90,19 +83,20 @@ String MenuInstance::pad_string(String input, String cPadWith, const unsigned ch
 	return strTemp;
 }
 
-void MenuInstance::draw_menu_item(String item, bool selected) {
-    if (item.isEmpty()) {
+void MenuInstance::draw_menu_item(MenuItem item, bool selected) {
+    String title = item.title;
+    if (title.isEmpty()) {
         return;
     }
     if (_debug_print != NULL) {
-        _debug_print->println("Drawing menu item: " + item);
+        _debug_print->println("Drawing menu item: " + title);
     }
     if (selected) {
         set_highlighted_color();
     } else {
         set_normal_color();
     }
-    _display->println(pad_string(item, " ", PADDING));
+    _display->println(pad_string(title, " ", PADDING));
     set_normal_color();
 }
 
@@ -116,7 +110,7 @@ void MenuInstance::set_normal_color() {
 
 int MenuInstance::get_selection() {
     if (!digitalRead(_enter_button_pin) == HIGH) {
-        return selected_option;
+        return _menu_items[(int)selected_option - 1].index;
     }
     return 0;
 }

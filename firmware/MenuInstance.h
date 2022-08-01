@@ -3,16 +3,22 @@
 
 #include <Adafruit_SSD1306.h>
 #include <HardwareSerial.h>
+#include <string.h>
 
 #define DEFAULT_TEXT_SIZE 2
 #define PADDING 20 / DEFAULT_TEXT_SIZE
 #define MENU_TOTAL_DISPLAYABLE_ITEMS 6 / DEFAULT_TEXT_SIZE
 
+struct MenuItem {
+    int index;
+    char *title;
+};
+
 class MenuInstance {
     private:
         Adafruit_SSD1306 *_display;
         HardwareSerial *_debug_print;
-        String *_arrayMenu;
+        MenuItem *_menu_items;
         int _total_menu_size;
         int64_t current_dial_position = 0;
         int64_t last_dial_position = 0;
@@ -26,7 +32,7 @@ class MenuInstance {
         uint8_t _back_button_pin;
         void show_menu_items();
         void show_menu_header();
-        void draw_menu_item(String item, bool selected = false);
+        void draw_menu_item(MenuItem item, bool selected = false);
         String pad_string(String input, String cPadWith, const unsigned char cMaxLen);
         void set_highlighted_color();
         void set_normal_color();
@@ -35,7 +41,7 @@ class MenuInstance {
         MenuInstance(
             Adafruit_SSD1306 *display,
             HardwareSerial *debug_print,
-            String *arrayMenu,
+            MenuItem *menu_items,
             unsigned int total_menu_size,
             String title,
             uint8_t enter_button_pin,
