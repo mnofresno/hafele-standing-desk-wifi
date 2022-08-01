@@ -12,7 +12,7 @@
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
 
-#define VERSION_STRING "v1.0.2"
+#define VERSION_STRING "v1.0.4"
 
 #define DEFAULT_FULL_UP_TIME_IN_SECS 18
 #define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
@@ -166,12 +166,12 @@ void config_api_endpoints() {
     }
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going up");
     });
 
     wifiManager.server->on("/down", [&]() {
         motor_driver.moveDownForMillis(500);
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going down");
     });
 
     already_configured_endpoints = true;
@@ -273,20 +273,20 @@ void handle_states_machine() {
         }
         break;
         case STATE_UPDOWN: {
-            Serial.println("Move...");
-
             int selected_movement;
 
             up_down_menu_instance.show();
 
             selected_movement = up_down_menu_instance.get_selection();
-
+            static bool manual_moving = false;
             if (!digitalRead(ENTER_BUTTON_PIN)) {
                 switch (selected_movement) {
                     case ITEM_INDEX_MOVE_UP:
+                        manual_moving = true;
                         motor_driver.moveUp();
                         break;
                     case ITEM_INDEX_MOVE_DOWN:
+                        manual_moving = true;
                         motor_driver.moveDown();
                         break;
                     case ITEM_INDEX_MOVE_FULL_UP:
@@ -297,7 +297,10 @@ void handle_states_machine() {
                         break;
                 }
             } else {
-                motor_driver.moveStop();
+                if (manual_moving) {
+                    motor_driver.stop();
+                    manual_moving = false;
+                }
             }
 
             set_next_state(STATE_UPDOWN);
@@ -330,7 +333,7 @@ void loop() {
     int64_t encoder_count = encoder.getCount();
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
-    motor_driver.process();
+    motor_driver.run();
     reset_wdt();
     tryToConnectWifi();
 }
