@@ -4,8 +4,10 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <ESP32Encoder.h>
-#include "MenuInstance.h"
 #include <esp_task_wdt.h>
+
+#include "MenuInstance.h"
+#include "MotorDriver.h"
 
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
@@ -53,6 +55,7 @@
 ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 
 MenuItem main_menu[] = {
     {.index = ITEM_INDEX_WIFI, .title = "WiFi Cfg."},
@@ -162,12 +165,12 @@ void config_api_endpoints() {
         return;
     }
     wifiManager.server->on("/up", [&]() {
-        moveUpForMillis(500);
+        motor_driver.moveUpForMillis(500);
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
     });
 
     wifiManager.server->on("/down", [&]() {
-        moveDownForMillis(500);
+        motor_driver.moveDownForMillis(500);
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok");
     });
 
@@ -210,36 +213,6 @@ void clear_debug_info() {
         display.setTextSize(FW_TEXT_SIZE);
         last_time_update = millis();
     }
-}
-
-void moveUpForMillis(int duration) {
-    moveUp();
-    delay(duration);
-    moveStop();
-}
-
-void moveDownForMillis(int duration) {
-    moveDown();
-    delay(duration);
-    moveStop();
-}
-
-void moveUp() {
-    enable_wdt();
-    digitalWrite(UP_RELAY_PIN, HIGH);
-    digitalWrite(DOWN_RELAY_PIN, LOW);
-}
-
-void moveDown() {
-    enable_wdt();
-    digitalWrite(DOWN_RELAY_PIN, HIGH);
-    digitalWrite(UP_RELAY_PIN, LOW);
-}
-
-void moveStop() {
-    digitalWrite(UP_RELAY_PIN, LOW);
-    digitalWrite(DOWN_RELAY_PIN, LOW);
-    disable_wdt();
 }
 
 void handle_states_machine() {
@@ -311,20 +284,20 @@ void handle_states_machine() {
             if (!digitalRead(ENTER_BUTTON_PIN)) {
                 switch (selected_movement) {
                     case ITEM_INDEX_MOVE_UP:
-                        moveUp();
+                        motor_driver.moveUp();
                         break;
                     case ITEM_INDEX_MOVE_DOWN:
-                        moveDown();
+                        motor_driver.moveDown();
                         break;
                     case ITEM_INDEX_MOVE_FULL_UP:
-                        moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
+                        motor_driver.moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
                         break;
                     case ITEM_INDEX_MOVE_FULL_DOWN:
-                        moveDownForMillis(DEFAULT_FULL_DOWN_TIME_IN_SECS * 1000);
+                        motor_driver.moveDownForMillis(DEFAULT_FULL_DOWN_TIME_IN_SECS * 1000);
                         break;
                 }
             } else {
-                moveStop();
+                motor_driver.moveStop();
             }
 
             set_next_state(STATE_UPDOWN);
@@ -357,6 +330,7 @@ void loop() {
     int64_t encoder_count = encoder.getCount();
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
+    motor_driver.process();
     reset_wdt();
     tryToConnectWifi();
 }
