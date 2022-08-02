@@ -54,7 +54,7 @@ void MenuInstance::show() {
 
         }
         if(digitalRead(_back_button_pin) == HIGH) {
-            selected_option = -1;
+            selected_option = MENU_ITEM_GO_BACK;
             return;
         }
     }
@@ -71,9 +71,13 @@ void MenuInstance::show_menu_header() {
 void MenuInstance::show_menu_items() {
     show_menu_header();
     for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option) ; x++) {
-        draw_menu_item(_menu_items[x], ((int)selected_option - 1) == x );
+        draw_menu_item(_menu_items[x], is_item_selected(x));
     }
     _display->display();
+}
+
+bool MenuInstance::is_item_selected(int current_item) {
+    return ((int)selected_option - 1) == current_item;
 }
 
 String MenuInstance::pad_string(String input, String cPadWith, const unsigned char cMaxLen) {
