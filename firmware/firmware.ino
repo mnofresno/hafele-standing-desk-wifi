@@ -17,7 +17,9 @@
 #define DEFAULT_FULL_UP_TIME_IN_SECS 18
 #define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
 
-#define FW_TEXT_SIZE 2
+#define FW_TEXT_SIZE_SMALL 1
+#define FW_TEXT_SIZE_LARGE 2
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -100,17 +102,17 @@ static bool wdt_is_enabled = false;
 
 void draw_starting(void) {
     display.clearDisplay();
-    display.setTextSize(FW_TEXT_SIZE);             // Draw 2X-scale text
+    display.setTextSize(FW_TEXT_SIZE_LARGE);
 
     display.setTextColor(SSD1306_WHITE);        // Draw white text
     display.setCursor(0,0);             // Start at top-left corner
     display.println(F("WIFI"));
     display.println(F("STANDING"));
     display.println(F("DESK"));
-    display.setTextSize(1);             // Draw 2X-scale text
+    display.setTextSize(FW_TEXT_SIZE_SMALL);
     display.println("--------------------");
     display.println(F(VERSION_STRING));
-    display.setTextSize(FW_TEXT_SIZE);             // Draw 2X-scale text
+    display.setTextSize(FW_TEXT_SIZE_LARGE);
 
     display.display();
     delay(1000);
@@ -154,6 +156,7 @@ void setup() {
 void on_pre_ota_update() {
     disable_wdt();
     display.clearDisplay();
+    display.setTextSize(FW_TEXT_SIZE_SMALL);
     show_message("Updating FW");
     show_message("Please wait...");
 }
@@ -203,10 +206,10 @@ void disable_wdt() {
 void print_debug_info() {
     if (show_buttons_debug) {
         display.setCursor(50,50);
-        display.setTextSize(1);
+        display.setTextSize(FW_TEXT_SIZE_SMALL);
         display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(!digitalRead(ENTER_BUTTON_PIN)));
         display.display();
-        display.setTextSize(FW_TEXT_SIZE);
+        display.setTextSize(FW_TEXT_SIZE_LARGE);
     }
 }
 
@@ -214,10 +217,10 @@ void clear_debug_info() {
     static unsigned long last_time_update = millis();
     if (millis() - last_time_update > 250) {
         display.setCursor(50,50);
-        display.setTextSize(1);
+        display.setTextSize(FW_TEXT_SIZE_SMALL);
         display.println("          ");
         display.display();
-        display.setTextSize(FW_TEXT_SIZE);
+        display.setTextSize(FW_TEXT_SIZE_LARGE);
         last_time_update = millis();
     }
 }
@@ -253,7 +256,7 @@ void handle_states_machine() {
         break;
         case STATE_WIFI_CONFIG: {
             Serial.println("Wifi...");
-            display.setTextSize(1);
+            display.setTextSize(FW_TEXT_SIZE_SMALL);
             String wifi_output = "WiFi Status:\n";
             if (WiFi.isConnected()) {
                 wifi_output += "Connected to:\n" + String(WiFi.SSID());
@@ -263,7 +266,7 @@ void handle_states_machine() {
             }
             show_message(wifi_output);
 
-            display.setTextSize(FW_TEXT_SIZE);
+            display.setTextSize(FW_TEXT_SIZE_LARGE);
             set_next_state(STATE_WIFI_CONFIG);
         }
         break;
