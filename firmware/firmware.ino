@@ -148,7 +148,14 @@ void setup() {
   	encoder.attachHalfQuad(ENCODER_PIN_B, ENCODER_PIN_A);
 
     WiFi.mode(WIFI_STA);
-    wifiManager.setPreOtaUpdateCallback(&disable_wdt);
+    wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
+}
+
+void on_pre_ota_update() {
+    disable_wdt();
+    display.clearDisplay();
+    show_message("Updating FW");
+    show_message("Please wait...");
 }
 
 void config_inputs_and_outputs() {
