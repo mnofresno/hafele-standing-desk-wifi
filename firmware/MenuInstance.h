@@ -8,6 +8,7 @@
 #define DEFAULT_TEXT_SIZE 2
 #define PADDING 20 / DEFAULT_TEXT_SIZE
 #define MENU_TOTAL_DISPLAYABLE_ITEMS 6 / DEFAULT_TEXT_SIZE
+#define MENU_ITEM_GO_BACK -1
 
 struct MenuItem {
     int index;
@@ -36,6 +37,7 @@ class MenuInstance {
         String pad_string(String input, String cPadWith, const unsigned char cMaxLen);
         void set_highlighted_color();
         void set_normal_color();
+        bool is_item_selected(int current_item);
 
     public:
         MenuInstance(

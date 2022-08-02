@@ -29,7 +29,7 @@
 #define STATE_WIFI_CONFIG 2
 #define STATE_CALIBRATION 3
 #define STATE_MEMORIES 4
-#define STATE_UPDOWN 5
+#define STATE_MOVE 5
 #define STATE_DEBUG_CONFIG 6
 
 #define ITEM_INDEX_WIFI 1
@@ -226,13 +226,13 @@ void handle_states_machine() {
 
             selected_item = main_menu_instance.get_selection();
 
-            if (selected_item == -1) next_state = STATE_CLOCK;
+            if (selected_item == MENU_ITEM_GO_BACK) next_state = STATE_CLOCK;
 
             if (selected_item == ITEM_INDEX_WIFI) next_state = STATE_WIFI_CONFIG;
             // if (selected_item == ITEM_INDEX_CALIBRATION) next_state = STATE_CALIBRATION;
             // if (selected_item == ITEM_INDEX_MEMORIES) next_state = STATE_MEMORIES;
             // if (selected_item == ITEM_INDEX_CLOCK) next_state = STATE_CLOCK;
-            if (selected_item == ITEM_INDEX_MOVE) next_state = STATE_UPDOWN;
+            if (selected_item == ITEM_INDEX_MOVE) next_state = STATE_MOVE;
             if (selected_item == ITEM_INDEX_DEBUG) next_state = STATE_DEBUG_CONFIG;
 
             if (selected_item == 0) next_state = STATE_MENU;
@@ -272,7 +272,7 @@ void handle_states_machine() {
             set_next_state(STATE_MEMORIES);
         }
         break;
-        case STATE_UPDOWN: {
+        case STATE_MOVE: {
             int selected_movement;
 
             up_down_menu_instance.show();
@@ -303,7 +303,7 @@ void handle_states_machine() {
                 }
             }
 
-            set_next_state(STATE_UPDOWN);
+            set_next_state(STATE_MOVE);
         }
         break;
         case STATE_DEBUG_CONFIG: {
