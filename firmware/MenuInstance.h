@@ -12,7 +12,7 @@
 
 struct MenuItem {
     int index;
-    char *title;
+    char title[20];
 };
 
 class MenuInstance {

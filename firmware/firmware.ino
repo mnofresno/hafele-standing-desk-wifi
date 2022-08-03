@@ -8,6 +8,7 @@
 
 #include "MenuInstance.h"
 #include "MotorDriver.h"
+#include "Calibration.h"
 
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
@@ -41,6 +42,7 @@
 #define ITEM_INDEX_MOVE_DOWN 5
 #define ITEM_INDEX_MOVE_FULL_UP 6
 #define ITEM_INDEX_MOVE_FULL_DOWN 7
+#define ITEM_INDEX_CALIBRATION 8
 
 #define UP_RELAY_PIN 32
 #define DOWN_RELAY_PIN 33
@@ -58,14 +60,15 @@ ESP32Encoder encoder;
 WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
+Calibration calibration_storage(&on_corrupted_eeprom);
 
 MenuItem main_menu[] = {
-    {.index = ITEM_INDEX_WIFI, .title = "WiFi Cfg."},
-    // {.index = ITEM_INDEX_CALIBRATION, .title = "Calibr."},
+    {ITEM_INDEX_WIFI, "WiFi Cfg."},
+    {ITEM_INDEX_CALIBRATION, "Calibr."},
     // {.index = ITEM_INDEX_MEMORIES, .title = "Memories"},
     // {.index = ITEM_INDEX_CLOCK, .title = "Clock"},
-    {.index = ITEM_INDEX_MOVE, .title = "Move"},
-    {.index = ITEM_INDEX_DEBUG, .title = "Debug"},
+    {ITEM_INDEX_MOVE, "Move"},
+    {ITEM_INDEX_DEBUG, "Debug"},
 };
 
 MenuInstance main_menu_instance(
@@ -79,10 +82,10 @@ MenuInstance main_menu_instance(
 );
 
 MenuItem up_down_menu[] = {
-    {.index = ITEM_INDEX_MOVE_UP, .title = "Up"},
-    {.index = ITEM_INDEX_MOVE_DOWN, .title = "Down"},
-    {.index = ITEM_INDEX_MOVE_FULL_UP, .title = "Full-Up"},
-    {.index = ITEM_INDEX_MOVE_FULL_DOWN, .title = "Full-Down"},
+    {ITEM_INDEX_MOVE_UP, "Up"},
+    {ITEM_INDEX_MOVE_DOWN, "Down"},
+    {ITEM_INDEX_MOVE_FULL_UP, "Full-Up"},
+    {ITEM_INDEX_MOVE_FULL_DOWN, "Full-Down"},
 };
 
 MenuInstance up_down_menu_instance(
@@ -99,6 +102,7 @@ int current_state = 1;
 int next_state = 1;
 bool show_buttons_debug = false;
 static bool wdt_is_enabled = false;
+CalibrationData calibration;
 
 void draw_starting(void) {
     display.clearDisplay();
@@ -119,11 +123,19 @@ void draw_starting(void) {
     display.clearDisplay();
 }
 
-void show_message(String input) {
-    // display.clearDisplay();
-    display.setCursor(0, 0);
+void show_message(String input, bool reset_cursor = true) {
+    if (reset_cursor) {
+        display.setCursor(0, 0);
+    }
     display.println(input);
     display.display();
+}
+
+void on_corrupted_eeprom() {
+    display.clearDisplay();
+    display.setTextSize(FW_TEXT_SIZE_SMALL);
+    show_message("Corrupted calib.");
+    show_message("restoring defaults...", false);
 }
 
 void initialize_display() {
@@ -151,14 +163,17 @@ void setup() {
 
     WiFi.mode(WIFI_STA);
     wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
+    wifiManager.setTitle("WIFI STANDING DESK");
+    calibration.current_position_mm = -999;
 }
 
 void on_pre_ota_update() {
     disable_wdt();
     display.clearDisplay();
+    display.setTextSize(FW_TEXT_SIZE_LARGE);
+    show_message("FW UPDATE");
     display.setTextSize(FW_TEXT_SIZE_SMALL);
-    show_message("Updating FW");
-    show_message("Please wait...");
+    show_message("Please wait...", false);
 }
 
 void config_inputs_and_outputs() {
@@ -239,7 +254,7 @@ void handle_states_machine() {
             if (selected_item == MENU_ITEM_GO_BACK) next_state = STATE_CLOCK;
 
             if (selected_item == ITEM_INDEX_WIFI) next_state = STATE_WIFI_CONFIG;
-            // if (selected_item == ITEM_INDEX_CALIBRATION) next_state = STATE_CALIBRATION;
+            if (selected_item == ITEM_INDEX_CALIBRATION) next_state = STATE_CALIBRATION;
             // if (selected_item == ITEM_INDEX_MEMORIES) next_state = STATE_MEMORIES;
             // if (selected_item == ITEM_INDEX_CLOCK) next_state = STATE_CLOCK;
             if (selected_item == ITEM_INDEX_MOVE) next_state = STATE_MOVE;
@@ -271,8 +286,24 @@ void handle_states_machine() {
         }
         break;
         case STATE_CALIBRATION: {
-            Serial.println("Calibr...");
-            show_message("CALIBR.!");
+            static int current_position = 0;
+            if (calibration.current_position_mm == -999) {
+                calibration = calibration_storage.fetch();
+                current_position = calibration.current_position_mm;
+            } else if (current_position != 0 && current_position != calibration.current_position_mm && digitalRead(BACK_BUTTON_PIN) == HIGH) {
+                calibration_storage.store(calibration);
+            }
+
+            static int64_t last_encoder_position = 0;
+            int64_t current_encoder_position = encoder.getCount();
+            if (last_encoder_position != current_encoder_position) {
+                current_position += current_encoder_position > last_encoder_position ? -1 : 1;
+                last_encoder_position = current_encoder_position;
+            }
+
+            display.setTextSize(FW_TEXT_SIZE_SMALL);
+            show_message("CALIBR.\nCurrent pos: " + String(current_position) + " mm");
+
             set_next_state(STATE_CALIBRATION);
         }
         break;
@@ -336,6 +367,13 @@ void handle_states_machine() {
     }
 }
 
+void set_next_state(int state) {
+    next_state = state;
+    if (digitalRead(BACK_BUTTON_PIN) == HIGH) {
+        next_state = STATE_MENU;
+    }
+}
+
 void loop() {
     wifiManager.process();
     handle_states_machine();
@@ -353,13 +391,6 @@ void reset_wdt() {
     if (millis() - last_wdt_reset >= (1000 * WDT_TIMEOUT) / 2) {
         esp_task_wdt_reset();
         last_wdt_reset = millis();
-    }
-}
-
-void set_next_state(int state) {
-    next_state = state;
-    if (digitalRead(BACK_BUTTON_PIN) == HIGH) {
-        next_state = STATE_MENU;
     }
 }
 
