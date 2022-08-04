@@ -36,16 +36,14 @@ void MenuInstance::show() {
             if (current_dial_position < last_dial_position) {
                 if (selected_option < _total_menu_size) {
                     selected_option += increment;
-                    increment_change_time = millis();
                 }
             } else if (current_dial_position > last_dial_position) {
                 if(selected_option > 1) {
                     selected_option -= increment;
-                    decrement_change_time = millis();
                 }
             }
 
-            if(selected_option < 1 + extra_option)
+            if(selected_option < 1 + extra_option && extra_option > 0)
                 extra_option--;
             if(selected_option > MENU_TOTAL_DISPLAYABLE_ITEMS + extra_option)
                 extra_option++;
@@ -70,8 +68,9 @@ void MenuInstance::show_menu_header() {
 
 void MenuInstance::show_menu_items() {
     show_menu_header();
-    for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option) ; x++) {
+    for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option); x++) {
         draw_menu_item(_menu_items[x], is_item_selected(x));
+        assert_menu_index(x);
     }
     _display->display();
 }
@@ -89,9 +88,6 @@ String MenuInstance::pad_string(String input, String cPadWith, const unsigned ch
 
 void MenuInstance::draw_menu_item(MenuItem item, bool selected) {
     String title = item.title;
-    if (title.isEmpty()) {
-        return;
-    }
     if (_debug_print != NULL) {
         _debug_print->println("Drawing menu item: " + title);
     }
@@ -114,7 +110,14 @@ void MenuInstance::set_normal_color() {
 
 int MenuInstance::get_selection() {
     if (!digitalRead(_enter_button_pin) == HIGH) {
-        return _menu_items[(int)selected_option - 1].index;
+        int array_index = (int)selected_option - 1;
+        assert_menu_index(array_index);
+        return _menu_items[array_index].index;
     }
     return 0;
+}
+
+void MenuInstance::assert_menu_index(int array_index) {
+    assert(array_index >= 0);
+    assert(array_index < _total_menu_size);
 }

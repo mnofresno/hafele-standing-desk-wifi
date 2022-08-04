@@ -2,12 +2,15 @@
 #include <EEPROM.h>
 
 
-Calibration::Calibration(std::function<void()> onCorruptedEepromCallback) {}
+Calibration::Calibration(std::function<void()> onCorruptedEepromCallback) {
+    _onCorruptedEepromCallback = onCorruptedEepromCallback;
+}
 
 CalibrationData Calibration::fetch() {
     read_eeprom();
     if (_data.salt != EEPROM_SALT) {
         Serial.println("Invalid settings in EEPROM, trying with defaults");
+        _onCorruptedEepromCallback();
         CalibrationData defaults;
         _data = defaults;
     }

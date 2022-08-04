@@ -10,6 +10,10 @@
 #include "MotorDriver.h"
 #include "Calibration.h"
 
+#define __ASSERT_USE_STDERR
+
+#include <assert.h>
+
 // #include "soc/soc.h"
 // #include "soc/rtc_cntl_reg.h"
 
@@ -65,10 +69,17 @@ Calibration calibration_storage(&on_corrupted_eeprom);
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
     {ITEM_INDEX_CALIBRATION, "Calibr."},
-    // {.index = ITEM_INDEX_MEMORIES, .title = "Memories"},
-    // {.index = ITEM_INDEX_CLOCK, .title = "Clock"},
+    // {ITEM_INDEX_MEMORIES, "Memories"},
+    // {ITEM_INDEX_CLOCK, "Clock"},
     {ITEM_INDEX_MOVE, "Move"},
     {ITEM_INDEX_DEBUG, "Debug"},
+};
+
+MenuItem up_down_menu[] = {
+    {ITEM_INDEX_MOVE_UP, "Up"},
+    {ITEM_INDEX_MOVE_DOWN, "Down"},
+    {ITEM_INDEX_MOVE_FULL_UP, "Full-Up"},
+    {ITEM_INDEX_MOVE_FULL_DOWN, "Full-Down"},
 };
 
 MenuInstance main_menu_instance(
@@ -81,13 +92,6 @@ MenuInstance main_menu_instance(
     BACK_BUTTON_PIN
 );
 
-MenuItem up_down_menu[] = {
-    {ITEM_INDEX_MOVE_UP, "Up"},
-    {ITEM_INDEX_MOVE_DOWN, "Down"},
-    {ITEM_INDEX_MOVE_FULL_UP, "Full-Up"},
-    {ITEM_INDEX_MOVE_FULL_DOWN, "Full-Down"},
-};
-
 MenuInstance up_down_menu_instance(
     &display,
     NULL,
@@ -98,11 +102,24 @@ MenuInstance up_down_menu_instance(
     BACK_BUTTON_PIN
 );
 
-int current_state = 1;
-int next_state = 1;
+int current_state = STATE_MENU;
+int next_state = STATE_MENU;
 bool show_buttons_debug = false;
 static bool wdt_is_enabled = false;
 CalibrationData calibration;
+
+void debug_pointers() {
+    static unsigned long last_time_update = millis();
+
+    unsigned long current_millis = millis();
+
+    if (current_millis - last_time_update > 2000) {
+        Serial.printf("\nPunteros menus:");
+        Serial.printf("\n%p", main_menu);
+        Serial.printf("\n%p", up_down_menu);
+        last_time_update = current_millis;
+    }
+}
 
 void draw_starting(void) {
     display.clearDisplay();
@@ -270,7 +287,6 @@ void handle_states_machine() {
         }
         break;
         case STATE_WIFI_CONFIG: {
-            Serial.println("Wifi...");
             display.setTextSize(FW_TEXT_SIZE_SMALL);
             String wifi_output = "WiFi Status:\n";
             if (WiFi.isConnected()) {
@@ -384,6 +400,7 @@ void loop() {
     motor_driver.run();
     reset_wdt();
     tryToConnectWifi();
+    debug_pointers();
 }
 
 void reset_wdt() {
