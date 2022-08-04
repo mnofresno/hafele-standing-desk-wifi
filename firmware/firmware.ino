@@ -108,16 +108,12 @@ static bool wdt_is_enabled = false;
 CalibrationData calibration;
 
 void debug_pointers() {
-    static unsigned long last_time_update = millis();
-
-    unsigned long current_millis = millis();
-
-    if (current_millis - last_time_update > 2000) {
+    display_handler.anti_flickering([&](){
         Serial.printf("\nPunteros menus:");
         Serial.printf("\n%p", main_menu);
         Serial.printf("\n%p", up_down_menu);
-        last_time_update = current_millis;
-    }
+
+    }, 2000);
 }
 
 void on_corrupted_eeprom() {

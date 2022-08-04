@@ -25,7 +25,6 @@ class MenuInstance {
         int _total_menu_size;
         int64_t current_dial_position = 0;
         int64_t last_dial_position = 0;
-        unsigned long last_render_time = 0;
         float selected_option = 1;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
         int extra_option = 0;
         String _title;
