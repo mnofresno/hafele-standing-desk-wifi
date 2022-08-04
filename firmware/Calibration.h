@@ -17,6 +17,7 @@ class Calibration {
         void read_eeprom();
         void save_eeprom();
         CalibrationData _data;
+        std::function<void()> _onCorruptedEepromCallback;
 
     public:
         Calibration(std::function<void()> onCorruptedEepromCallback);
