@@ -35,13 +35,13 @@ void DebugInfo::print() {
 void DebugInfo::clear() {
     _display_handler->anti_flickering([&]() {
         Adafruit_SSD1306 *_display = _display_handler->display();
-        _display->setCursor(50,50);
         _display->setTextSize(FW_TEXT_SIZE_SMALL);
+        _display->setCursor(50,45);
         _display_handler->println_with_pad("", 10);
+        _display->setCursor(50,55);
         _display_handler->println_with_pad("", 10);
         _display->display();
         _display->setTextSize(FW_TEXT_SIZE_LARGE);
-        last_time_update = millis();
     });
 }
 

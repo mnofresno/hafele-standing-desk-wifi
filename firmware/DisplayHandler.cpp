@@ -70,10 +70,11 @@ void DisplayHandler::print_full_screen_with_title(String title, String body) {
     last_body_length = body.length();
 }
 
-void DisplayHandler::anti_flickering(std::function<void()> callback) {
-    static unsigned long last_time_update = millis();
-    if (millis() - last_time_update > 250) {
+void DisplayHandler::anti_flickering(std::function<void()> callback, int millis_between_calls) {
+    unsigned long current_millis = millis();
+    static unsigned long last_time_update = current_millis;
+    if (current_millis - last_time_update > millis_between_calls) {
         callback();
-        last_time_update = millis();
+        last_time_update = current_millis;
     }
 }

@@ -26,10 +26,6 @@ void MenuInstance::process(int64_t dialPosition) {
 void MenuInstance::show() {
     float increment = 0.5;
 
-    if (millis() - last_render_time  < 250) {
-        return;
-    }
-    last_render_time = millis();
     show_menu_items();
 
     if (!digitalRead(_enter_button_pin) == LOW) {
@@ -68,12 +64,14 @@ void MenuInstance::show_menu_header() {
 }
 
 void MenuInstance::show_menu_items() {
-    show_menu_header();
-    for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option); x++) {
-        draw_menu_item(_menu_items[x], is_item_selected(x));
-        assert_menu_index(x);
-    }
-    _display->display();
+    _display_handler->anti_flickering([&]() {
+        show_menu_header();
+        for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option); x++) {
+            draw_menu_item(_menu_items[x], is_item_selected(x));
+            assert_menu_index(x);
+        }
+        _display->display();
+    });
 }
 
 bool MenuInstance::is_item_selected(int current_item) {
