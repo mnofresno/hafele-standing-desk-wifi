@@ -1,7 +1,7 @@
 #include "MenuInstance.h"
 
 MenuInstance::MenuInstance(
-    Adafruit_SSD1306 *display,
+    DisplayHandler *display_handler,
     HardwareSerial *debug_print,
     MenuItem *menu_items,
     unsigned int total_menu_size,
@@ -9,7 +9,8 @@ MenuInstance::MenuInstance(
     uint8_t enter_button_pin,
     uint8_t back_button_pin
 ) {
-    _display = display;
+    _display_handler = display_handler;
+    _display = _display_handler->display();
     _debug_print = debug_print;
     _menu_items = menu_items;
     _total_menu_size = total_menu_size;
@@ -63,7 +64,7 @@ void MenuInstance::show() {
 void MenuInstance::show_menu_header() {
     _display->setTextSize(DEFAULT_TEXT_SIZE);
     _display->setCursor(0,0);             // Start at top-left corner
-    _display->println(pad_string(_title, " ", PADDING));
+    _display_handler->println_with_pad(_title, PADDING);
 }
 
 void MenuInstance::show_menu_items() {
@@ -79,13 +80,6 @@ bool MenuInstance::is_item_selected(int current_item) {
     return ((int)selected_option - 1) == current_item;
 }
 
-String MenuInstance::pad_string(String input, String cPadWith, const unsigned char cMaxLen) {
-	String strTemp = input;
-	while (strTemp.length() < cMaxLen)
-		strTemp += cPadWith;
-	return strTemp;
-}
-
 void MenuInstance::draw_menu_item(MenuItem item, bool selected) {
     String title = item.title;
     if (_debug_print != NULL) {
@@ -96,7 +90,7 @@ void MenuInstance::draw_menu_item(MenuItem item, bool selected) {
     } else {
         set_normal_color();
     }
-    _display->println(pad_string(title, " ", PADDING));
+    _display_handler->println_with_pad(title, PADDING);
     set_normal_color();
 }
 

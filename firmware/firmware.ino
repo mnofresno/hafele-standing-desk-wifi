@@ -9,6 +9,8 @@
 #include "MenuInstance.h"
 #include "MotorDriver.h"
 #include "Calibration.h"
+#include "DebugInfo.h"
+#include "DisplayHandler.h"
 
 #define __ASSERT_USE_STDERR
 
@@ -22,14 +24,10 @@
 #define DEFAULT_FULL_UP_TIME_IN_SECS 18
 #define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
 
-#define FW_TEXT_SIZE_SMALL 1
-#define FW_TEXT_SIZE_LARGE 2
-
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
 #define STATE_CLOCK 0
 #define STATE_MENU 1
@@ -65,6 +63,8 @@ WiFiManager wifiManager;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 Calibration calibration_storage(&on_corrupted_eeprom);
+DisplayHandler display_handler(&display);
+DebugInfo debug_info(&display_handler, ENTER_BUTTON_PIN, BACK_BUTTON_PIN);
 
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
@@ -83,7 +83,7 @@ MenuItem up_down_menu[] = {
 };
 
 MenuInstance main_menu_instance(
-    &display,
+    &display_handler,
     NULL,
     main_menu,
     ARRAY_SIZE(main_menu),
@@ -93,7 +93,7 @@ MenuInstance main_menu_instance(
 );
 
 MenuInstance up_down_menu_instance(
-    &display,
+    &display_handler,
     NULL,
     up_down_menu,
     ARRAY_SIZE(up_down_menu),
@@ -104,7 +104,6 @@ MenuInstance up_down_menu_instance(
 
 int current_state = STATE_MENU;
 int next_state = STATE_MENU;
-bool show_buttons_debug = false;
 static bool wdt_is_enabled = false;
 CalibrationData calibration;
 
@@ -121,47 +120,8 @@ void debug_pointers() {
     }
 }
 
-void draw_starting(void) {
-    display.clearDisplay();
-    display.setTextSize(FW_TEXT_SIZE_LARGE);
-
-    display.setTextColor(SSD1306_WHITE);        // Draw white text
-    display.setCursor(0,0);             // Start at top-left corner
-    display.println(F("WIFI"));
-    display.println(F("STANDING"));
-    display.println(F("DESK"));
-    display.setTextSize(FW_TEXT_SIZE_SMALL);
-    display.println("--------------------");
-    display.println(F(VERSION_STRING));
-    display.setTextSize(FW_TEXT_SIZE_LARGE);
-
-    display.display();
-    delay(1000);
-    display.clearDisplay();
-}
-
-void show_message(String input, bool reset_cursor = true) {
-    if (reset_cursor) {
-        display.setCursor(0, 0);
-    }
-    display.println(input);
-    display.display();
-}
-
 void on_corrupted_eeprom() {
-    display.clearDisplay();
-    display.setTextSize(FW_TEXT_SIZE_SMALL);
-    show_message("Corrupted calib.");
-    show_message("restoring defaults...", false);
-}
-
-void initialize_display() {
-    if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-      Serial.println(F("SSD1306 allocation failed"));
-      for(;;); // Don't proceed, loop forever
-    }
-    display.display();
-    delay(200);
+    display_handler.print_full_screen_with_title("Corrupt. Mem.", "Restoring defaults...");
 }
 
 void setup() {
@@ -171,8 +131,7 @@ void setup() {
     Serial.println();
     Serial.println("Starting Serial Port...");
 
-    initialize_display();
-    draw_starting();
+    display_handler.draw_starting(VERSION_STRING);
     config_inputs_and_outputs();
 
     ESP32Encoder::useInternalWeakPullResistors=UP;
@@ -187,10 +146,7 @@ void setup() {
 void on_pre_ota_update() {
     disable_wdt();
     display.clearDisplay();
-    display.setTextSize(FW_TEXT_SIZE_LARGE);
-    show_message("FW UPDATE");
-    display.setTextSize(FW_TEXT_SIZE_SMALL);
-    show_message("Please wait...", false);
+    display_handler.print_full_screen_with_title("FW UPDATE", "Please wait...");
 }
 
 void config_inputs_and_outputs() {
@@ -235,28 +191,6 @@ void disable_wdt() {
     }
 }
 
-void print_debug_info() {
-    if (show_buttons_debug) {
-        display.setCursor(50,50);
-        display.setTextSize(FW_TEXT_SIZE_SMALL);
-        display.println("B: " + String(digitalRead(BACK_BUTTON_PIN)) + " E: " + String(!digitalRead(ENTER_BUTTON_PIN)));
-        display.display();
-        display.setTextSize(FW_TEXT_SIZE_LARGE);
-    }
-}
-
-void clear_debug_info() {
-    static unsigned long last_time_update = millis();
-    if (millis() - last_time_update > 250) {
-        display.setCursor(50,50);
-        display.setTextSize(FW_TEXT_SIZE_SMALL);
-        display.println("          ");
-        display.display();
-        display.setTextSize(FW_TEXT_SIZE_LARGE);
-        last_time_update = millis();
-    }
-}
-
 void handle_states_machine() {
     current_state = next_state;
 
@@ -282,32 +216,34 @@ void handle_states_machine() {
         break;
         case STATE_CLOCK: {
             Serial.println("Clock...");
-            show_message("CLOCK!");
+            display_handler.show_message("CLOCK!");
             set_next_state(STATE_CLOCK);
         }
         break;
         case STATE_WIFI_CONFIG: {
-            display.setTextSize(FW_TEXT_SIZE_SMALL);
-            String wifi_output = "WiFi Status:\n";
+            String wifi_output;
             if (WiFi.isConnected()) {
                 wifi_output += "Connected to:\n" + String(WiFi.SSID());
                 wifi_output += "\nIP Address:\n" + WiFi.localIP().toString();
             } else {
                 wifi_output += "Not connected :(";
             }
-            show_message(wifi_output);
+            display_handler.print_full_screen_with_title("WiFi", "Status:\n" + wifi_output);
 
-            display.setTextSize(FW_TEXT_SIZE_LARGE);
             set_next_state(STATE_WIFI_CONFIG);
         }
         break;
         case STATE_CALIBRATION: {
             static int current_position = 0;
             if (calibration.current_position_mm == -999) {
+                debug_info.setFetching(true);
                 calibration = calibration_storage.fetch();
+                debug_info.setFetching(false);
                 current_position = calibration.current_position_mm;
             } else if (current_position != 0 && current_position != calibration.current_position_mm && digitalRead(BACK_BUTTON_PIN) == HIGH) {
+                debug_info.setStoring(true);
                 calibration_storage.store(calibration);
+                debug_info.setStoring(false);
             }
 
             static int64_t last_encoder_position = 0;
@@ -317,15 +253,14 @@ void handle_states_machine() {
                 last_encoder_position = current_encoder_position;
             }
 
-            display.setTextSize(FW_TEXT_SIZE_SMALL);
-            show_message("CALIBR.\nCurrent pos: " + String(current_position) + " mm");
+            display_handler.print_full_screen_with_title("CALIBR.", "Current pos: " + String(current_position) + " mm");
 
             set_next_state(STATE_CALIBRATION);
         }
         break;
         case STATE_MEMORIES: {
             Serial.println("Mem...");
-            show_message("MEMORIES!");
+            display_handler.show_message("MEMORIES!");
             set_next_state(STATE_MEMORIES);
         }
         break;
@@ -364,15 +299,7 @@ void handle_states_machine() {
         }
         break;
         case STATE_DEBUG_CONFIG: {
-            show_message("Dbg: " + String(show_buttons_debug ? "ON ": "OFF"));
-            static int64_t last_encoder_position = encoder.getCount();
-            if (last_encoder_position != encoder.getCount()) {
-                show_buttons_debug = !show_buttons_debug;
-                last_encoder_position = encoder.getCount();
-            }
-            if (!show_buttons_debug) {
-                clear_debug_info();
-            }
+            debug_info.showConfig(encoder.getCount());
             set_next_state(STATE_DEBUG_CONFIG);
         }
         break;
@@ -393,7 +320,7 @@ void set_next_state(int state) {
 void loop() {
     wifiManager.process();
     handle_states_machine();
-    print_debug_info();
+    debug_info.print();
     int64_t encoder_count = encoder.getCount();
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
