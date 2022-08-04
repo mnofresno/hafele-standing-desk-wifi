@@ -4,6 +4,7 @@
 #include <Adafruit_SSD1306.h>
 #include <HardwareSerial.h>
 #include <string.h>
+#include "DisplayHandler.h"
 
 #define DEFAULT_TEXT_SIZE 2
 #define PADDING 20 / DEFAULT_TEXT_SIZE
@@ -18,6 +19,7 @@ struct MenuItem {
 class MenuInstance {
     private:
         Adafruit_SSD1306 *_display;
+        DisplayHandler *_display_handler;
         HardwareSerial *_debug_print;
         MenuItem *_menu_items;
         int _total_menu_size;
@@ -32,7 +34,6 @@ class MenuInstance {
         void show_menu_items();
         void show_menu_header();
         void draw_menu_item(MenuItem item, bool selected = false);
-        String pad_string(String input, String cPadWith, const unsigned char cMaxLen);
         void set_highlighted_color();
         void set_normal_color();
         bool is_item_selected(int current_item);
@@ -40,7 +41,7 @@ class MenuInstance {
 
     public:
         MenuInstance(
-            Adafruit_SSD1306 *display,
+            DisplayHandler *display_handler,
             HardwareSerial *debug_print,
             MenuItem *menu_items,
             unsigned int total_menu_size,
