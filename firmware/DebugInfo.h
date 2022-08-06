@@ -2,6 +2,7 @@
 #define DebugInfo_h
 
 #include "DisplayHandler.h"
+#include "ButtonsHandler.h"
 #include <Arduino.h>
 
 class DebugInfo {
@@ -9,8 +10,7 @@ class DebugInfo {
         bool _enabled = false;
         DisplayHandler *_display_handler;
         int64_t last_dial_position;
-        uint8_t _enter_button_pin;
-        uint8_t _back_button_pin;
+        ButtonsHandler * _buttons_handler;
         bool _storing_config;
         bool _fetching_config;
         void clear();
@@ -18,8 +18,7 @@ class DebugInfo {
     public:
         DebugInfo(
             DisplayHandler *display_handler,
-            uint8_t enter_button_pin,
-            uint8_t back_button_pin
+            ButtonsHandler *buttons_handler
         );
         void print();
         void showConfig(int64_t dial_position);

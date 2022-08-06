@@ -3,12 +3,10 @@
 
 DebugInfo::DebugInfo(
     DisplayHandler *display_handler,
-    uint8_t enter_button_pin,
-    uint8_t back_button_pin
+    ButtonsHandler *buttons_handler
 ) {
     _display_handler = display_handler;
-    _enter_button_pin = enter_button_pin;
-    _back_button_pin = back_button_pin;
+    _buttons_handler = buttons_handler;
 }
 
 void DebugInfo::print() {
@@ -17,10 +15,7 @@ void DebugInfo::print() {
             Adafruit_SSD1306 *_display = _display_handler->display();
             _display->setCursor(50,45);
             _display->setTextSize(1);
-            _display->println(
-                "B: " + String(digitalRead(_back_button_pin))
-                + " E: " + String(!digitalRead(_enter_button_pin))
-            );
+            _display->println(_buttons_handler->serialize_buttons_debug());
             _display->setCursor(50,55);
             _display->println(
                 "S: " + String(_storing_config)
