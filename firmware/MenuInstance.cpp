@@ -6,8 +6,7 @@ MenuInstance::MenuInstance(
     MenuItem *menu_items,
     unsigned int total_menu_size,
     String title,
-    uint8_t enter_button_pin,
-    uint8_t back_button_pin
+    ButtonsHandler * buttons_handler
 ) {
     _display_handler = display_handler;
     _display = _display_handler->display();
@@ -15,8 +14,7 @@ MenuInstance::MenuInstance(
     _menu_items = menu_items;
     _total_menu_size = total_menu_size;
     _title = title;
-    _enter_button_pin = enter_button_pin;
-    _back_button_pin = back_button_pin;
+    _buttons_handler = buttons_handler;
 }
 
 void MenuInstance::process(int64_t dialPosition) {
@@ -28,7 +26,7 @@ void MenuInstance::show() {
 
     show_menu_items();
 
-    if (!digitalRead(_enter_button_pin) == LOW) {
+    if (!_buttons_handler->readEnterButton()) {
         if (current_dial_position != last_dial_position) {
             if (current_dial_position < last_dial_position) {
                 if (selected_option < _total_menu_size) {
@@ -48,7 +46,7 @@ void MenuInstance::show() {
             show_menu_items();
 
         }
-        if(digitalRead(_back_button_pin) == HIGH) {
+        if(_buttons_handler->readBackButton()) {
             selected_option = MENU_ITEM_GO_BACK;
             return;
         }
@@ -101,7 +99,7 @@ void MenuInstance::set_normal_color() {
 }
 
 int MenuInstance::get_selection() {
-    if (!digitalRead(_enter_button_pin) == HIGH) {
+    if (_buttons_handler->readEnterButton()) {
         int array_index = (int)selected_option - 1;
         assert_menu_index(array_index);
         return _menu_items[array_index].index;

@@ -11,6 +11,7 @@
 #include "Calibration.h"
 #include "DebugInfo.h"
 #include "DisplayHandler.h"
+#include "ButtonsHandler.h"
 
 #define __ASSERT_USE_STDERR
 
@@ -61,7 +62,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 Calibration calibration_storage(&on_corrupted_eeprom);
 DisplayHandler display_handler(&display);
-DebugInfo debug_info(&display_handler, ENTER_BUTTON_PIN, BACK_BUTTON_PIN);
+ButtonsHandler buttons_handler(ENTER_BUTTON_PIN, BACK_BUTTON_PIN, true);
+DebugInfo debug_info(&display_handler, &buttons_handler);
 
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
@@ -85,8 +87,7 @@ MenuInstance main_menu_instance(
     main_menu,
     ARRAY_SIZE(main_menu),
     "Menu:",
-    ENTER_BUTTON_PIN,
-    BACK_BUTTON_PIN
+    &buttons_handler
 );
 
 MenuInstance up_down_menu_instance(
@@ -95,8 +96,7 @@ MenuInstance up_down_menu_instance(
     up_down_menu,
     ARRAY_SIZE(up_down_menu),
     "Move:",
-    ENTER_BUTTON_PIN,
-    BACK_BUTTON_PIN
+    &buttons_handler
 );
 
 int current_state = STATE_MENU;
@@ -135,8 +135,6 @@ void on_pre_ota_update() {
 }
 
 void config_inputs_and_outputs() {
-    pinMode(BACK_BUTTON_PIN, INPUT);
-    pinMode(ENTER_BUTTON_PIN, INPUT);
     pinMode(DOWN_RELAY_PIN, OUTPUT);
     pinMode(UP_RELAY_PIN, OUTPUT);
 }
@@ -222,7 +220,7 @@ int states_transformation() {
         }
         break;
         case STATE_CALIBRATION: {
-            if (calibration.is_dirty && !digitalRead(ENTER_BUTTON_PIN)) {
+            if (calibration.is_dirty && buttons_handler.readEnterButton()) {
                 debug_info.setStoring(true);
                 Serial.println("\nStoring...\n");
                 calibration_storage.store(calibration);
@@ -266,7 +264,7 @@ int states_transformation() {
 
             selected_movement = up_down_menu_instance.get_selection();
             static bool manual_moving = false;
-            if (!digitalRead(ENTER_BUTTON_PIN)) {
+            if (buttons_handler.readEnterButton()) {
                 switch (selected_movement) {
                     case ITEM_INDEX_MOVE_UP:
                         manual_moving = true;
@@ -308,7 +306,7 @@ void handle_states_machine() {
 }
 
 int get_next_state_or_back(int state) {
-    if (digitalRead(BACK_BUTTON_PIN) == HIGH) {
+    if (buttons_handler.readBackButton()) {
         return STATE_MENU;
     }
     return state;

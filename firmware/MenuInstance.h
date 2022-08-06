@@ -5,6 +5,7 @@
 #include <HardwareSerial.h>
 #include <string.h>
 #include "DisplayHandler.h"
+#include "ButtonsHandler.h"
 
 #define DEFAULT_TEXT_SIZE 2
 #define PADDING 20 / DEFAULT_TEXT_SIZE
@@ -28,8 +29,7 @@ class MenuInstance {
         float selected_option = 1;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
         int extra_option = 0;
         String _title;
-        uint8_t _enter_button_pin;
-        uint8_t _back_button_pin;
+        ButtonsHandler * _buttons_handler;
         void show_menu_items();
         void show_menu_header();
         void draw_menu_item(MenuItem item, bool selected = false);
@@ -45,8 +45,7 @@ class MenuInstance {
             MenuItem *menu_items,
             unsigned int total_menu_size,
             String title,
-            uint8_t enter_button_pin,
-            uint8_t back_button_pin
+            ButtonsHandler * buttons_handler
         );
         void process(int64_t dialPosition);
         void show();
