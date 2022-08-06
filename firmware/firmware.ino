@@ -16,10 +16,7 @@
 
 #include <assert.h>
 
-// #include "soc/soc.h"
-// #include "soc/rtc_cntl_reg.h"
-
-#define VERSION_STRING "v1.0.4"
+#define VERSION_STRING "v1.0.3"
 
 #define DEFAULT_FULL_UP_TIME_IN_SECS 18
 #define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
@@ -107,17 +104,8 @@ int next_state = STATE_MENU;
 static bool wdt_is_enabled = false;
 CalibrationData calibration;
 
-void debug_pointers() {
-    display_handler.anti_flickering([&](){
-        Serial.printf("\nPunteros menus:");
-        Serial.printf("\n%p", main_menu);
-        Serial.printf("\n%p", up_down_menu);
-
-    }, 2000);
-}
-
 void on_corrupted_eeprom() {
-    display_handler.print_full_screen_with_title("Corrupt. Mem.", "Restoring defaults...");
+    display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
 }
 
 void setup() {
@@ -136,7 +124,8 @@ void setup() {
     WiFi.mode(WIFI_STA);
     wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
     wifiManager.setTitle("WIFI STANDING DESK");
-    calibration.current_position_mm = -999;
+
+    calibration_storage.fetch(calibration);
 }
 
 void on_pre_ota_update() {
@@ -187,33 +176,38 @@ void disable_wdt() {
     }
 }
 
-void handle_states_machine() {
-    current_state = next_state;
+int menu_item_to_state(int selected_item) {
+    switch (selected_item) {
+        case MENU_ITEM_GO_BACK:
+            return STATE_CLOCK;
+        case ITEM_INDEX_WIFI:
+            return STATE_WIFI_CONFIG;
+        case ITEM_INDEX_CALIBRATION:
+            return STATE_CALIBRATION;
+        // case ITEM_INDEX_MEMORIES:
+        //     return STATE_MEMORIES;
+        // case ITEM_INDEX_CLOCK:
+        //     return STATE_CLOCK;
+        case ITEM_INDEX_MOVE:
+            return STATE_MOVE;
+        case ITEM_INDEX_DEBUG:
+            return STATE_DEBUG_CONFIG;
+        default:
+            return STATE_MENU;
+    }
+}
 
+int states_transformation() {
     switch (current_state) {
         case STATE_MENU: {
-            int selected_item;
-
             main_menu_instance.show();
-
-            selected_item = main_menu_instance.get_selection();
-
-            if (selected_item == MENU_ITEM_GO_BACK) next_state = STATE_CLOCK;
-
-            if (selected_item == ITEM_INDEX_WIFI) next_state = STATE_WIFI_CONFIG;
-            if (selected_item == ITEM_INDEX_CALIBRATION) next_state = STATE_CALIBRATION;
-            // if (selected_item == ITEM_INDEX_MEMORIES) next_state = STATE_MEMORIES;
-            // if (selected_item == ITEM_INDEX_CLOCK) next_state = STATE_CLOCK;
-            if (selected_item == ITEM_INDEX_MOVE) next_state = STATE_MOVE;
-            if (selected_item == ITEM_INDEX_DEBUG) next_state = STATE_DEBUG_CONFIG;
-
-            if (selected_item == 0) next_state = STATE_MENU;
+            return menu_item_to_state(
+                main_menu_instance.get_selection()
+            );
         }
-        break;
         case STATE_CLOCK: {
             Serial.println("Clock...");
             display_handler.show_message("CLOCK!");
-            set_next_state(STATE_CLOCK);
         }
         break;
         case STATE_WIFI_CONFIG: {
@@ -225,39 +219,44 @@ void handle_states_machine() {
                 wifi_output += "Not connected :(";
             }
             display_handler.print_full_screen_with_title("WiFi", "Status:\n" + wifi_output);
-
-            set_next_state(STATE_WIFI_CONFIG);
         }
         break;
         case STATE_CALIBRATION: {
-            static int current_position = 0;
-            if (calibration.current_position_mm == -999) {
-                debug_info.setFetching(true);
-                calibration = calibration_storage.fetch();
-                debug_info.setFetching(false);
-                current_position = calibration.current_position_mm;
-            } else if (current_position != 0 && current_position != calibration.current_position_mm && digitalRead(BACK_BUTTON_PIN) == HIGH) {
+            if (calibration.is_dirty && !digitalRead(ENTER_BUTTON_PIN)) {
                 debug_info.setStoring(true);
+                Serial.println("\nStoring...\n");
                 calibration_storage.store(calibration);
                 debug_info.setStoring(false);
+                Serial.println("\nStored OK...\n");
+                calibration.is_dirty = false;
             }
 
             static int64_t last_encoder_position = 0;
             int64_t current_encoder_position = encoder.getCount();
             if (last_encoder_position != current_encoder_position) {
-                current_position += current_encoder_position > last_encoder_position ? -1 : 1;
+                calibration.current_position_mm += current_encoder_position > last_encoder_position ? -1 : 1;
                 last_encoder_position = current_encoder_position;
+                calibration.is_dirty = true;
             }
 
-            display_handler.print_full_screen_with_title("CALIBR.", "Current pos: " + String(current_position) + " mm");
+            char buffer[40];
 
-            set_next_state(STATE_CALIBRATION);
+            sprintf(
+                buffer,
+                "Current pos: %i mm\n%s",
+                calibration.current_position_mm,
+                calibration.is_dirty ? "" : "Saved"
+            );
+
+            display_handler.print_full_screen_with_title(
+                "CALIBR.",
+                String(buffer)
+            );
         }
         break;
         case STATE_MEMORIES: {
             Serial.println("Mem...");
             display_handler.show_message("MEMORIES!");
-            set_next_state(STATE_MEMORIES);
         }
         break;
         case STATE_MOVE: {
@@ -290,27 +289,29 @@ void handle_states_machine() {
                     manual_moving = false;
                 }
             }
-
-            set_next_state(STATE_MOVE);
         }
         break;
         case STATE_DEBUG_CONFIG: {
             debug_info.showConfig(encoder.getCount());
-            set_next_state(STATE_DEBUG_CONFIG);
         }
         break;
     }
+    return get_next_state_or_back(current_state);
+}
 
+void handle_states_machine() {
+    current_state = next_state;
+    next_state = states_transformation();
     if (next_state != current_state) {
         display.clearDisplay();
     }
 }
 
-void set_next_state(int state) {
-    next_state = state;
+int get_next_state_or_back(int state) {
     if (digitalRead(BACK_BUTTON_PIN) == HIGH) {
-        next_state = STATE_MENU;
+        return STATE_MENU;
     }
+    return state;
 }
 
 void loop() {
@@ -322,8 +323,7 @@ void loop() {
     up_down_menu_instance.process(encoder_count);
     motor_driver.run();
     reset_wdt();
-    tryToConnectWifi();
-    debug_pointers();
+    try_to_connect_wifi();
 }
 
 void reset_wdt() {
@@ -334,7 +334,7 @@ void reset_wdt() {
     }
 }
 
-void tryToConnectWifi() {
+void try_to_connect_wifi() {
     static unsigned long last_wifi_check = 0;
     if (!WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
         wifiManager.setConfigPortalBlocking(false);

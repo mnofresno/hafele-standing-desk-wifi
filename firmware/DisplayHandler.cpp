@@ -61,6 +61,8 @@ void DisplayHandler::print_full_screen_with_title(String title, String body) {
     static int last_title_length = 0;
     static int last_body_length = 0;
 
+    _display->setCursor(0, 0);
+
     _display->setTextSize(FW_TEXT_SIZE_LARGE);
     show_message(pad_string(title, " ", last_title_length));
     _display->setTextSize(FW_TEXT_SIZE_SMALL);
