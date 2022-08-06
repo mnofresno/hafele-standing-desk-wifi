@@ -261,7 +261,7 @@ int states_transformation() {
             int selected_movement;
 
             up_down_menu_instance.show();
-
+            enable_wdt();
             selected_movement = up_down_menu_instance.get_selection();
             static bool manual_moving = false;
             if (buttons_handler.readEnterButton()) {
@@ -287,6 +287,7 @@ int states_transformation() {
                     manual_moving = false;
                 }
             }
+            disable_wdt();
         }
         break;
         case STATE_DEBUG_CONFIG: {
