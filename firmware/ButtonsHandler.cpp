@@ -21,7 +21,7 @@ bool ButtonsHandler::readEnterButton() {
 }
 
 bool ButtonsHandler::readBackButton() {
-    bool button_reading = do_read_back_button()
+    bool button_reading = do_read_back_button();
 
     return debounce_state_change(BACK_BUTTON_CLICK, button_reading);
 }
