@@ -17,7 +17,7 @@
 
 #include <assert.h>
 
-#define VERSION_STRING "v1.0.3"
+#define VERSION_STRING "v1.0.4"
 
 #define DEFAULT_FULL_UP_TIME_IN_SECS 18
 #define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
@@ -301,7 +301,9 @@ int states_transformation() {
 void handle_states_machine() {
     current_state = next_state;
     next_state = states_transformation();
-    if (next_state != current_state) {
+    bool has_changed_state = next_state != current_state;
+    buttons_handler.process(has_changed_state);
+    if (has_changed_state) {
         display.clearDisplay();
     }
 }
