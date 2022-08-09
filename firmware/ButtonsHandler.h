@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-#define CLICK_DEBOUNCE_TIME 100
-#define STATE_DEBOUNCE_TIME 200
+#define CLICK_DEBOUNCE_TIME 50
+#define STATE_DEBOUNCE_TIME 100
 
 #define STATE_CHANGE 1
 #define ENTER_BUTTON_CLICK 2
