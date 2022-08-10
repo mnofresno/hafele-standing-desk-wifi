@@ -103,6 +103,7 @@ int current_state = STATE_MENU;
 int next_state = STATE_MENU;
 static bool wdt_is_enabled = false;
 CalibrationData calibration;
+bool is_wifi_enabled = true;
 
 void on_corrupted_eeprom() {
     display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
@@ -195,6 +196,27 @@ int menu_item_to_state(int selected_item) {
     }
 }
 
+void wifi_print_connected() {
+    display_handler.println_with_pad("Connected to:");
+    display_handler.println_with_pad(String(WiFi.SSID()));
+    display_handler.println_with_pad("IP Address:");
+    display_handler.println_with_pad(WiFi.localIP().toString());
+}
+
+void wifi_print_disconnected() {
+    display_handler.println_with_pad("Not connected :(");
+    display_handler.println_with_pad("Press encoder button");
+    display_handler.println_with_pad("to re-connect WiFi.");
+    display_handler.println_with_pad("");
+}
+
+void wifi_print_connecting(String connecting_bar) {
+    display_handler.println_with_pad("");
+    display_handler.println_with_pad("Connecting" + connecting_bar);
+    display_handler.println_with_pad("");
+    display_handler.println_with_pad("");
+}
+
 int states_transformation() {
     switch (current_state) {
         case STATE_MENU: {
@@ -209,14 +231,28 @@ int states_transformation() {
         }
         break;
         case STATE_WIFI_CONFIG: {
-            String wifi_output;
+            static String connecting_bar = "";
+            static bool connecting = false;
+            display_handler.print_full_screen_with_title("WiFi", "Status:");
             if (WiFi.isConnected()) {
-                wifi_output += "Connected to:\n" + String(WiFi.SSID());
-                wifi_output += "\nIP Address:\n" + WiFi.localIP().toString();
+                wifi_print_connected();
+                connecting = false;
+            } else if (connecting) {
+                wifi_print_connecting(connecting_bar);
+                display_handler.anti_flickering([&](){
+                    connecting_bar += ".";
+                }, 200);
             } else {
-                wifi_output += "Not connected :(";
+                wifi_print_disconnected();
             }
-            display_handler.print_full_screen_with_title("WiFi", "Status:\n" + wifi_output);
+            if (buttons_handler.readEnterButton()) {
+                is_wifi_enabled = ! is_wifi_enabled;
+                if (is_wifi_enabled) {
+                    connecting = true;
+                    connecting_bar = "";
+                    // wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+                }
+            }
         }
         break;
         case STATE_CALIBRATION: {
@@ -337,13 +373,16 @@ void reset_wdt() {
 
 void try_to_connect_wifi() {
     static unsigned long last_wifi_check = 0;
-    if (!WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
+    if (is_wifi_enabled && !WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
         wifiManager.setConfigPortalBlocking(false);
         wifiManager.startConfigPortal();
         WiFi.begin();
         // wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
         config_api_endpoints();
         last_wifi_check = millis();
+    } else if (!is_wifi_enabled) {
+        WiFi.disconnect(true);
+        WiFi.mode(WIFI_OFF);
     }
 }
 

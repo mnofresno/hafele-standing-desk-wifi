@@ -7,6 +7,8 @@
 
 #define FW_TEXT_SIZE_SMALL 1
 #define FW_TEXT_SIZE_LARGE 2
+#define DEFAULT_TEXT_SIZE 2
+#define PADDING 20 / DEFAULT_TEXT_SIZE
 
 class DisplayHandler {
     private:
@@ -18,7 +20,7 @@ class DisplayHandler {
         void show_message(String input, bool reset_cursor = true);
         void draw_starting(String version_string);
         Adafruit_SSD1306* display();
-        void println_with_pad(String input, int length);
+        void println_with_pad(String input, int length = 20);
         void print_full_screen_with_title(String title, String body);
         void anti_flickering(std::function<void()> callback, int millis_between_calls = 250);
 };

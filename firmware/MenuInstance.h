@@ -7,8 +7,6 @@
 #include "DisplayHandler.h"
 #include "ButtonsHandler.h"
 
-#define DEFAULT_TEXT_SIZE 2
-#define PADDING 20 / DEFAULT_TEXT_SIZE
 #define MENU_TOTAL_DISPLAYABLE_ITEMS 6 / DEFAULT_TEXT_SIZE
 #define MENU_ITEM_GO_BACK -1
 
