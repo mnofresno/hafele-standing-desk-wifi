@@ -104,6 +104,7 @@ int next_state = STATE_MENU;
 static bool wdt_is_enabled = false;
 CalibrationData calibration;
 bool is_wifi_enabled = true;
+int use_ap_or_station = WIFI_STA;
 
 void on_corrupted_eeprom() {
     display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
@@ -204,10 +205,11 @@ void wifi_print_connected() {
 }
 
 void wifi_print_disconnected() {
+    String selector = use_ap_or_station == WIFI_STA ? "<-" : "->";
     display_handler.println_with_pad("Not connected :(");
     display_handler.println_with_pad("Press encoder button");
     display_handler.println_with_pad("to re-connect WiFi.");
-    display_handler.println_with_pad("");
+    display_handler.println_with_pad("STA " + selector + " AP");
 }
 
 void wifi_print_connecting(String connecting_bar) {
@@ -233,6 +235,7 @@ int states_transformation() {
         case STATE_WIFI_CONFIG: {
             static String connecting_bar = "";
             static bool connecting = false;
+            static int64_t last_dial_position = encoder.getCount();
             display_handler.print_full_screen_with_title("WiFi", "Status:");
             if (WiFi.isConnected()) {
                 wifi_print_connected();
@@ -244,13 +247,16 @@ int states_transformation() {
                 }, 200);
             } else {
                 wifi_print_disconnected();
+                if (last_dial_position != encoder.getCount()) {
+                    use_ap_or_station = use_ap_or_station == WIFI_STA ? WIFI_AP : WIFI_STA;
+                    last_dial_position = encoder.getCount();
+                }
             }
             if (buttons_handler.readEnterButton()) {
                 is_wifi_enabled = ! is_wifi_enabled;
                 if (is_wifi_enabled) {
                     connecting = true;
                     connecting_bar = "";
-                    // wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
                 }
             }
         }
@@ -295,7 +301,6 @@ int states_transformation() {
         break;
         case STATE_MOVE: {
             int selected_movement;
-
             up_down_menu_instance.show();
             enable_wdt();
             selected_movement = up_down_menu_instance.get_selection();
@@ -376,8 +381,11 @@ void try_to_connect_wifi() {
     if (is_wifi_enabled && !WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
         wifiManager.setConfigPortalBlocking(false);
         wifiManager.startConfigPortal();
-        WiFi.begin();
-        // wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+        if (use_ap_or_station == WIFI_STA) {
+            WiFi.begin();
+        } else {
+            wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+        }
         config_api_endpoints();
         last_wifi_check = millis();
     } else if (!is_wifi_enabled) {
