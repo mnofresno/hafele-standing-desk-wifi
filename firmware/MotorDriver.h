@@ -7,6 +7,9 @@
 #define MOVE_STATE_DOWN 2
 #define MOVE_STATE_STOP 3
 
+#define DEFAULT_FULL_UP_TIME_IN_SECS 18
+#define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
+
 class MotorDriver {
     private:
         uint8_t _motor_up_pin;
@@ -15,6 +18,7 @@ class MotorDriver {
         unsigned long _duration = 0; /** When = 0, implies infinity */
         unsigned int _current_move_state = MOVE_STATE_STOP;
         unsigned int _expected_state = MOVE_STATE_STOP;
+        void moveForMillis(int direction, unsigned long duration);
         bool timedOut();
         void doMoveUp();
         void doMoveDown();
@@ -27,7 +31,8 @@ class MotorDriver {
         );
         void moveUpForMillis(unsigned long duration);
         void moveDownForMillis(unsigned long duration);
-        void moveForMillis(int direction, unsigned long duration);
+        void moveFullUp();
+        void moveFullDown();
         void moveUp();
         void moveDown();
         void stop();

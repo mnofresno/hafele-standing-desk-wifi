@@ -84,3 +84,11 @@ void MotorDriver::stop() {
     _expected_state = MOVE_STATE_STOP;
     _duration = 0;
 }
+
+void MotorDriver::moveFullDown() {
+    moveDownForMillis(DEFAULT_FULL_DOWN_TIME_IN_SECS * 1000);
+}
+
+void MotorDriver::moveFullUp() {
+    moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
+}
