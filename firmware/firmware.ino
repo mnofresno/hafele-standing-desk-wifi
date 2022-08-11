@@ -19,9 +19,6 @@
 
 #define VERSION_STRING "v1.0.4"
 
-#define DEFAULT_FULL_UP_TIME_IN_SECS 18
-#define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
-
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -153,8 +150,18 @@ void config_api_endpoints() {
     });
 
     wifiManager.server->on("/down", [&]() {
-        motor_driver.moveDownForMillis(500);
+        motor_driver.moveDownForMillis(400);
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going down");
+    });
+
+    wifiManager.server->on("/full_up", [&]() {
+        motor_driver.moveFullUp();
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going FULL up");
+    });
+
+    wifiManager.server->on("/full_down", [&]() {
+        motor_driver.moveFullDown();
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going FULL down");
     });
 
     already_configured_endpoints = true;
@@ -316,10 +323,10 @@ int states_transformation() {
                         motor_driver.moveDown();
                         break;
                     case ITEM_INDEX_MOVE_FULL_UP:
-                        motor_driver.moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
+                        motor_driver.moveFullUp();
                         break;
                     case ITEM_INDEX_MOVE_FULL_DOWN:
-                        motor_driver.moveDownForMillis(DEFAULT_FULL_DOWN_TIME_IN_SECS * 1000);
+                        motor_driver.moveFullDown();
                         break;
                 }
             } else {
