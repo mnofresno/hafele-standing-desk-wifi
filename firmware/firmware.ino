@@ -58,6 +58,10 @@
 
 ESP32Encoder encoder;
 WiFiManager wifiManager;
+WiFiManagerParameter wm_param_current_position_mm("current_position_mm", "Current Position (mm)", "position", 20);
+WiFiManagerParameter wm_param_up_traverse_mm_sec("up_traverse_mm_sec", "Up traverse speed (mm/s)", "up traverse", 20);
+WiFiManagerParameter wm_param_down_traverse_mm_sec("down_traverse_mm_sec", "Down traverse speed (mm/s)", "down traverse", 20);
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 Calibration calibration_storage(&on_corrupted_eeprom);
@@ -137,13 +141,35 @@ void setup() {
   	encoder.attachHalfQuad(ENCODER_PIN_B, ENCODER_PIN_A);
 
     WiFi.mode(WIFI_STA);
-    wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
-    wifiManager.setTitle("WIFI STANDING DESK");
 
     calibration_storage.fetch(calibration);
 
+    setup_wifi_manager();
+
     calibration_menu_instance.setFontSize(1);
     display_handler.display()->dim(true);
+}
+
+void setup_wifi_manager() {
+    wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
+    wifiManager.setTitle("WIFI STANDING DESK");
+
+    wm_param_current_position_mm.setValue(String(calibration.current_position_mm).c_str(), 20);
+    wm_param_up_traverse_mm_sec.setValue(String(calibration.up_traverse_mm_sec).c_str(), 20);
+    wm_param_down_traverse_mm_sec.setValue(String(calibration.down_traverse_mm_sec).c_str(), 20);
+
+    wifiManager.setParamsPage(true);
+    wifiManager.setSaveParamsCallback(&on_params_save);
+    wifiManager.addParameter(&wm_param_current_position_mm);
+    wifiManager.addParameter(&wm_param_up_traverse_mm_sec);
+    wifiManager.addParameter(&wm_param_down_traverse_mm_sec);
+}
+
+void on_params_save() {
+    calibration.current_position_mm = String(wm_param_current_position_mm.getValue()).toInt();
+    calibration.up_traverse_mm_sec = String(wm_param_up_traverse_mm_sec.getValue()).toInt();
+    calibration.down_traverse_mm_sec = String(wm_param_down_traverse_mm_sec.getValue()).toInt();
+    calibration_storage.store(calibration);
 }
 
 void on_pre_ota_update() {
@@ -334,8 +360,9 @@ int states_transformation() {
         }
         break;
         case STATE_MOVE: {
-            int current_time = millis();
+            unsigned long current_time = millis();
             static unsigned long start_time = 0;
+            static int was_moved_in_direction = 0;
             int selected_movement;
             up_down_menu_instance.show();
             up_down_menu_instance.setTitle("Move: " + String(calibration.current_position_mm));
@@ -343,24 +370,29 @@ int states_transformation() {
             selected_movement = up_down_menu_instance.get_selection();
             static bool manual_moving = false;
 
-            if (manual_moving) {
-                float speed = selected_movement == ITEM_INDEX_MOVE_UP
-                    ? calibration.up_traverse_mm_sec
-                    : -calibration.down_traverse_mm_sec;
-                unsigned long duration = current_time - start_time;
-                calibration.current_position_mm = calibration.current_position_mm + speed * duration;
-            }
+            // if (manual_moving && start_time != 0) {
+            //     float speed = selected_movement == ITEM_INDEX_MOVE_UP
+            //         ? calibration.up_traverse_mm_sec
+            //         : -calibration.down_traverse_mm_sec;
+            //     float duration_in_secs = (current_time - start_time) / 1000.0;
+            //     calibration.current_position_mm = calibration.current_position_mm + speed * duration_in_secs;
+            // }
 
             if (buttons_handler.readEnterButton()) {
+                was_moved_in_direction = selected_movement;
                 switch (selected_movement) {
                     case ITEM_INDEX_MOVE_UP:
                         manual_moving = true;
-                        start_time = start_time == 0 ? current_time : start_time;
+                        if (start_time == 0) {
+                            start_time = current_time;
+                        }
                         motor_driver.moveUp();
                         break;
                     case ITEM_INDEX_MOVE_DOWN:
                         manual_moving = true;
-                        start_time = start_time == 0 ? current_time : start_time;
+                        if (start_time == 0) {
+                            start_time = current_time;
+                        }
                         motor_driver.moveDown();
                         break;
                     case ITEM_INDEX_MOVE_FULL_UP:
@@ -373,6 +405,11 @@ int states_transformation() {
             } else {
                 if (manual_moving) {
                     if (start_time != 0) {
+                        float speed = was_moved_in_direction == ITEM_INDEX_MOVE_UP
+                            ? calibration.up_traverse_mm_sec
+                            : -calibration.down_traverse_mm_sec;
+                        float duration_in_secs = (current_time - start_time) / 1000.0;
+                        calibration.current_position_mm += speed * abs(duration_in_secs);
                         start_time = 0;
                         calibration_storage.store(calibration);
                     }
