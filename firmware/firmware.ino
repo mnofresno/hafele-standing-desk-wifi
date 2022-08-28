@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <WiFiManager.h>
 #include <SPI.h>
 #include <Wire.h>
@@ -15,9 +16,7 @@
 
 #define __ASSERT_USE_STDERR
 
-#include <assert.h>
-
-#define VERSION_STRING "v1.0.4"
+#define VERSION_STRING "v1.0.5"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -40,6 +39,10 @@
 #define ITEM_INDEX_MOVE_FULL_UP 6
 #define ITEM_INDEX_MOVE_FULL_DOWN 7
 #define ITEM_INDEX_CALIBRATION 8
+#define ITEM_INDEX_CALIBRATION_CURRENT_POSITION 9
+#define ITEM_INDEX_CALIBRATION_UP_SPEED 10
+#define ITEM_INDEX_CALIBRATION_DOWN_SPEED 11
+#define ITEM_INDEX_CALIBRATION_DOWN_STATUS 12
 
 #define UP_RELAY_PIN 32
 #define DOWN_RELAY_PIN 33
@@ -78,9 +81,15 @@ MenuItem up_down_menu[] = {
     {ITEM_INDEX_MOVE_FULL_DOWN, "Full-Down"},
 };
 
+MenuItem calibration_menu[] = {
+    {ITEM_INDEX_CALIBRATION_CURRENT_POSITION, "Curr. Pos."},
+    {ITEM_INDEX_CALIBRATION_UP_SPEED, "Up spd."},
+    {ITEM_INDEX_CALIBRATION_DOWN_SPEED, "Down spd."},
+    {ITEM_INDEX_CALIBRATION_DOWN_STATUS, "Status: "},
+};
+
 MenuInstance main_menu_instance(
     &display_handler,
-    NULL,
     main_menu,
     ARRAY_SIZE(main_menu),
     "Menu:",
@@ -89,10 +98,17 @@ MenuInstance main_menu_instance(
 
 MenuInstance up_down_menu_instance(
     &display_handler,
-    NULL,
     up_down_menu,
     ARRAY_SIZE(up_down_menu),
     "Move:",
+    &buttons_handler
+);
+
+MenuInstance calibration_menu_instance(
+    &display_handler,
+    calibration_menu,
+    ARRAY_SIZE(calibration_menu),
+    "Calibration:",
     &buttons_handler
 );
 
@@ -125,6 +141,9 @@ void setup() {
     wifiManager.setTitle("WIFI STANDING DESK");
 
     calibration_storage.fetch(calibration);
+
+    calibration_menu_instance.setFontSize(1);
+    display_handler.display()->dim(true);
 }
 
 void on_pre_ota_update() {
@@ -225,6 +244,9 @@ void wifi_print_connecting(String connecting_bar) {
     display_handler.println_with_pad("");
     display_handler.println_with_pad("");
 }
+String this_parameter_is_selected(int current_parameter, int selected_parameter) {
+    return current_parameter == selected_parameter ? "> " : "";
+}
 
 int states_transformation() {
     switch (current_state) {
@@ -269,36 +291,41 @@ int states_transformation() {
         }
         break;
         case STATE_CALIBRATION: {
-            if (calibration.is_dirty && buttons_handler.readEnterButton()) {
-                debug_info.setStoring(true);
-                Serial.println("\nStoring...\n");
-                calibration_storage.store(calibration);
-                debug_info.setStoring(false);
-                Serial.println("\nStored OK...\n");
-                calibration.is_dirty = false;
-            }
+            String("Curr. pos.: " + String(calibration.current_position_mm) + " mm").toCharArray(calibration_menu[0].title, 20);
+            String("Up spd.: " + String(calibration.up_traverse_mm_sec) + " mm/s").toCharArray(calibration_menu[1].title, 20);
+            String("Down spd.: " + String(calibration.down_traverse_mm_sec) + " mm/s").toCharArray(calibration_menu[2].title, 20);
+            String("Status: " + String(calibration.is_dirty ? "dirty" : "saved")).toCharArray(calibration_menu[3].title, 20);
+
+            calibration_menu_instance.show();
+
+            int selected_config = calibration_menu_instance.get_selection();
 
             static int64_t last_encoder_position = 0;
             int64_t current_encoder_position = encoder.getCount();
-            if (last_encoder_position != current_encoder_position) {
-                calibration.current_position_mm += current_encoder_position > last_encoder_position ? -1 : 1;
-                last_encoder_position = current_encoder_position;
-                calibration.is_dirty = true;
+
+            if (buttons_handler.readEnterButton()) {
+                if (last_encoder_position != current_encoder_position) {
+                    switch (selected_config) {
+                        case ITEM_INDEX_CALIBRATION_CURRENT_POSITION:
+                            calibration.current_position_mm += current_encoder_position > last_encoder_position ? -1 : 1;
+                            break;
+                        case ITEM_INDEX_CALIBRATION_UP_SPEED:
+                            calibration.up_traverse_mm_sec += current_encoder_position > last_encoder_position ? -1 : 1;
+                            break;
+                        case ITEM_INDEX_CALIBRATION_DOWN_SPEED:
+                            calibration.down_traverse_mm_sec += current_encoder_position > last_encoder_position ? -1 : 1;
+                            break;
+                    }
+                    calibration.is_dirty = true;
+                    last_encoder_position = current_encoder_position;
+                }
+            } else {
+                calibration_menu_instance.process(current_encoder_position);
+                if (calibration.is_dirty) {
+                    calibration_storage.store(calibration);
+                    calibration.is_dirty = false;
+                }
             }
-
-            char buffer[40];
-
-            sprintf(
-                buffer,
-                "Current pos: %i mm\n%s",
-                calibration.current_position_mm,
-                calibration.is_dirty ? "" : "Saved"
-            );
-
-            display_handler.print_full_screen_with_title(
-                "CALIBR.",
-                String(buffer)
-            );
         }
         break;
         case STATE_MEMORIES: {
@@ -307,19 +334,33 @@ int states_transformation() {
         }
         break;
         case STATE_MOVE: {
+            int current_time = millis();
+            static unsigned long start_time = 0;
             int selected_movement;
             up_down_menu_instance.show();
+            up_down_menu_instance.setTitle("Move: " + String(calibration.current_position_mm));
             enable_wdt();
             selected_movement = up_down_menu_instance.get_selection();
             static bool manual_moving = false;
+
+            if (manual_moving) {
+                float speed = selected_movement == ITEM_INDEX_MOVE_UP
+                    ? calibration.up_traverse_mm_sec
+                    : -calibration.down_traverse_mm_sec;
+                unsigned long duration = current_time - start_time;
+                calibration.current_position_mm = calibration.current_position_mm + speed * duration;
+            }
+
             if (buttons_handler.readEnterButton()) {
                 switch (selected_movement) {
                     case ITEM_INDEX_MOVE_UP:
                         manual_moving = true;
+                        start_time = start_time == 0 ? current_time : start_time;
                         motor_driver.moveUp();
                         break;
                     case ITEM_INDEX_MOVE_DOWN:
                         manual_moving = true;
+                        start_time = start_time == 0 ? current_time : start_time;
                         motor_driver.moveDown();
                         break;
                     case ITEM_INDEX_MOVE_FULL_UP:
@@ -331,6 +372,10 @@ int states_transformation() {
                 }
             } else {
                 if (manual_moving) {
+                    if (start_time != 0) {
+                        start_time = 0;
+                        calibration_storage.store(calibration);
+                    }
                     motor_driver.stop();
                     manual_moving = false;
                 }
@@ -368,8 +413,10 @@ void loop() {
     handle_states_machine();
     debug_info.print();
     int64_t encoder_count = encoder.getCount();
+
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
+
     motor_driver.run();
     reset_wdt();
     try_to_connect_wifi();

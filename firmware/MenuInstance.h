@@ -2,12 +2,12 @@
 #define MenuInstance_h
 
 #include <Adafruit_SSD1306.h>
-#include <HardwareSerial.h>
 #include <string.h>
 #include "DisplayHandler.h"
 #include "ButtonsHandler.h"
 
-#define MENU_TOTAL_DISPLAYABLE_ITEMS 6 / DEFAULT_TEXT_SIZE
+#define DEFAULT_MENU_SIZE 2
+#define MAX_DISPLAYABLE_ITEMS 6
 #define MENU_ITEM_GO_BACK -1
 
 struct MenuItem {
@@ -19,9 +19,9 @@ class MenuInstance {
     private:
         Adafruit_SSD1306 *_display;
         DisplayHandler *_display_handler;
-        HardwareSerial *_debug_print;
         MenuItem *_menu_items;
         int _total_menu_size;
+        int _font_size = DEFAULT_MENU_SIZE;
         int64_t current_dial_position = 0;
         int64_t last_dial_position = 0;
         float selected_option = 1;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
@@ -35,11 +35,11 @@ class MenuInstance {
         void set_normal_color();
         bool is_item_selected(int current_item);
         void assert_menu_index(int array_index);
+        int totalDisplayableItems();
 
     public:
         MenuInstance(
             DisplayHandler *display_handler,
-            HardwareSerial *debug_print,
             MenuItem *menu_items,
             unsigned int total_menu_size,
             String title,
@@ -48,6 +48,8 @@ class MenuInstance {
         void process(int64_t dialPosition);
         void show();
         int get_selection();
-
+        void setTitle(String title);
+        void setItems(MenuItem *menu_items);
+        void setFontSize(int size);
 };
 #endif

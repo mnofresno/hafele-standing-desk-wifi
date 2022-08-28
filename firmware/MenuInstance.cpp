@@ -2,7 +2,6 @@
 
 MenuInstance::MenuInstance(
     DisplayHandler *display_handler,
-    HardwareSerial *debug_print,
     MenuItem *menu_items,
     unsigned int total_menu_size,
     String title,
@@ -10,7 +9,6 @@ MenuInstance::MenuInstance(
 ) {
     _display_handler = display_handler;
     _display = _display_handler->display();
-    _debug_print = debug_print;
     _menu_items = menu_items;
     _total_menu_size = total_menu_size;
     _title = title;
@@ -40,7 +38,7 @@ void MenuInstance::show() {
 
             if(selected_option < 1 + extra_option && extra_option > 0)
                 extra_option--;
-            if(selected_option > MENU_TOTAL_DISPLAYABLE_ITEMS + extra_option)
+            if(selected_option > totalDisplayableItems() + extra_option)
                 extra_option++;
 
             show_menu_items();
@@ -56,7 +54,7 @@ void MenuInstance::show() {
 }
 
 void MenuInstance::show_menu_header() {
-    _display->setTextSize(DEFAULT_TEXT_SIZE);
+    _display->setTextSize(_font_size);
     _display->setCursor(0,0);             // Start at top-left corner
     _display_handler->println_with_pad(_title, PADDING);
 }
@@ -64,7 +62,7 @@ void MenuInstance::show_menu_header() {
 void MenuInstance::show_menu_items() {
     _display_handler->anti_flickering([&]() {
         show_menu_header();
-        for(int x = extra_option; x < _total_menu_size && x <= (MENU_TOTAL_DISPLAYABLE_ITEMS - 1 + extra_option); x++) {
+        for(int x = extra_option; x < _total_menu_size && x <= (totalDisplayableItems() - 1 + extra_option); x++) {
             draw_menu_item(_menu_items[x], is_item_selected(x));
             assert_menu_index(x);
         }
@@ -78,9 +76,6 @@ bool MenuInstance::is_item_selected(int current_item) {
 
 void MenuInstance::draw_menu_item(MenuItem item, bool selected) {
     String title = item.title;
-    if (_debug_print != NULL) {
-        _debug_print->println("Drawing menu item: " + title);
-    }
     if (selected) {
         set_highlighted_color();
     } else {
@@ -110,4 +105,20 @@ int MenuInstance::get_selection() {
 void MenuInstance::assert_menu_index(int array_index) {
     assert(array_index >= 0);
     assert(array_index < _total_menu_size);
+}
+
+void MenuInstance::setTitle(String title) {
+    _title = title;
+}
+
+void MenuInstance::setItems(MenuItem *menu_items) {
+    _menu_items = menu_items;
+}
+
+void MenuInstance::setFontSize(int size) {
+    _font_size = size;
+}
+
+int MenuInstance::totalDisplayableItems() {
+    return MAX_DISPLAYABLE_ITEMS / _font_size;
 }
