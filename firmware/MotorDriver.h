@@ -28,6 +28,8 @@ class MotorDriver {
         void moveForMillis(int direction, unsigned long duration);
         bool timedOut();
         bool carriedOut();
+        bool carriedOutMax();
+        bool carriedOutMin();
         void doMoveUp();
         void doMoveDown();
         void doStop();
@@ -37,6 +39,7 @@ class MotorDriver {
         void _started_movement();
         bool _moving_up();
         bool _moving_down();
+        bool _is_moving();
         void calibrationChanged();
 
     public:

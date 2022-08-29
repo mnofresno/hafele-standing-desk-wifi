@@ -16,20 +16,17 @@ void MotorDriver::run() {
         switch (_expected_state) {
             case MOVE_STATE_UP:
                 doMoveUp();
-                _current_move_state = MOVE_STATE_UP;
                 break;
             case MOVE_STATE_DOWN:
                 doMoveDown();
-                _current_move_state = MOVE_STATE_DOWN;
                 break;
             case MOVE_STATE_STOP:
                 doStop();
-                _current_move_state = MOVE_STATE_STOP;
                 break;
         }
     }
 
-    if ((_current_move_state != MOVE_STATE_STOP && timedOut() && _duration != 0) || carriedOut()) {
+    if ((_is_moving() && timedOut() && _duration != 0) || carriedOut()) {
         stop();
     }
 }
@@ -39,8 +36,16 @@ bool MotorDriver::timedOut() {
 }
 
 bool MotorDriver::carriedOut() {
-    return (_moving_up() && currentPositionInMM() > (MAX_HEIGHT_MM - HEIGHT_MARGIN))
-        || (_moving_down() && currentPositionInMM() < (MIN_HEIGHT_MM + HEIGHT_MARGIN));
+    return (_moving_up() && carriedOutMax())
+        || (_moving_down() && carriedOutMin());
+}
+
+bool MotorDriver::carriedOutMax() {
+    return currentPositionInMM() > (MAX_HEIGHT_MM - HEIGHT_MARGIN);
+}
+
+bool MotorDriver::carriedOutMin() {
+    return currentPositionInMM() < (MIN_HEIGHT_MM + HEIGHT_MARGIN);
 }
 
 void MotorDriver::_started_movement() {
@@ -63,28 +68,31 @@ void MotorDriver::moveDownForMillis(unsigned long duration) {
 }
 
 void MotorDriver::doMoveUp() {
-    if (carriedOut()) {
+    if (carriedOutMax()) {
         return;
     }
     _started_movement();
     // enable_wdt();
     digitalWrite(_motor_up_pin, HIGH);
     digitalWrite(_motor_down_pin, LOW);
+    _current_move_state = MOVE_STATE_UP;
 }
 
 void MotorDriver::doMoveDown() {
-    if (carriedOut()) {
+    if (carriedOutMin()) {
         return;
     }
     _started_movement();
     // enable_wdt();
     digitalWrite(_motor_down_pin, HIGH);
     digitalWrite(_motor_up_pin, LOW);
+    _current_move_state = MOVE_STATE_DOWN;
 }
 
 void MotorDriver::doStop() {
     digitalWrite(_motor_up_pin, LOW);
     digitalWrite(_motor_down_pin, LOW);
+    _current_move_state = MOVE_STATE_STOP;
     _initial_position_mm = _calibration->current_position_mm;
     _started_movement_at = 0;
     calibrationChanged();
@@ -119,7 +127,7 @@ unsigned int MotorDriver::currentPositionInMM() {
 }
 
 void MotorDriver::_update_position() {
-    if (_current_move_state != MOVE_STATE_STOP) {
+    if (_is_moving()) {
         _calibration->current_position_mm = _initial_position_mm + _speed() * (_elapsed_time() / 1000.0);
     }
 }
@@ -136,6 +144,10 @@ int MotorDriver::_speed() {
 
 bool MotorDriver::_moving_up() {
     return _current_move_state == MOVE_STATE_UP;
+}
+
+bool MotorDriver::_is_moving() {
+    return _moving_up() || _moving_down();
 }
 
 bool MotorDriver::_moving_down() {
