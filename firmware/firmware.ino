@@ -374,6 +374,7 @@ int states_transformation() {
         case STATE_MOVE: {
             int selected_movement;
             up_down_menu_instance.show();
+            // up_down_menu_instance.setTitle("Move " + String(motor_driver.currentPositionInMM()), "mm");
             up_down_menu_instance.setTitle("Move: " + String(motor_driver.currentPositionInMM()));
             enable_wdt();
             selected_movement = up_down_menu_instance.get_selection();

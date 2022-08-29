@@ -16,6 +16,10 @@ void DisplayHandler::println_with_pad(String input, int length) {
     _display->println(pad_string(input, " ", length));
 }
 
+void DisplayHandler::print_with_pad(String input, int length) {
+    _display->print(pad_string(input, " ", length));
+}
+
 String DisplayHandler::pad_string(String input, String cPadWith, const unsigned char cMaxLen) {
 	String strTemp = input;
 	while (strTemp.length() < cMaxLen)

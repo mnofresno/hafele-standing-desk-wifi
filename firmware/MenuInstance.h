@@ -7,6 +7,7 @@
 #include "ButtonsHandler.h"
 
 #define DEFAULT_MENU_SIZE 2
+#define SUBTITLE_SIZE 1
 #define MAX_DISPLAYABLE_ITEMS 6
 #define MENU_ITEM_GO_BACK -1
 
@@ -27,6 +28,7 @@ class MenuInstance {
         float selected_option = 1;  // From 1 to 1.75 selected_option is 1 -> From 2 to 2.75 selected_option is 2
         int extra_option = 0;
         String _title;
+        String _subtitle;
         ButtonsHandler * _buttons_handler;
         void show_menu_items();
         void show_menu_header();
@@ -36,6 +38,7 @@ class MenuInstance {
         bool is_item_selected(int current_item);
         void assert_menu_index(int array_index);
         int totalDisplayableItems();
+        int padding(int font_size);
 
     public:
         MenuInstance(
@@ -48,7 +51,7 @@ class MenuInstance {
         void process(int64_t dialPosition);
         void show();
         int get_selection();
-        void setTitle(String title);
+        void setTitle(String title, String subtitle = "");
         void setItems(MenuItem *menu_items);
         void setFontSize(int size);
 };
