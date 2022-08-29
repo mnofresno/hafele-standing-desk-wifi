@@ -9,6 +9,7 @@ MotorDriver::MotorDriver(
 }
 
 void MotorDriver::run() {
+    _update_position();
     if (
         _current_move_state != _expected_state
     ) {
@@ -28,18 +29,27 @@ void MotorDriver::run() {
         }
     }
 
-    if (_current_move_state != MOVE_STATE_STOP && timedOut() && _duration != 0) {
-        _expected_state = MOVE_STATE_STOP;
-        _duration = 0;
+    if ((_current_move_state != MOVE_STATE_STOP && timedOut() && _duration != 0) || carriedOut()) {
+        stop();
     }
 }
 
 bool MotorDriver::timedOut() {
-    return millis() - _started_movement_at >= _duration;
+    return _elapsed_time() >= _duration;
+}
+
+bool MotorDriver::carriedOut() {
+    return (_moving_up() && currentPositionInMM() > (MAX_HEIGHT_MM - HEIGHT_MARGIN))
+        || (_moving_down() && currentPositionInMM() < (MIN_HEIGHT_MM + HEIGHT_MARGIN));
+}
+
+void MotorDriver::_started_movement() {
+    if (_started_movement_at == 0) {
+        _started_movement_at = millis();
+    }
 }
 
 void MotorDriver::moveForMillis(int direction, unsigned long duration) {
-    _started_movement_at = millis();
     _expected_state = direction;
     _duration = duration;
 }
@@ -53,12 +63,20 @@ void MotorDriver::moveDownForMillis(unsigned long duration) {
 }
 
 void MotorDriver::doMoveUp() {
+    if (carriedOut()) {
+        return;
+    }
+    _started_movement();
     // enable_wdt();
     digitalWrite(_motor_up_pin, HIGH);
     digitalWrite(_motor_down_pin, LOW);
 }
 
 void MotorDriver::doMoveDown() {
+    if (carriedOut()) {
+        return;
+    }
+    _started_movement();
     // enable_wdt();
     digitalWrite(_motor_down_pin, HIGH);
     digitalWrite(_motor_up_pin, LOW);
@@ -67,6 +85,9 @@ void MotorDriver::doMoveDown() {
 void MotorDriver::doStop() {
     digitalWrite(_motor_up_pin, LOW);
     digitalWrite(_motor_down_pin, LOW);
+    _initial_position_mm = _calibration->current_position_mm;
+    _started_movement_at = 0;
+    calibrationChanged();
     // disable_wdt();
 }
 
@@ -91,4 +112,47 @@ void MotorDriver::moveFullDown() {
 
 void MotorDriver::moveFullUp() {
     moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
+}
+
+unsigned int MotorDriver::currentPositionInMM() {
+    return _calibration->current_position_mm;
+}
+
+void MotorDriver::_update_position() {
+    if (_current_move_state != MOVE_STATE_STOP) {
+        _calibration->current_position_mm = _initial_position_mm + _speed() * (_elapsed_time() / 1000.0);
+    }
+}
+
+unsigned int MotorDriver::_elapsed_time() {
+    return millis() - _started_movement_at;
+}
+
+int MotorDriver::_speed() {
+    return _moving_up()
+        ? _calibration->up_traverse_mm_sec
+        : -_calibration->down_traverse_mm_sec;
+}
+
+bool MotorDriver::_moving_up() {
+    return _current_move_state == MOVE_STATE_UP;
+}
+
+bool MotorDriver::_moving_down() {
+    return _current_move_state == MOVE_STATE_DOWN;
+}
+
+void MotorDriver::setOnCalibrationChangedCallback(std::function<void()> callback) {
+    _onCalibrationChangedCallback = callback;
+}
+
+void MotorDriver::setCalibrationData(CalibrationData *calibration) {
+    _calibration = calibration;
+    _initial_position_mm = _calibration->current_position_mm;
+}
+
+void MotorDriver::calibrationChanged() {
+    if (_onCalibrationChangedCallback != NULL) {
+        _onCalibrationChangedCallback();
+    }
 }

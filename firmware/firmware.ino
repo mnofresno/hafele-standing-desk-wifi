@@ -63,8 +63,8 @@ WiFiManagerParameter wm_param_up_traverse_mm_sec("up_traverse_mm_sec", "Up trave
 WiFiManagerParameter wm_param_down_traverse_mm_sec("down_traverse_mm_sec", "Down traverse speed (mm/s)", "down traverse", 20);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 Calibration calibration_storage(&on_corrupted_eeprom);
+MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 DisplayHandler display_handler(&display);
 ButtonsHandler buttons_handler(ENTER_BUTTON_PIN, BACK_BUTTON_PIN, true);
 DebugInfo debug_info(&display_handler, &buttons_handler);
@@ -147,7 +147,10 @@ void setup() {
     setup_wifi_manager();
 
     calibration_menu_instance.setFontSize(1);
-    display_handler.display()->dim(true);
+    display.dim(true);
+
+    motor_driver.setOnCalibrationChangedCallback(&store_calibration);
+    motor_driver.setCalibrationData(&calibration);
 }
 
 void setup_wifi_manager() {
@@ -178,7 +181,7 @@ void on_params_save() {
     calibration.current_position_mm = String(wm_param_current_position_mm.getValue()).toInt();
     calibration.up_traverse_mm_sec = String(wm_param_up_traverse_mm_sec.getValue()).toInt();
     calibration.down_traverse_mm_sec = String(wm_param_down_traverse_mm_sec.getValue()).toInt();
-    calibration_storage.store(calibration);
+    store_calibration();
 }
 
 void on_pre_ota_update() {
@@ -369,40 +372,21 @@ int states_transformation() {
         }
         break;
         case STATE_MOVE: {
-            unsigned long current_time = millis();
-            static unsigned long start_time = 0;
-            static int initial_position_mm = calibration.current_position_mm;
-            static int was_moved_in_direction = 0;
             int selected_movement;
             up_down_menu_instance.show();
-            up_down_menu_instance.setTitle("Move: " + String(calibration.current_position_mm));
+            up_down_menu_instance.setTitle("Move: " + String(motor_driver.currentPositionInMM()));
             enable_wdt();
             selected_movement = up_down_menu_instance.get_selection();
             static bool manual_moving = false;
 
-            if (manual_moving && start_time != 0) {
-                float speed = was_moved_in_direction == ITEM_INDEX_MOVE_UP
-                    ? calibration.up_traverse_mm_sec
-                    : -calibration.down_traverse_mm_sec;
-                float duration_in_secs = (current_time - start_time) / 1000.0;
-                calibration.current_position_mm = initial_position_mm + speed * duration_in_secs;
-            }
-
             if (buttons_handler.readEnterButton()) {
-                was_moved_in_direction = selected_movement;
                 switch (selected_movement) {
                     case ITEM_INDEX_MOVE_UP:
                         manual_moving = true;
-                        if (start_time == 0) {
-                            start_time = current_time;
-                        }
                         motor_driver.moveUp();
                         break;
                     case ITEM_INDEX_MOVE_DOWN:
                         manual_moving = true;
-                        if (start_time == 0) {
-                            start_time = current_time;
-                        }
                         motor_driver.moveDown();
                         break;
                     case ITEM_INDEX_MOVE_FULL_UP:
@@ -414,11 +398,6 @@ int states_transformation() {
                 }
             } else {
                 if (manual_moving) {
-                    if (start_time != 0) {
-                        start_time = 0;
-                        initial_position_mm = calibration.current_position_mm;
-                        store_calibration();
-                    }
                     motor_driver.stop();
                     manual_moving = false;
                 }

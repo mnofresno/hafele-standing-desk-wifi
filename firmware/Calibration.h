@@ -7,9 +7,9 @@
 #define EEPROM_SALT 46126
 
 typedef struct CalibrationData {
-    int up_traverse_mm_sec = 15;
-    int down_traverse_mm_sec = 20;
-    int current_position_mm = 500;
+    unsigned int up_traverse_mm_sec = 15;
+    unsigned int down_traverse_mm_sec = 20;
+    unsigned int current_position_mm = 500;
     bool is_dirty = false;
 };
 
