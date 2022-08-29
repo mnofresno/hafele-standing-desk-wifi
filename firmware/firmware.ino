@@ -154,15 +154,24 @@ void setup_wifi_manager() {
     wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
     wifiManager.setTitle("WIFI STANDING DESK");
 
-    wm_param_current_position_mm.setValue(String(calibration.current_position_mm).c_str(), 20);
-    wm_param_up_traverse_mm_sec.setValue(String(calibration.up_traverse_mm_sec).c_str(), 20);
-    wm_param_down_traverse_mm_sec.setValue(String(calibration.down_traverse_mm_sec).c_str(), 20);
+    update_calibration_parameters();
 
     wifiManager.setParamsPage(true);
     wifiManager.setSaveParamsCallback(&on_params_save);
     wifiManager.addParameter(&wm_param_current_position_mm);
     wifiManager.addParameter(&wm_param_up_traverse_mm_sec);
     wifiManager.addParameter(&wm_param_down_traverse_mm_sec);
+}
+
+void update_calibration_parameters() {
+    wm_param_current_position_mm.setValue(String(calibration.current_position_mm).c_str(), 20);
+    wm_param_up_traverse_mm_sec.setValue(String(calibration.up_traverse_mm_sec).c_str(), 20);
+    wm_param_down_traverse_mm_sec.setValue(String(calibration.down_traverse_mm_sec).c_str(), 20);
+}
+
+void store_calibration() {
+    update_calibration_parameters();
+    calibration_storage.store(calibration);
 }
 
 void on_params_save() {
@@ -348,7 +357,7 @@ int states_transformation() {
             } else {
                 calibration_menu_instance.process(current_encoder_position);
                 if (calibration.is_dirty) {
-                    calibration_storage.store(calibration);
+                    store_calibration();
                     calibration.is_dirty = false;
                 }
             }
@@ -362,6 +371,7 @@ int states_transformation() {
         case STATE_MOVE: {
             unsigned long current_time = millis();
             static unsigned long start_time = 0;
+            static int initial_position_mm = calibration.current_position_mm;
             static int was_moved_in_direction = 0;
             int selected_movement;
             up_down_menu_instance.show();
@@ -370,13 +380,13 @@ int states_transformation() {
             selected_movement = up_down_menu_instance.get_selection();
             static bool manual_moving = false;
 
-            // if (manual_moving && start_time != 0) {
-            //     float speed = selected_movement == ITEM_INDEX_MOVE_UP
-            //         ? calibration.up_traverse_mm_sec
-            //         : -calibration.down_traverse_mm_sec;
-            //     float duration_in_secs = (current_time - start_time) / 1000.0;
-            //     calibration.current_position_mm = calibration.current_position_mm + speed * duration_in_secs;
-            // }
+            if (manual_moving && start_time != 0) {
+                float speed = was_moved_in_direction == ITEM_INDEX_MOVE_UP
+                    ? calibration.up_traverse_mm_sec
+                    : -calibration.down_traverse_mm_sec;
+                float duration_in_secs = (current_time - start_time) / 1000.0;
+                calibration.current_position_mm = initial_position_mm + speed * duration_in_secs;
+            }
 
             if (buttons_handler.readEnterButton()) {
                 was_moved_in_direction = selected_movement;
@@ -405,13 +415,9 @@ int states_transformation() {
             } else {
                 if (manual_moving) {
                     if (start_time != 0) {
-                        float speed = was_moved_in_direction == ITEM_INDEX_MOVE_UP
-                            ? calibration.up_traverse_mm_sec
-                            : -calibration.down_traverse_mm_sec;
-                        float duration_in_secs = (current_time - start_time) / 1000.0;
-                        calibration.current_position_mm += speed * abs(duration_in_secs);
                         start_time = 0;
-                        calibration_storage.store(calibration);
+                        initial_position_mm = calibration.current_position_mm;
+                        store_calibration();
                     }
                     motor_driver.stop();
                     manual_moving = false;
