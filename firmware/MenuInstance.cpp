@@ -56,7 +56,13 @@ void MenuInstance::show() {
 void MenuInstance::show_menu_header() {
     _display->setTextSize(_font_size);
     _display->setCursor(0,0);             // Start at top-left corner
-    _display_handler->println_with_pad(_title, PADDING);
+    _display_handler->println_with_pad(_title, padding(_font_size));
+    if (_subtitle.length() != 0) {
+        _display->setTextSize(SUBTITLE_SIZE);
+        _display->setCursor(7 * _title.length(), 0);
+        _display_handler->print_with_pad(_subtitle, padding(SUBTITLE_SIZE));
+        _display->setTextSize(_font_size);
+    }
 }
 
 void MenuInstance::show_menu_items() {
@@ -81,7 +87,7 @@ void MenuInstance::draw_menu_item(MenuItem item, bool selected) {
     } else {
         set_normal_color();
     }
-    _display_handler->println_with_pad(title, PADDING);
+    _display_handler->println_with_pad(title, padding(_font_size));
     set_normal_color();
 }
 
@@ -107,8 +113,9 @@ void MenuInstance::assert_menu_index(int array_index) {
     assert(array_index < _total_menu_size);
 }
 
-void MenuInstance::setTitle(String title) {
+void MenuInstance::setTitle(String title, String subtitle) {
     _title = title;
+    _subtitle = subtitle;
 }
 
 void MenuInstance::setItems(MenuItem *menu_items) {
@@ -121,4 +128,8 @@ void MenuInstance::setFontSize(int size) {
 
 int MenuInstance::totalDisplayableItems() {
     return MAX_DISPLAYABLE_ITEMS / _font_size;
+}
+
+int MenuInstance::padding(int font_size) {
+    return 20 / font_size;
 }
