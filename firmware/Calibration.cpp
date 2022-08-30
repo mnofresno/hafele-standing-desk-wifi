@@ -20,6 +20,8 @@ void Calibration::fetch(CalibrationData &data) {
     }
     data.down_traverse_mm_sec = parsedJson["down_traverse_mm_sec"];
     data.up_traverse_mm_sec = parsedJson["up_traverse_mm_sec"];
+    data.memory_m1_mm = parsedJson["memory_m1_mm"];
+    data.memory_m2_mm = parsedJson["memory_m2_mm"];
     data.is_dirty = false;
 
 
@@ -34,6 +36,8 @@ void Calibration::store(CalibrationData &data) {
     parsedJson["current_position_mm"] = data.current_position_mm;
     parsedJson["down_traverse_mm_sec"] = data.down_traverse_mm_sec;
     parsedJson["up_traverse_mm_sec"] = data.up_traverse_mm_sec;
+    parsedJson["memory_m1_mm"] = data.memory_m1_mm;
+    parsedJson["memory_m2_mm"] = data.memory_m2_mm;
 
     String serializedJson;
 
