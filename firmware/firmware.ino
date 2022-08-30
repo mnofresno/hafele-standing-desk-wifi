@@ -32,19 +32,27 @@
 #define STATE_DEBUG_CONFIG 6
 
 #define ITEM_INDEX_WIFI 1
+#define ITEM_INDEX_MEMORIES 101
 #define ITEM_INDEX_MOVE 2
 #define ITEM_INDEX_DEBUG 3
+
 #define ITEM_INDEX_MOVE_UP 4
 #define ITEM_INDEX_MOVE_DOWN 5
 #define ITEM_INDEX_MOVE_FULL_UP 6
 #define ITEM_INDEX_MOVE_FULL_DOWN 7
 #define ITEM_INDEX_MOVE_1SEC_UP 61
 #define ITEM_INDEX_MOVE_1SEC_DOWN 71
+
 #define ITEM_INDEX_CALIBRATION 8
 #define ITEM_INDEX_CALIBRATION_CURRENT_POSITION 9
 #define ITEM_INDEX_CALIBRATION_UP_SPEED 10
 #define ITEM_INDEX_CALIBRATION_DOWN_SPEED 11
 #define ITEM_INDEX_CALIBRATION_DOWN_STATUS 12
+
+#define ITEM_INDEX_MEMORIES_GOTO_M1 13
+#define ITEM_INDEX_MEMORIES_GOTO_M2 14
+#define ITEM_INDEX_MEMORIES_SET_M1 15
+#define ITEM_INDEX_MEMORIES_SET_M2 16
 
 #define UP_RELAY_PIN 32
 #define DOWN_RELAY_PIN 33
@@ -74,7 +82,7 @@ DebugInfo debug_info(&display_handler, &buttons_handler);
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
     {ITEM_INDEX_CALIBRATION, "Calibr."},
-    // {ITEM_INDEX_MEMORIES, "Memories"},
+    {ITEM_INDEX_MEMORIES, "Memories"},
     // {ITEM_INDEX_CLOCK, "Clock"},
     {ITEM_INDEX_MOVE, "Move"},
     {ITEM_INDEX_DEBUG, "Debug"},
@@ -94,6 +102,13 @@ MenuItem calibration_menu[] = {
     {ITEM_INDEX_CALIBRATION_UP_SPEED, "Up spd."},
     {ITEM_INDEX_CALIBRATION_DOWN_SPEED, "Down spd."},
     {ITEM_INDEX_CALIBRATION_DOWN_STATUS, "Status: "},
+};
+
+MenuItem memories_menu[] = {
+    {ITEM_INDEX_MEMORIES_GOTO_M1, "M1 999 mm"},
+    {ITEM_INDEX_MEMORIES_GOTO_M2, "M2 111 mm"},
+    {ITEM_INDEX_MEMORIES_SET_M1, "Set M1"},
+    {ITEM_INDEX_MEMORIES_SET_M2, "Set M2"},
 };
 
 MenuInstance main_menu_instance(
@@ -117,6 +132,14 @@ MenuInstance calibration_menu_instance(
     calibration_menu,
     ARRAY_SIZE(calibration_menu),
     "Calibration:",
+    &buttons_handler
+);
+
+MenuInstance memories_menu_instance(
+    &display_handler,
+    memories_menu,
+    ARRAY_SIZE(memories_menu),
+    "Mem:",
     &buttons_handler
 );
 
@@ -264,8 +287,8 @@ int menu_item_to_state(int selected_item) {
             return STATE_WIFI_CONFIG;
         case ITEM_INDEX_CALIBRATION:
             return STATE_CALIBRATION;
-        // case ITEM_INDEX_MEMORIES:
-        //     return STATE_MEMORIES;
+        case ITEM_INDEX_MEMORIES:
+            return STATE_MEMORIES;
         // case ITEM_INDEX_CLOCK:
         //     return STATE_CLOCK;
         case ITEM_INDEX_MOVE:
@@ -383,8 +406,33 @@ int states_transformation() {
         }
         break;
         case STATE_MEMORIES: {
-            Serial.println("Mem...");
-            display_handler.show_message("MEMORIES!");
+            String("M1 " + String(calibration.memory_m1_mm) + " mm").toCharArray(memories_menu[0].title, 20);
+            String("M2 " + String(calibration.memory_m2_mm) + " mm").toCharArray(memories_menu[1].title, 20);
+
+            memories_menu_instance.show();
+
+            memories_menu_instance.setTitle("Mem: " + String(motor_driver.currentPositionInMM()));
+
+            int selected_option = memories_menu_instance.get_selection();
+
+            if (buttons_handler.readEnterButton()) {
+                switch (selected_option) {
+                    case ITEM_INDEX_MEMORIES_GOTO_M1:
+                        motor_driver.moveToTarget(calibration.memory_m1_mm);
+                    break;
+                    case ITEM_INDEX_MEMORIES_GOTO_M2:
+                        motor_driver.moveToTarget(calibration.memory_m2_mm);
+                    break;
+                    case ITEM_INDEX_MEMORIES_SET_M1:
+                        calibration.memory_m1_mm = motor_driver.currentPositionInMM();
+                        store_calibration();
+                    break;
+                    case ITEM_INDEX_MEMORIES_SET_M2:
+                        calibration.memory_m2_mm = motor_driver.currentPositionInMM();
+                        store_calibration();
+                    break;
+                }
+            }
         }
         break;
         case STATE_MOVE: {
@@ -461,6 +509,7 @@ void loop() {
 
     main_menu_instance.process(encoder_count);
     up_down_menu_instance.process(encoder_count);
+    memories_menu_instance.process(encoder_count);
 
     motor_driver.run();
     reset_wdt();

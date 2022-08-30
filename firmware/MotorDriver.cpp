@@ -175,6 +175,9 @@ void MotorDriver::calibrationChanged() {
 }
 
 void MotorDriver::moveToTarget(unsigned int position) {
+    if (abs((float)(currentPositionInMM() - position)) <= HEIGHT_MARGIN) {
+        return;
+    }
     assert(
         (position > MIN_HEIGHT_MM + HEIGHT_MARGIN)
         && (position < MAX_HEIGHT_MM - HEIGHT_MARGIN)
