@@ -12,7 +12,7 @@
 #define DEFAULT_FULL_DOWN_TIME_IN_SECS 16
 #define MAX_HEIGHT_MM 1220
 #define MIN_HEIGHT_MM 725
-#define HEIGHT_MARGIN 10
+#define HEIGHT_MARGIN 5
 
 class MotorDriver {
     private:
@@ -23,6 +23,7 @@ class MotorDriver {
         unsigned int _current_move_state = MOVE_STATE_STOP;
         unsigned int _expected_state = MOVE_STATE_STOP;
         unsigned int _initial_position_mm;
+        unsigned int _target_position = 0;
         std::function<void()> _onCalibrationChangedCallback;
         CalibrationData *_calibration;
         void moveForMillis(int direction, unsigned long duration);
@@ -41,6 +42,7 @@ class MotorDriver {
         bool _moving_down();
         bool _is_moving();
         void calibrationChanged();
+        bool reachedTarget();
 
     public:
         MotorDriver(
@@ -51,6 +53,7 @@ class MotorDriver {
         void setCalibrationData(CalibrationData *calibration);
         void moveUpForMillis(unsigned long duration);
         void moveDownForMillis(unsigned long duration);
+        void moveToTarget(unsigned int position);
         void moveFullUp();
         void moveFullDown();
         void moveUp();

@@ -38,6 +38,8 @@
 #define ITEM_INDEX_MOVE_DOWN 5
 #define ITEM_INDEX_MOVE_FULL_UP 6
 #define ITEM_INDEX_MOVE_FULL_DOWN 7
+#define ITEM_INDEX_MOVE_1SEC_UP 61
+#define ITEM_INDEX_MOVE_1SEC_DOWN 71
 #define ITEM_INDEX_CALIBRATION 8
 #define ITEM_INDEX_CALIBRATION_CURRENT_POSITION 9
 #define ITEM_INDEX_CALIBRATION_UP_SPEED 10
@@ -83,6 +85,8 @@ MenuItem up_down_menu[] = {
     {ITEM_INDEX_MOVE_DOWN, "Down"},
     {ITEM_INDEX_MOVE_FULL_UP, "Full-Up"},
     {ITEM_INDEX_MOVE_FULL_DOWN, "Full-Down"},
+    {ITEM_INDEX_MOVE_1SEC_UP, "1 sec. Up"},
+    {ITEM_INDEX_MOVE_1SEC_DOWN, "1 sec. Down"},
 };
 
 MenuItem calibration_menu[] = {
@@ -164,6 +168,7 @@ void setup_wifi_manager() {
     wifiManager.addParameter(&wm_param_current_position_mm);
     wifiManager.addParameter(&wm_param_up_traverse_mm_sec);
     wifiManager.addParameter(&wm_param_down_traverse_mm_sec);
+    wifiManager.setWebServerCallback(&config_api_endpoints);
 }
 
 void update_calibration_parameters() {
@@ -219,6 +224,17 @@ void config_api_endpoints() {
     wifiManager.server->on("/full_down", [&]() {
         motor_driver.moveFullDown();
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going FULL down");
+    });
+
+    wifiManager.server->on("/move_to", [&]() {
+        String position_str = wifiManager.server->arg(String("target"));
+        if (position_str.length() > 0) {
+            int position = position_str.toInt();
+            motor_driver.moveToTarget(position);
+            wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going to target: " + String(position));
+            return;
+        }
+        wifiManager.server->send(200, "text/plain charset=utf-8", "Error, must include target query param");
     });
 
     already_configured_endpoints = true;
@@ -396,6 +412,12 @@ int states_transformation() {
                     case ITEM_INDEX_MOVE_FULL_DOWN:
                         motor_driver.moveFullDown();
                         break;
+                    case ITEM_INDEX_MOVE_1SEC_UP:
+                        motor_driver.moveUpForMillis(1000);
+                        break;
+                    case ITEM_INDEX_MOVE_1SEC_DOWN:
+                        motor_driver.moveDownForMillis(1000);
+                        break;
                 }
             } else {
                 if (manual_moving) {
@@ -463,7 +485,6 @@ void try_to_connect_wifi() {
         } else {
             wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
         }
-        config_api_endpoints();
         last_wifi_check = millis();
     } else if (!is_wifi_enabled) {
         WiFi.disconnect(true);
