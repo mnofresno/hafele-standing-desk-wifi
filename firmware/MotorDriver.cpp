@@ -26,9 +26,14 @@ void MotorDriver::run() {
         }
     }
 
-    if ((_is_moving() && timedOut() && _duration != 0) || carriedOut()) {
+    if ((_is_moving() && timedOut() && _duration != 0) || carriedOut() || reachedTarget()) {
         stop();
     }
+}
+
+bool MotorDriver::reachedTarget() {
+    return currentPositionInMM() > (_target_position - HEIGHT_MARGIN)
+        && currentPositionInMM() < (_target_position + HEIGHT_MARGIN);
 }
 
 bool MotorDriver::timedOut() {
@@ -167,4 +172,15 @@ void MotorDriver::calibrationChanged() {
     if (_onCalibrationChangedCallback != NULL) {
         _onCalibrationChangedCallback();
     }
+}
+
+void MotorDriver::moveToTarget(unsigned int position) {
+    assert(
+        (position > MIN_HEIGHT_MM + HEIGHT_MARGIN)
+        && (position < MAX_HEIGHT_MM - HEIGHT_MARGIN)
+    );
+    _target_position = position;
+    _expected_state = currentPositionInMM() < position
+        ? MOVE_STATE_UP
+        : MOVE_STATE_DOWN;
 }
