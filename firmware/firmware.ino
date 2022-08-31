@@ -16,7 +16,10 @@
 
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.0.5"
+#define VERSION_STRING "v1.1.3"
+
+#define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
+#define DEFAULT_AP_PASSWORD "PASSWORD"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -181,6 +184,8 @@ void setup() {
 }
 
 void setup_wifi_manager() {
+    wifiManager.setConfigPortalBlocking(false);
+
     wifiManager.setPreOtaUpdateCallback(&on_pre_ota_update);
     wifiManager.setTitle("WIFI STANDING DESK");
 
@@ -191,7 +196,10 @@ void setup_wifi_manager() {
     wifiManager.addParameter(&wm_param_current_position_mm);
     wifiManager.addParameter(&wm_param_up_traverse_mm_sec);
     wifiManager.addParameter(&wm_param_down_traverse_mm_sec);
+
     wifiManager.setWebServerCallback(&config_api_endpoints);
+
+    wifiManager.startWebPortal();
 }
 
 void update_calibration_parameters() {
@@ -224,11 +232,6 @@ void config_inputs_and_outputs() {
 }
 
 void config_api_endpoints() {
-    static bool already_configured_endpoints = false;
-
-    if (already_configured_endpoints) {
-        return;
-    }
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
         wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going up");
@@ -259,8 +262,6 @@ void config_api_endpoints() {
         }
         wifiManager.server->send(200, "text/plain charset=utf-8", "Error, must include target query param");
     });
-
-    already_configured_endpoints = true;
 }
 
 void enable_wdt() {
@@ -527,12 +528,11 @@ void reset_wdt() {
 void try_to_connect_wifi() {
     static unsigned long last_wifi_check = 0;
     if (is_wifi_enabled && !WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
-        wifiManager.setConfigPortalBlocking(false);
-        wifiManager.startConfigPortal();
+        wifiManager.startConfigPortal(DEFAULT_AP_NAME, DEFAULT_AP_PASSWORD);
         if (use_ap_or_station == WIFI_STA) {
             WiFi.begin();
         } else {
-            wifiManager.autoConnect("WIFI_STANDING_DESK","PASSWORD");
+            wifiManager.autoConnect(DEFAULT_AP_NAME, DEFAULT_AP_PASSWORD);
         }
         last_wifi_check = millis();
     } else if (!is_wifi_enabled) {

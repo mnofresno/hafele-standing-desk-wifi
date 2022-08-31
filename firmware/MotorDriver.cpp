@@ -120,11 +120,11 @@ void MotorDriver::stop() {
 }
 
 void MotorDriver::moveFullDown() {
-    moveToTarget(MIN_HEIGHT_MM);
+    moveToTarget(MIN_HEIGHT_MM + HEIGHT_MARGIN);
 }
 
 void MotorDriver::moveFullUp() {
-    moveToTarget(MAX_HEIGHT_MM);
+    moveToTarget(MAX_HEIGHT_MM - HEIGHT_MARGIN);
 }
 
 unsigned int MotorDriver::currentPositionInMM() {
@@ -179,8 +179,8 @@ void MotorDriver::moveToTarget(unsigned int position) {
         return;
     }
     assert(
-        (position > MIN_HEIGHT_MM + HEIGHT_MARGIN)
-        && (position < MAX_HEIGHT_MM - HEIGHT_MARGIN)
+        (position >= MIN_HEIGHT_MM + HEIGHT_MARGIN)
+        && (position <= MAX_HEIGHT_MM - HEIGHT_MARGIN)
     );
     _target_position = position;
     _expected_state = currentPositionInMM() < position
