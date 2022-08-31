@@ -40,7 +40,6 @@ class MotorDriver {
         void _started_movement();
         bool _moving_up();
         bool _moving_down();
-        bool _is_moving();
         void calibrationChanged();
         bool reachedTarget();
 
@@ -60,6 +59,7 @@ class MotorDriver {
         void moveDown();
         void stop();
         void run();
+        bool isMoving();
         unsigned int currentPositionInMM();
 };
 #endif

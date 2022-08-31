@@ -415,7 +415,7 @@ int states_transformation() {
 
             int selected_option = memories_menu_instance.get_selection();
 
-            if (buttons_handler.readEnterButton()) {
+            if (buttons_handler.readEnterButton() && !motor_driver.isMoving()) {
                 switch (selected_option) {
                     case ITEM_INDEX_MEMORIES_GOTO_M1:
                         motor_driver.moveToTarget(calibration.memory_m1_mm);
