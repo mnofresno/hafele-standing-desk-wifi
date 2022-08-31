@@ -26,7 +26,7 @@ void MotorDriver::run() {
         }
     }
 
-    if ((_is_moving() && timedOut() && _duration != 0) || carriedOut() || reachedTarget()) {
+    if ((isMoving() && timedOut() && _duration != 0) || carriedOut() || reachedTarget()) {
         stop();
     }
 }
@@ -132,7 +132,7 @@ unsigned int MotorDriver::currentPositionInMM() {
 }
 
 void MotorDriver::_update_position() {
-    if (_is_moving()) {
+    if (isMoving()) {
         _calibration->current_position_mm = _initial_position_mm + _speed() * (_elapsed_time() / 1000.0);
     }
 }
@@ -151,7 +151,7 @@ bool MotorDriver::_moving_up() {
     return _current_move_state == MOVE_STATE_UP;
 }
 
-bool MotorDriver::_is_moving() {
+bool MotorDriver::isMoving() {
     return _moving_up() || _moving_down();
 }
 
@@ -175,7 +175,7 @@ void MotorDriver::calibrationChanged() {
 }
 
 void MotorDriver::moveToTarget(unsigned int position) {
-    if (abs((float)(currentPositionInMM() - position)) <= HEIGHT_MARGIN) {
+    if (pow(currentPositionInMM() - position, 2) <= pow(HEIGHT_MARGIN, 2)) {
         return;
     }
     assert(
