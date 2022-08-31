@@ -120,11 +120,11 @@ void MotorDriver::stop() {
 }
 
 void MotorDriver::moveFullDown() {
-    moveDownForMillis(DEFAULT_FULL_DOWN_TIME_IN_SECS * 1000);
+    moveToTarget(MIN_HEIGHT_MM);
 }
 
 void MotorDriver::moveFullUp() {
-    moveUpForMillis(DEFAULT_FULL_UP_TIME_IN_SECS * 1000);
+    moveToTarget(MAX_HEIGHT_MM);
 }
 
 unsigned int MotorDriver::currentPositionInMM() {
