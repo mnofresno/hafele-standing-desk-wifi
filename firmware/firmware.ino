@@ -91,13 +91,13 @@ MenuItem main_menu[] = {
     {ITEM_INDEX_DEBUG, "Debug"},
 };
 
-MenuItem up_down_menu[] = {
+MenuItem move_menu[] = {
     {ITEM_INDEX_MOVE_UP, "Up"},
     {ITEM_INDEX_MOVE_DOWN, "Down"},
     {ITEM_INDEX_MOVE_FULL_UP, "Full-Up"},
     {ITEM_INDEX_MOVE_FULL_DOWN, "Full-Down"},
-    {ITEM_INDEX_MOVE_1SEC_UP, "1 sec. Up"},
-    {ITEM_INDEX_MOVE_1SEC_DOWN, "1 sec. Down"},
+    {ITEM_INDEX_MOVE_1SEC_UP, "1 sec. UP"},
+    {ITEM_INDEX_MOVE_1SEC_DOWN, "1 sec. DN"},
 };
 
 MenuItem calibration_menu[] = {
@@ -122,10 +122,10 @@ MenuInstance main_menu_instance(
     &buttons_handler
 );
 
-MenuInstance up_down_menu_instance(
+MenuInstance move_menu_instance(
     &display_handler,
-    up_down_menu,
-    ARRAY_SIZE(up_down_menu),
+    move_menu,
+    ARRAY_SIZE(move_menu),
     "Move:",
     &buttons_handler
 );
@@ -158,9 +158,7 @@ void on_corrupted_eeprom() {
 }
 
 void setup() {
-    // WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-
-    Serial.begin(115200);
+     Serial.begin(115200);
     Serial.println();
     Serial.println("Starting Serial Port...");
 
@@ -438,11 +436,10 @@ int states_transformation() {
         break;
         case STATE_MOVE: {
             int selected_movement;
-            up_down_menu_instance.show();
-            // up_down_menu_instance.setTitle("Move " + String(motor_driver.currentPositionInMM()), "mm");
-            up_down_menu_instance.setTitle("Move: " + String(motor_driver.currentPositionInMM()));
+            move_menu_instance.show();
+            move_menu_instance.setTitle("Move: " + String(motor_driver.currentPositionInMM()));
             enable_wdt();
-            selected_movement = up_down_menu_instance.get_selection();
+            selected_movement = move_menu_instance.get_selection();
             static bool manual_moving = false;
 
             if (buttons_handler.readEnterButton()) {
@@ -509,7 +506,7 @@ void loop() {
     int64_t encoder_count = encoder.getCount();
 
     main_menu_instance.process(encoder_count);
-    up_down_menu_instance.process(encoder_count);
+    move_menu_instance.process(encoder_count);
     memories_menu_instance.process(encoder_count);
 
     motor_driver.run();

@@ -102,6 +102,9 @@ void MenuInstance::set_normal_color() {
 int MenuInstance::get_selection() {
     if (_buttons_handler->readEnterButton()) {
         int array_index = (int)selected_option - 1;
+        if (array_index < 0) {
+            return 0;
+        }
         assert_menu_index(array_index);
         return _menu_items[array_index].index;
     }
