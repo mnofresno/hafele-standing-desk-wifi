@@ -40,7 +40,7 @@ const char* HTML_PANEL = R"=====(
         @media screen and (max-width: 600px) {
             a.button, input[type="text"] {
                 padding: 20px 40px; /* Increase padding further for smaller screens */
-                font-size: 35px; /* Increase font size for smaller screens */
+                font-size: 25px; /* Increase font size for smaller screens */
             }
             .panel-title {
                 display: none;
@@ -84,12 +84,12 @@ const char* HTML_PANEL = R"=====(
     <br/>
     <a href="/full_down" class="button">Full-down <span class="double-down-arrow"></span></a>
     <br/>
-    <a href="/up" class="button">Up 1 sec. <span class="down-arrow"></span></a>
+    <a href="/up" class="button">Little Up <span class="down-arrow"></span></a>
     <br/>
-    <a href="/down" class="button">Down 1 sec. <span class="down-arrow"></span></a>
+    <a href="/down" class="button">Little Down <span class="down-arrow"></span></a>
     <br/>
-    <input type="text" id="targetPosition" placeholder="Enter position in mm">
-    <a href="#" class="button" onclick="moveToTarget()">Move to target position</a>
+    <input type="text" id="targetPosition" placeholder="Target position (mm)">
+    <a href="#" class="button" onclick="moveToTarget()">Go target position</a>
     <br/>
     <script>
         function moveToTarget() {
@@ -99,6 +99,7 @@ const char* HTML_PANEL = R"=====(
         }
         setTimeout(function () {
             document.getElementById("messageHeader").style.display = "none";
+            window.location.href = "/panel";
         }, 1000);
     </script>
 </body>
