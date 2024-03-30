@@ -13,6 +13,8 @@
 #include "DebugInfo.h"
 #include "DisplayHandler.h"
 #include "ButtonsHandler.h"
+#include "html/panel.h"
+#include "html/going_to.h"
 
 #define __ASSERT_USE_STDERR
 
@@ -232,22 +234,22 @@ void config_inputs_and_outputs() {
 void config_api_endpoints() {
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going up");
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("UP"));
     });
 
     wifiManager.server->on("/down", [&]() {
         motor_driver.moveDownForMillis(400);
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going down");
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("DOWN"));
     });
 
     wifiManager.server->on("/full_up", [&]() {
         motor_driver.moveFullUp();
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going FULL up");
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("FULL UP"));
     });
 
     wifiManager.server->on("/full_down", [&]() {
         motor_driver.moveFullDown();
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going FULL down");
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("FULL DOWN"));
     });
 
     wifiManager.server->on("/move_to", [&]() {
@@ -255,11 +257,21 @@ void config_api_endpoints() {
         if (position_str.length() > 0) {
             int position = position_str.toInt();
             motor_driver.moveToTarget(position);
-            wifiManager.server->send(200, "text/plain charset=utf-8", "Ok, going to target: " + String(position));
+            wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("to target: " + String(position)));
             return;
         }
-        wifiManager.server->send(200, "text/plain charset=utf-8", "Error, must include target query param");
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("NOWHERE: Error, must include target query param"));
     });
+
+    wifiManager.server->on("/panel", [&]() {
+        wifiManager.server->send(200, "text/html charset=utf-8", HTML_PANEL);
+    });
+}
+
+String goingToHtmlContentFor(String message) {
+    String htmlPage(HTML_GOING_TO);
+    htmlPage.replace("%s", message);
+    return htmlPage;
 }
 
 void enable_wdt() {
