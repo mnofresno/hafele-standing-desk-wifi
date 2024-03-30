@@ -234,22 +234,22 @@ void config_inputs_and_outputs() {
 void config_api_endpoints() {
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
-        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("UP"));
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("Moving UP"));
     });
 
     wifiManager.server->on("/down", [&]() {
         motor_driver.moveDownForMillis(400);
-        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("DOWN"));
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("Moving DOWN"));
     });
 
     wifiManager.server->on("/full_up", [&]() {
         motor_driver.moveFullUp();
-        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("FULL UP"));
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("Moving FULL UP"));
     });
 
     wifiManager.server->on("/full_down", [&]() {
         motor_driver.moveFullDown();
-        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("FULL DOWN"));
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("Moving FULL DOWN"));
     });
 
     wifiManager.server->on("/move_to", [&]() {
@@ -257,20 +257,20 @@ void config_api_endpoints() {
         if (position_str.length() > 0) {
             int position = position_str.toInt();
             motor_driver.moveToTarget(position);
-            wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("to target: " + String(position)));
+            wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("Moving to target: " + String(position)));
             return;
         }
         wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor("NOWHERE: Error, must include target query param"));
     });
 
     wifiManager.server->on("/panel", [&]() {
-        wifiManager.server->send(200, "text/html charset=utf-8", HTML_PANEL);
+        wifiManager.server->send(200, "text/html charset=utf-8", goingToHtmlContentFor(""));
     });
 }
 
 String goingToHtmlContentFor(String message) {
-    String htmlPage(HTML_GOING_TO);
-    htmlPage.replace("%s", message);
+    String htmlPage(HTML_PANEL);
+    htmlPage.replace("%message%", message);
     return htmlPage;
 }
 

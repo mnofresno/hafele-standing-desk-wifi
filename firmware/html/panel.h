@@ -78,6 +78,7 @@ const char* HTML_PANEL = R"=====(
 </head>
 <body>
     <h1 class="panel-title">PANEL MOVEMENT</h1>
+    <h2 id="messageHeader">%message%</h2>
     <br/>
     <a href="/full_up" class="button"><span>Full-up <span class="double-up-arrow"></span></span></a>
     <br/>
@@ -96,6 +97,9 @@ const char* HTML_PANEL = R"=====(
             var newUrl = "/move_to?target=" + targetParam;
             window.location.href = newUrl;
         }
+        setTimeout(function () {
+            document.getElementById("messageHeader").style.display = "none";
+        }, 1000);
     </script>
 </body>
 </html>
