@@ -99,7 +99,9 @@ const char* HTML_PANEL = R"=====(
         }
         setTimeout(function () {
             document.getElementById("messageHeader").style.display = "none";
-            window.location.href = "/panel";
+            if (window.location.pathname !== "/panel") {
+                window.location.href = "/panel";
+            }
         }, 1000);
     </script>
 </body>
