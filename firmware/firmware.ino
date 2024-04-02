@@ -6,6 +6,7 @@
 #include <Adafruit_SSD1306.h>
 #include <ESP32Encoder.h>
 #include <esp_task_wdt.h>
+#include <ArduinoJson.h>
 
 #include "MenuInstance.h"
 #include "MotorDriver.h"
@@ -119,7 +120,7 @@ MenuInstance main_menu_instance(
     &display_handler,
     main_menu,
     ARRAY_SIZE(main_menu),
-    "Menu:",
+    "Menu: (-)",
     &buttons_handler
 );
 
@@ -159,7 +160,7 @@ void on_corrupted_eeprom() {
 }
 
 void setup() {
-     Serial.begin(115200);
+    Serial.begin(115200);
     Serial.println();
     Serial.println("Starting Serial Port...");
 
@@ -210,6 +211,7 @@ void update_calibration_parameters() {
 void store_calibration() {
     update_calibration_parameters();
     calibration_storage.store(calibration);
+    motor_driver.setCalibrationData(&calibration);
 }
 
 void on_params_save() {
@@ -231,6 +233,15 @@ void config_inputs_and_outputs() {
 }
 
 void config_api_endpoints() {
+    wifiManager.server->on("/status", [&]() {
+        DynamicJsonDocument parsedStatus(1024);
+        parsedStatus["current_position_mm"] = calibration.current_position_mm;
+        parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
+        String jsonStatus;
+        serializeJson(parsedStatus, jsonStatus);
+        wifiManager.server->send(200, "application/json", jsonStatus);
+    });
+
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
         wifiManager.server->send(200, "text/html charset=utf-8", htmlPanelWithMessage("Moving UP"));
@@ -524,6 +535,7 @@ void loop() {
     motor_driver.run();
     reset_wdt();
     try_to_connect_wifi();
+    report_wifi_on_display();
 }
 
 void reset_wdt() {
@@ -547,6 +559,15 @@ void try_to_connect_wifi() {
     } else if (!is_wifi_enabled) {
         WiFi.disconnect(true);
         WiFi.mode(WIFI_OFF);
+    }
+}
+
+void report_wifi_on_display() {
+    static bool wifi_reported = false;
+
+    if (!wifi_reported && WiFi.isConnected()) {
+        main_menu_instance.setTitle("Menu: (c)");
+        wifi_reported = true;
     }
 }
 
