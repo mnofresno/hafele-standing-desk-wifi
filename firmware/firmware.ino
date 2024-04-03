@@ -18,7 +18,7 @@
 
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.3"
+#define VERSION_STRING "v1.1.4"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -419,7 +419,7 @@ int states_transformation() {
                     last_encoder_position = current_encoder_position;
                 }
             } else {
-                calibration_menu_instance.process(current_encoder_position);
+                calibration_menu_instance.updatePosition(current_encoder_position);
                 if (calibration.is_dirty) {
                     store_calibration();
                     calibration.is_dirty = false;
@@ -528,9 +528,9 @@ void loop() {
     debug_info.print();
     int64_t encoder_count = encoder.getCount();
 
-    main_menu_instance.process(encoder_count);
-    move_menu_instance.process(encoder_count);
-    memories_menu_instance.process(encoder_count);
+    main_menu_instance.updatePosition(encoder_count);
+    move_menu_instance.updatePosition(encoder_count);
+    memories_menu_instance.updatePosition(encoder_count);
 
     motor_driver.run();
     reset_wdt();

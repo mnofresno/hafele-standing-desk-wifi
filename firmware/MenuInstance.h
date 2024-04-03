@@ -10,6 +10,7 @@
 #define SUBTITLE_SIZE 1
 #define MAX_DISPLAYABLE_ITEMS 6
 #define MENU_ITEM_GO_BACK -1
+#define DIAL_INCREMENT 0.5
 
 struct MenuItem {
     int index;
@@ -31,6 +32,7 @@ class MenuInstance {
         String _subtitle;
         ButtonsHandler * _buttons_handler;
         void show_menu_items();
+        void do_show_menu_items();
         void show_menu_header();
         void draw_menu_item(MenuItem item, bool selected = false);
         void set_highlighted_color();
@@ -39,6 +41,7 @@ class MenuInstance {
         void assert_menu_index(int array_index);
         int totalDisplayableItems();
         int padding(int font_size);
+        void assert_extra_option();
 
     public:
         MenuInstance(
@@ -48,7 +51,7 @@ class MenuInstance {
             String title,
             ButtonsHandler * buttons_handler
         );
-        void process(int64_t dialPosition);
+        void updatePosition(int64_t dialPosition);
         void show();
         int get_selection();
         void setTitle(String title, String subtitle = "");

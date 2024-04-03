@@ -15,33 +15,30 @@ MenuInstance::MenuInstance(
     _buttons_handler = buttons_handler;
 }
 
-void MenuInstance::process(int64_t dialPosition) {
+void MenuInstance::updatePosition(int64_t dialPosition) {
     current_dial_position = dialPosition;
 }
 
 void MenuInstance::show() {
-    float increment = 0.5;
-
-    show_menu_items();
-
+    assert_extra_option();
     if (!_buttons_handler->readEnterButton()) {
         if (current_dial_position != last_dial_position) {
+
+            if(selected_option < 1 + extra_option && extra_option > 0) {
+                extra_option--;
+            } else if(selected_option > totalDisplayableItems() + extra_option) {
+                extra_option++;
+            }
+
             if (current_dial_position < last_dial_position) {
                 if (selected_option < _total_menu_size) {
-                    selected_option += increment;
+                    selected_option += DIAL_INCREMENT;
                 }
             } else if (current_dial_position > last_dial_position) {
                 if(selected_option > 1) {
-                    selected_option -= increment;
+                    selected_option -= DIAL_INCREMENT;
                 }
             }
-
-            if(selected_option < 1 + extra_option && extra_option > 0)
-                extra_option--;
-            if(selected_option > totalDisplayableItems() + extra_option)
-                extra_option++;
-
-            show_menu_items();
 
         }
         if(_buttons_handler->readBackButton()) {
@@ -51,6 +48,12 @@ void MenuInstance::show() {
     }
 
     last_dial_position = current_dial_position;
+    show_menu_items();
+}
+
+void MenuInstance::assert_extra_option() {
+    assert(extra_option >= 0);
+    assert(extra_option < totalDisplayableItems());
 }
 
 void MenuInstance::show_menu_header() {
@@ -65,14 +68,18 @@ void MenuInstance::show_menu_header() {
     }
 }
 
+void MenuInstance::do_show_menu_items() {
+    show_menu_header();
+    for(int x = extra_option; x < _total_menu_size && x <= (totalDisplayableItems() - 1 + extra_option); x++) {
+        draw_menu_item(_menu_items[x], is_item_selected(x));
+        assert_menu_index(x);
+    }
+    _display->display();
+}
+
 void MenuInstance::show_menu_items() {
     _display_handler->anti_flickering([&]() {
-        show_menu_header();
-        for(int x = extra_option; x < _total_menu_size && x <= (totalDisplayableItems() - 1 + extra_option); x++) {
-            draw_menu_item(_menu_items[x], is_item_selected(x));
-            assert_menu_index(x);
-        }
-        _display->display();
+        do_show_menu_items();
     });
 }
 
