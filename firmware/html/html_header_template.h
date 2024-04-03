@@ -1,0 +1,8 @@
+#ifndef HTML_%REPLACE_FILENAME%_H
+#define HTML_%REPLACE_FILENAME%_H
+
+const char* HTML_%REPLACE_FILENAME% = R"=====(
+%REPLACE_CONTENT%
+)=====";
+
+#endif // HTML_%REPLACE_FILENAME%_H
