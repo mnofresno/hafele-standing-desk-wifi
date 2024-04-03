@@ -13,9 +13,9 @@ for html_file in html/*.html; do
 
     html_content=$(cat "$html_file")
 
-    escaped_content=$(printf "%s" "$html_content" | tr '\n' '\\n' | sed -e 's/\\/\\\\/g' -e 's/\*/\\*/g' -e 's/\$/\\$/g' -e 's/"/\\"/g' -e 's/\//\\\//g')
+    escaped_content=$(printf "%s" "$html_content" | sed -e ':a;N;$!ba;s/\n/[NL]/g' | sed -e 's/\\/\\\\/g' -e 's/\*/\\*/g' -e 's/\$/\\$/g' -e 's/"/\\"/g' -e 's/\//\\\//g')
     replaced_content=$(sed -e "s/%REPLACE_FILENAME%/$uppercase_filename/g" -e "s/%REPLACE_CONTENT%/$escaped_content/g" "$template_file")
-    replaced_content=$(echo "$replaced_content" | tr '\\' '\n')
+    replaced_content=$(echo "$replaced_content" | sed 's/\[NL\]/\n/g' )
 
     new_file="html/$filename.h"
     echo "$replaced_content" > "$new_file"
