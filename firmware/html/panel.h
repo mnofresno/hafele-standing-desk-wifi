@@ -84,7 +84,7 @@ const char* HTML_PANEL = R"=====(
     <br/>
     <a href="/full_down" class="button">Full-down <span class="double-down-arrow"></span></a>
     <br/>
-    <a href="/up" class="button">Little Up <span class="down-arrow"></span></a>
+    <a href="/up" class="button">Little Up <span class="up-arrow"></span></a>
     <br/>
     <a href="/down" class="button">Little Down <span class="down-arrow"></span></a>
     <br/>
