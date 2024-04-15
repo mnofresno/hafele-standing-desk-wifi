@@ -236,6 +236,8 @@ void config_api_endpoints() {
     wifiManager.server->on("/status", [&]() {
         DynamicJsonDocument parsedStatus(1024);
         parsedStatus["current_position_mm"] = calibration.current_position_mm;
+        parsedStatus["memory_m1_mm"] = calibration.memory_m1_mm;
+        parsedStatus["memory_m2_mm"] = calibration.memory_m2_mm;
         parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
         String jsonStatus;
         serializeJson(parsedStatus, jsonStatus);

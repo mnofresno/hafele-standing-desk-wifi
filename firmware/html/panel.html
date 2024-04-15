@@ -87,16 +87,45 @@
     <input type="text" id="targetPosition" placeholder="Target position (mm)">
     <a href="#" class="button" onclick="moveToTarget()">Go target position</a>
     <br/>
+    <a href="#" class="button" onclick="moveToM1()">GO M1 <span id="m1_value"> mm</span></a>
+    <br/>
+    <a href="#" class="button" onclick="moveToM2()">GO M2 <span id="m2_value"> mm</span></a>
+    <br/>
     <script>
+        function moveToM1() {
+            doMoveToTarget(document.getElementById('m1_value').innerHTML);
+        }
+        function moveToM2() {
+            doMoveToTarget(document.getElementById('m2_value').innerHTML);
+        }
+        function loadMemoriesValues() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/status', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var jsonResponse = JSON.parse(xhr.responseText);
+                        document.getElementById('m1_value').innerHTML = jsonResponse.memory_m1_mm;
+                        document.getElementById('m2_value').innerHTML = jsonResponse.memory_m2_mm;
+                    } else {
+                        console.error('Request failed with status:', xhr.status);
+                    }
+                }
+            };
+            xhr.send();
+        }
+        loadMemoriesValues();
         function moveToTarget() {
-            var targetParam = document.getElementById("targetPosition").value;
-            var newUrl = "/move_to?target=" + targetParam;
+            doMoveToTarget(document.getElementById("targetPosition").value)
+        }
+        function doMoveToTarget(target) {
+            var newUrl = "/move_to?target=" + target;
             window.location.href = newUrl;
         }
         setTimeout(function () {
             document.getElementById("messageHeader").style.display = "none";
             if (window.location.pathname !== "/panel") {
-                window.location.href = "/panel";
+                // window.location.href = "/panel";
             }
         }, 1000);
     </script>
