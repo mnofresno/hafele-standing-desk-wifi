@@ -44,9 +44,15 @@ Then to compile the source code use this commands:
 
 ```bash
 cd firmware
-arduino-cli compile --fqbn esp32:esp32:esp32 . --build-path ./build
-
+./build.sh
 ```
+
+To compile and upload with OTA use this:
+
+```bash
+make TARGET_IP=x.x.x.x
+```
+(Replace x.x.x.x with device's IP address)
 
 And to upload the file use the following:
 

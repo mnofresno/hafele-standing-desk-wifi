@@ -10,8 +10,8 @@ const char* HTML_PANEL = R"=====(
         /* Style for link as button */
         a.button, input[type="text"] {
             display: block;
-            margin-bottom: 10px; /* Add margin between buttons and input */
-            padding: 15px 30px; /* Increase padding for larger buttons */
+            margin-bottom: 5px; /* Add margin between buttons and input */
+            padding: 10px 25px; /* Increase padding for larger buttons */
             text-decoration: none;
             background-color: #4CAF50; /* Green */
             color: white;
@@ -39,7 +39,7 @@ const char* HTML_PANEL = R"=====(
         /* Media query for smaller screens */
         @media screen and (max-width: 600px) {
             a.button, input[type="text"] {
-                padding: 20px 40px; /* Increase padding further for smaller screens */
+                padding: 15px 35px; /* Increase padding further for smaller screens */
                 font-size: 25px; /* Increase font size for smaller screens */
             }
             .panel-title {
@@ -91,9 +91,9 @@ const char* HTML_PANEL = R"=====(
     <input type="text" id="targetPosition" placeholder="Target position (mm)">
     <a href="#" class="button" onclick="moveToTarget()">Go target position</a>
     <br/>
-    <a href="#" class="button" onclick="moveToM1()">GO M1 <span id="m1_value"></span></a>
+    <a href="#" class="button" onclick="moveToM1()">GO M1 <span id="m1_value"> mm</span></a>
     <br/>
-    <a href="#" class="button" onclick="moveToM2()">GO M2 <span id="m2_value"></span></a>
+    <a href="#" class="button" onclick="moveToM2()">GO M2 <span id="m2_value"> mm</span></a>
     <br/>
     <script>
         function moveToM1() {
