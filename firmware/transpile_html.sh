@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 template_file="html/html_header_template.h"
 
 if [ ! -f "$template_file" ]; then
