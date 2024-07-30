@@ -1,0 +1,11 @@
+name: arduino-build-workflow
+'on': push
+jobs:
+  firmware_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker image
+        run: docker build firmware/docker-build -t ghcr.io/mnofresno/arduino-esp32-build:1.0.0
+      - name: Build arduino firmware
+        run: ./firmware/build.sh
