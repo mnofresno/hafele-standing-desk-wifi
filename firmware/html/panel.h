@@ -7,73 +7,88 @@ const char* HTML_PANEL = R"=====(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAFELE STANDING PANEL</title>
     <style>
-        /* Style for link as button */
-        a.button, input[type="text"] {
-            display: block;
-            margin-bottom: 5px; /* Add margin between buttons and input */
-            padding: 10px 25px; /* Increase padding for larger buttons */
-            text-decoration: none;
-            background-color: #4CAF50; /* Green */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 16px; /* Default font size */
-        }
-
-        input[type="text"] {
-            width: 100%;
-        }
-
-        /* Hover effect */
-        a.button:hover, input[type="text"]:hover {
-            background-color: #45a049; /* Darker green */
-        }
-
-        /* Active effect */
-        a.button:active, input[type="text"]:active {
-            background-color: #3e8e41; /* Dark green */
-        }
-
-        /* Media query for smaller screens */
-        @media screen and (max-width: 600px) {
+            /* Style for link as button */
             a.button, input[type="text"] {
-                padding: 15px 35px; /* Increase padding further for smaller screens */
-                font-size: 25px; /* Increase font size for smaller screens */
+                display: block;
+                margin-bottom: 5px; /* Add margin between buttons and input */
+                padding: 10px 25px; /* Increase padding for larger buttons */
+                text-decoration: none;
+                background-color: #4CAF50; /* Green */
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                text-align: center;
+                font-size: 16px; /* Default font size */
             }
-            .panel-title {
-                display: none;
+
+            input[type="text"] {
+                width: 100%;
             }
+
+            /* Hover effect */
+            a.button:hover, input[type="text"]:hover {
+                background-color: #45a049; /* Darker green */
+            }
+
+            /* Active effect */
+            a.button:active, input[type="text"]:active {
+                background-color: #3e8e41; /* Dark green */
+            }
+
+            /* Media query for smaller screens */
+            @media screen and (max-width: 600px) {
+                a.button, input[type="text"] {
+                    padding: 15px 35px; /* Increase padding further for smaller screens */
+                    font-size: 25px; /* Increase font size for smaller screens */
+                }
+                .panel-title {
+                    display: none;
+                }
+            }
+
+            .down-arrow::after {
+            content: "\25BC"; /* Unicode character for down arrow */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-left: 5px; /* Adjust spacing as needed */
         }
 
-       .down-arrow::after {
-           content: "\25BC"; /* Unicode character for down arrow */
-           font-size: 20px; /* Adjust size as needed */
-           display: inline-block;
-           margin-left: 5px; /* Adjust spacing as needed */
-       }
+        .up-arrow::after {
+            content: "\25B2"; /* Unicode character for down arrow */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-left: 5px; /* Adjust spacing as needed */
+        }
 
-       .up-arrow::after {
-           content: "\25B2"; /* Unicode character for down arrow */
-           font-size: 20px; /* Adjust size as needed */
-           display: inline-block;
-           margin-left: 5px; /* Adjust spacing as needed */
-       }
+        .double-up-arrow::after {
+            content: "\23EB"; /* Unicode character for down arrow */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-left: 5px; /* Adjust spacing as needed */
+        }
 
-       .double-up-arrow::after {
-           content: "\23EB"; /* Unicode character for down arrow */
-           font-size: 20px; /* Adjust size as needed */
-           display: inline-block;
-           margin-left: 5px; /* Adjust spacing as needed */
-       }
+        .double-down-arrow::after {
+            content: "\23EC"; /* Unicode character for down arrow */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-left: 5px; /* Adjust spacing as needed */
+        }
 
-       .double-down-arrow::after {
-           content: "\23EC"; /* Unicode character for down arrow */
-           font-size: 20px; /* Adjust size as needed */
-           display: inline-block;
-           margin-left: 5px; /* Adjust spacing as needed */
-       }
+        .lock-open::after {
+            content: "\1F513"; /* Unicode character for down arrow */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-left: 5px; /* Adjust spacing as needed */
+        }
+
+        .lock-closed::after {
+            content: "\1F512"; /* Unicode character for down arrow */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-left: 5px; /* Adjust spacing as needed */
+        }
+
     </style>
 </head>
 <body>
@@ -95,22 +110,42 @@ const char* HTML_PANEL = R"=====(
     <br/>
     <a href="#" class="button" onclick="moveToM2()">GO M2 <span id="m2_value"></span> mm</a>
     <br/>
+    <a href="#" class="button" onclick="toggleDisplayLock()"><span id="is_display_locked" class="lock-open">UNLOCKED</span></a>
+    <br/>
     <script>
+        function toggleDisplayLock() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/toggle_lock', true);
+            xhr.onreadystatechange = function () {
+                loadStateValues();
+            };
+            xhr.send();
+        }
         function moveToM1() {
-            doMoveToTarget(document.getElementById('m1_value').innerHTML);
+            doMoveToTarget(document.getElementById('m1_value').innerText);
         }
         function moveToM2() {
-            doMoveToTarget(document.getElementById('m2_value').innerHTML);
+            doMoveToTarget(document.getElementById('m2_value').innerText);
         }
-        function loadMemoriesValues() {
+        function loadStateValues() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/status', true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         var jsonResponse = JSON.parse(xhr.responseText);
-                        document.getElementById('m1_value').innerHTML = jsonResponse.memory_m1_mm;
-                        document.getElementById('m2_value').innerHTML = jsonResponse.memory_m2_mm;
+                        document.getElementById('m1_value').innerText = jsonResponse.memory_m1_mm;
+                        document.getElementById('m2_value').innerText = jsonResponse.memory_m2_mm;
+                        var displayElement = document.getElementById('is_display_locked');
+                        if (jsonResponse.is_display_locked) {
+                            displayElement.classList.add('lock-closed');
+                            displayElement.classList.remove('lock-open');
+                            displayElement.innerText = 'LOCKED';
+                        } else {
+                            displayElement.classList.add('lock-open');
+                            displayElement.classList.remove('lock-closed');
+                            displayElement.innerText = 'UNLOCKED';
+                        }
                     } else {
                         console.error('Request failed with status:', xhr.status);
                     }
@@ -118,7 +153,7 @@ const char* HTML_PANEL = R"=====(
             };
             xhr.send();
         }
-        loadMemoriesValues();
+        loadStateValues();
         function moveToTarget() {
             doMoveToTarget(document.getElementById("targetPosition").value)
         }

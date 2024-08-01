@@ -18,7 +18,7 @@
 
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.4"
+#define VERSION_STRING "v1.1.5"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -35,6 +35,7 @@
 #define STATE_MEMORIES 4
 #define STATE_MOVE 5
 #define STATE_DEBUG_CONFIG 6
+#define STATE_LOCKED 7
 
 #define ITEM_INDEX_WIFI 1
 #define ITEM_INDEX_MEMORIES 101
@@ -83,6 +84,20 @@ MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 DisplayHandler display_handler(&display);
 ButtonsHandler buttons_handler(ENTER_BUTTON_PIN, BACK_BUTTON_PIN, true);
 DebugInfo debug_info(&display_handler, &buttons_handler);
+
+const char* get_state_name(int state) {
+    switch (state) {
+        case STATE_CLOCK: return "STATE_CLOCK";
+        case STATE_MENU: return "STATE_MENU";
+        case STATE_WIFI_CONFIG: return "STATE_WIFI_CONFIG";
+        case STATE_CALIBRATION: return "STATE_CALIBRATION";
+        case STATE_MEMORIES: return "STATE_MEMORIES";
+        case STATE_MOVE: return "STATE_MOVE";
+        case STATE_DEBUG_CONFIG: return "STATE_DEBUG_CONFIG";
+        case STATE_LOCKED: return "STATE_LOCKED";
+        default: return "UNKNOWN_STATE";
+    }
+}
 
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
@@ -154,6 +169,8 @@ static bool wdt_is_enabled = false;
 CalibrationData calibration;
 bool is_wifi_enabled = true;
 int use_ap_or_station = WIFI_STA;
+
+bool is_display_locked = false;
 
 void on_corrupted_eeprom() {
     display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
@@ -232,21 +249,41 @@ void config_inputs_and_outputs() {
     pinMode(UP_RELAY_PIN, OUTPUT);
 }
 
+String generate_json_status() {
+    DynamicJsonDocument parsedStatus(2048);
+    parsedStatus["current_position_mm"] = calibration.current_position_mm;
+    parsedStatus["memory_m1_mm"] = calibration.memory_m1_mm;
+    parsedStatus["memory_m2_mm"] = calibration.memory_m2_mm;
+    parsedStatus["is_display_locked"] = is_display_locked;
+    parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
+    parsedStatus["current_state"] = get_state_name(current_state);
+    String jsonStatus;
+    serializeJson(parsedStatus, jsonStatus);
+    return jsonStatus;
+}
+
+void toggle_lock() {
+    if (is_display_locked) {
+        is_display_locked = false;
+        next_state = STATE_MENU;
+    } else {
+        is_display_locked = true;
+    }
+}
+
 void config_api_endpoints() {
     wifiManager.server->on("/status", [&]() {
-        DynamicJsonDocument parsedStatus(1024);
-        parsedStatus["current_position_mm"] = calibration.current_position_mm;
-        parsedStatus["memory_m1_mm"] = calibration.memory_m1_mm;
-        parsedStatus["memory_m2_mm"] = calibration.memory_m2_mm;
-        parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
-        String jsonStatus;
-        serializeJson(parsedStatus, jsonStatus);
-        wifiManager.server->send(200, "application/json", jsonStatus);
+        wifiManager.server->send(200, "application/json", generate_json_status());
     });
 
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
         wifiManager.server->send(200, "text/html charset=utf-8", htmlPanelWithMessage("Moving UP"));
+    });
+
+    wifiManager.server->on("/toggle_lock", [&]() {
+        toggle_lock();
+        wifiManager.server->send(200, "application/json", generate_json_status());
     });
 
     wifiManager.server->on("/down", [&]() {
@@ -319,8 +356,14 @@ int menu_item_to_state(int selected_item) {
         case ITEM_INDEX_DEBUG:
             return STATE_DEBUG_CONFIG;
         default:
-            return STATE_MENU;
+            return get_default_state();
     }
+}
+
+int get_default_state() {
+    return is_display_locked
+        ? STATE_LOCKED
+        : STATE_MENU;
 }
 
 void wifi_print_connected() {
@@ -503,6 +546,10 @@ int states_transformation() {
             debug_info.showConfig(encoder.getCount());
         }
         break;
+        case STATE_LOCKED: {
+            display_handler.print_full_screen_with_title("\nLOCKED", "\n\nCheck Web UI");
+        }
+        break;
     }
     return get_next_state_or_back(current_state);
 }
@@ -519,7 +566,7 @@ void handle_states_machine() {
 
 int get_next_state_or_back(int state) {
     if (buttons_handler.readBackButton()) {
-        return STATE_MENU;
+        return get_default_state();
     }
     return state;
 }

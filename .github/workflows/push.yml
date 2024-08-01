@@ -7,5 +7,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build docker image
         run: docker build firmware/docker-build -t ghcr.io/mnofresno/arduino-esp32-build:1.0.0
+
+      - name: Transpile html into header files
+        run: ./firmware/transpile_html.sh
+
       - name: Build arduino firmware
         run: ./firmware/build.sh

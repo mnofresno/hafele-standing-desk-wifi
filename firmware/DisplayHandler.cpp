@@ -51,7 +51,7 @@ void DisplayHandler::draw_starting(String version_string) {
 void DisplayHandler::initialize() {
     if(!_display->begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
       Serial.println(F("SSD1306 allocation failed"));
-      for(;;); // Don't proceed, loop forever
+      for(;;);
     }
     _display->display();
     delay(200);
