@@ -101,11 +101,11 @@ const char* get_state_name(int state) {
 
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
-    {ITEM_INDEX_CALIBRATION, "Calibr."},
+    // {ITEM_INDEX_CALIBRATION, "Calibr."},
     {ITEM_INDEX_MEMORIES, "Memories"},
     // {ITEM_INDEX_CLOCK, "Clock"},
     {ITEM_INDEX_MOVE, "Move"},
-    {ITEM_INDEX_DEBUG, "Debug"},
+    // {ITEM_INDEX_DEBUG, "Debug"},
 };
 
 MenuItem move_menu[] = {
