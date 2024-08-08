@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 if [ -z "$1" ]; then
     echo "Uso: $0 <IP_DEL_DISPOSITIVO>"
     echo "Por favor, proporciona la dirección IP del dispositivo."

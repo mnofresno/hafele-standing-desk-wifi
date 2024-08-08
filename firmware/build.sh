@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -eu
+
 cd "$(dirname "$0")"
 
 IMAGE_NAME="ghcr.io/mnofresno/arduino-esp32-build:1.0.0"

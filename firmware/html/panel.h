@@ -98,13 +98,13 @@ const char* HTML_PANEL = R"=====(
     <a href="/full_up" class="button"><span>Full-up <span class="double-up-arrow"></span></span></a>
     <br/>
     <a href="/full_down" class="button">Full-down <span class="double-down-arrow"></span></a>
-    <br/>
+    <!-- <br/>
     <a href="/up" class="button">Little Up <span class="up-arrow"></span></a>
     <br/>
     <a href="/down" class="button">Little Down <span class="down-arrow"></span></a>
     <br/>
     <input type="text" id="targetPosition" placeholder="Target position (mm)">
-    <a href="#" class="button" onclick="moveToTarget()">Go target position</a>
+    <a href="#" class="button" onclick="moveToTarget()">Go target position</a> -->
     <br/>
     <a href="#" class="button" onclick="moveToM1()">GO M1 <span id="m1_value"></span> mm</a>
     <br/>
@@ -140,11 +140,11 @@ const char* HTML_PANEL = R"=====(
                         if (jsonResponse.is_display_locked) {
                             displayElement.classList.add('lock-closed');
                             displayElement.classList.remove('lock-open');
-                            displayElement.innerText = 'LOCKED';
+                            displayElement.innerText = 'UNLOCK';
                         } else {
                             displayElement.classList.add('lock-open');
                             displayElement.classList.remove('lock-closed');
-                            displayElement.innerText = 'UNLOCKED';
+                            displayElement.innerText = 'LOCK';
                         }
                     } else {
                         console.error('Request failed with status:', xhr.status);
@@ -164,7 +164,7 @@ const char* HTML_PANEL = R"=====(
         setTimeout(function () {
             document.getElementById("messageHeader").style.display = "none";
             if (window.location.pathname !== "/panel") {
-                // window.location.href = "/panel";
+                window.location.href = "/panel";
             }
         }, 1000);
     </script>
