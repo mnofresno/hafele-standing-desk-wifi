@@ -547,7 +547,9 @@ int states_transformation() {
         }
         break;
         case STATE_LOCKED: {
-            display_handler.print_full_screen_with_title("\nLOCKED", "\n\nCheck Web UI");
+            String title("\nLOCKED\n @{position} mm");
+            title.replace("{position}", String(calibration.current_position_mm));
+            display_handler.print_full_screen_with_title(title, "\nCheck Web UI");
         }
         break;
     }
