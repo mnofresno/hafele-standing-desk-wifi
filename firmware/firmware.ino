@@ -15,7 +15,8 @@
 #include "DisplayHandler.h"
 #include "ButtonsHandler.h"
 #include "html/panel.h"
-
+#include <WiFiUdp.h>
+#include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
 #define VERSION_STRING "v1.1.5"
@@ -84,6 +85,8 @@ MotorDriver motor_driver(UP_RELAY_PIN, DOWN_RELAY_PIN);
 DisplayHandler display_handler(&display);
 ButtonsHandler buttons_handler(ENTER_BUTTON_PIN, BACK_BUTTON_PIN, true);
 DebugInfo debug_info(&display_handler, &buttons_handler);
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", -10800, 3600000);
 
 const char* get_state_name(int state) {
     switch (state) {
@@ -135,7 +138,7 @@ MenuInstance main_menu_instance(
     &display_handler,
     main_menu,
     ARRAY_SIZE(main_menu),
-    "Menu: (-)",
+    "Menu: (.)",
     &buttons_handler
 );
 
@@ -169,8 +172,8 @@ static bool wdt_is_enabled = false;
 CalibrationData calibration;
 bool is_wifi_enabled = true;
 int use_ap_or_station = WIFI_STA;
-
 bool is_display_locked = false;
+bool wifi_currently_connected = false;
 
 void on_corrupted_eeprom() {
     display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
@@ -198,6 +201,7 @@ void setup() {
 
     motor_driver.setOnCalibrationChangedCallback(&store_calibration);
     motor_driver.setCalibrationData(&calibration);
+    timeClient.begin();
 }
 
 void setup_wifi_manager() {
@@ -547,9 +551,12 @@ int states_transformation() {
         }
         break;
         case STATE_LOCKED: {
-            String title("\nLOCKED\n @{position} mm");
-            title.replace("{position}", String(calibration.current_position_mm));
-            display_handler.print_full_screen_with_title(title, "\nCheck Web UI");
+            String title("\nLOCKED\n {clock}");
+            title.replace("{clock}", timeClient.getFormattedTime());
+            String position("@{position} mm\n{wifi_state} Check Web UI");
+            position.replace("{wifi_state}", wifi_currently_connected ? "(c)" : "(!)");
+            position.replace("{position}", String(calibration.current_position_mm));
+            display_handler.print_full_screen_with_title(title, position);
         }
         break;
     }
@@ -586,7 +593,16 @@ void loop() {
     motor_driver.run();
     reset_wdt();
     try_to_connect_wifi();
+    update_clock();
     report_wifi_on_display();
+}
+
+void update_clock() {
+    static unsigned long last_clock_update = 0;
+    if (millis() - last_clock_update >= 60000 && WiFi.isConnected()) {
+        timeClient.update();
+        last_clock_update = millis();
+    }
 }
 
 void reset_wdt() {
@@ -614,11 +630,13 @@ void try_to_connect_wifi() {
 }
 
 void report_wifi_on_display() {
-    static bool wifi_reported = false;
+    static bool wifi_previously_connected = false;
+    wifi_currently_connected = WiFi.isConnected();
 
-    if (!wifi_reported && WiFi.isConnected()) {
-        main_menu_instance.setTitle("Menu: (c)");
-        wifi_reported = true;
+    if (wifi_previously_connected != wifi_currently_connected) {
+        String state(wifi_currently_connected ? "(c)" : "(!)");
+        main_menu_instance.setTitle("Menu: " + state);
+        wifi_previously_connected = wifi_currently_connected;
     }
 }
 

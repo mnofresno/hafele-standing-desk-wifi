@@ -11,6 +11,7 @@ RUN arduino-cli lib install "Adafruit GFX Library@1.11.10"
 RUN arduino-cli lib install "Adafruit SSD1306@2.5.10"
 RUN arduino-cli lib install ESP32Encoder@0.10.1
 RUN arduino-cli lib install ArduinoJson@7.1.0
+RUN arduino-cli lib install NTPClient@3.2.1
 
 WORKDIR /firmware
 CMD [ "arduino-cli" ]

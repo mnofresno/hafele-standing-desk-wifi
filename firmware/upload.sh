@@ -1,2 +1,3 @@
 #!/bin/bash
-arduino-cli upload -p /dev/ttyUSB2 --fqbn esp32:esp32:esp32 -i build/firmware.ino.bin
+USB_PORT=${1:-USB0}
+arduino-cli upload -p "/dev/tty$USB_PORT" --fqbn esp32:esp32:esp32 -i build/firmware.ino.bin

@@ -4,7 +4,7 @@ set -eu
 
 cd "$(dirname "$0")"
 
-IMAGE_NAME="ghcr.io/mnofresno/arduino-esp32-build:1.0.0"
+IMAGE_NAME="ghcr.io/mnofresno/arduino-esp32-build:1.0.1"
 
 arduinocli() {
     docker run --rm -v `pwd`:/firmware  -t $IMAGE_NAME arduino-cli "$@"
