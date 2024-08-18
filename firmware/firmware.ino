@@ -280,6 +280,11 @@ void config_api_endpoints() {
         wifiManager.server->send(200, "application/json", generate_json_status());
     });
 
+    wifiManager.server->on("/stop", [&]() {
+        motor_driver.stop();
+        wifiManager.server->send(200, "text/html charset=utf-8", htmlPanelWithMessage("Stopped"));
+    });
+
     wifiManager.server->on("/up", [&]() {
         motor_driver.moveUpForMillis(500);
         wifiManager.server->send(200, "text/html charset=utf-8", htmlPanelWithMessage("Moving UP"));

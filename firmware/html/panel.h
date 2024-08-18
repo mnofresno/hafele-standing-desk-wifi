@@ -89,6 +89,13 @@ const char* HTML_PANEL = R"=====(
             margin-left: 5px; /* Adjust spacing as needed */
         }
 
+        .stop-icon::before {
+            content: "\1F6D1"; /* Unicode character for stop icon */
+            font-size: 20px; /* Adjust size as needed */
+            display: inline-block;
+            margin-right: 5px; /* Adjust spacing as needed */
+        }
+
     </style>
 </head>
 <body>
@@ -98,6 +105,7 @@ const char* HTML_PANEL = R"=====(
     <a href="/full_up" class="button"><span>Full-up <span class="double-up-arrow"></span></span></a>
     <br/>
     <a href="/full_down" class="button">Full-down <span class="double-down-arrow"></span></a>
+    <br/>
     <!-- <br/>
     <a href="/up" class="button">Little Up <span class="up-arrow"></span></a>
     <br/>
@@ -105,6 +113,7 @@ const char* HTML_PANEL = R"=====(
     <br/>
     <input type="text" id="targetPosition" placeholder="Target position (mm)">
     <a href="#" class="button" onclick="moveToTarget()">Go target position</a> -->
+    <a href="/stop" class="button stop-icon">STOP</a>
     <br/>
     <a href="#" class="button" onclick="moveToM1()">GO M1 <span id="m1_value"></span> mm</a>
     <br/>
