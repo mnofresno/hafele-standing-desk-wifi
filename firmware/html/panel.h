@@ -7,8 +7,7 @@ const char* HTML_PANEL = R"=====(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAFELE STANDING PANEL</title>
     <style>
-        /* Style for link as button */
-        a.button, input[type="text"] {
+        .badge {
             display: block;
             margin-bottom: 5px; /* Add margin between buttons and input */
             padding: 10px 25px; /* Increase padding for larger buttons */
@@ -130,38 +129,59 @@ const char* HTML_PANEL = R"=====(
             margin-right: 10px; /* Adjust spacing as needed */
         }
 
+        .ruler-icon::before {
+            content: "\1F4CF"; /* Unicode character for ruler icon */
+            font-size: 18px; /* Adjust size as needed */
+            display: inline-block;
+            margin-right: 10px; /* Adjust spacing as needed */
+        }
     </style>
 </head>
 <body>
     <h1 class="panel-title">PANEL MOVEMENT</h1>
-    <h2 id="messageHeader">%message%</h2>
     <br/>
-    <a href="/full_up" class="button"><span>Full-up <span class="double-up-icon"></span></span></a>
+    <span class="badge"><span id="messageHeader" class="ruler-icon">%message%</span></span>
     <br/>
-    <a href="/full_down" class="button"><span>Full-down <span class="double-down-icon"></span></span></a>
+    <a class="badge button" onclick="execute_action('full_up')"><span>Full-up <span class="double-up-icon"></span></span></a>
     <br/>
-    <a href="/stop" class="button"><span>Stop <span class="stop-icon"></span></span></a>
+    <a class="badge button" onclick="execute_action('full_down')"><span>Full-down <span class="double-down-icon"></span></span></a>
     <br/>
-    <a href="#" class="button" onclick="moveToM1()"><span>GO M1 <span id="m1_value"></span> mm</span></a>
+    <a class="badge button" onclick="execute_action('stop')"><span>Stop <span class="stop-icon"></span></span></a>
     <br/>
-    <a href="#" class="button" onclick="moveToM2()"><span>GO M2 <span id="m2_value"></span> mm</span></a>
+    <a href="#" class="badge button" onclick="moveToM1()"><span>GO M1 <span id="m1_value"></span> mm</span></a>
     <br/>
-    <a href="#" class="button" onclick="toggleDisplayLock()"><span id="is_display_locked">UNLOCKED <span class="lock-open-icon"></span></span></a>
+    <a href="#" class="badge button" onclick="moveToM2()"><span>GO M2 <span id="m2_value"></span> mm</span></a>
+    <br/>
+    <a href="#" class="badge button" onclick="toggleDisplayLock()"><span id="is_display_locked">UNLOCKED <span class="lock-open-icon"></span></span></a>
     <br/>
 
     <!-- Accordion Section -->
     <button class="accordion"><span class="settings-icon"></span>Advanced Controls</button>
     <div class="panel">
-        <a href="/up" class="button"><span>Little Up <span class="up-arrow-icon"></span></span></a>
+        <a class="badge button" onclick="execute_action('up')"><span>Little Up <span class="up-arrow-icon"></span></span></a>
         <br/>
-        <a href="/down" class="button"><span>Little Down <span class="down-arrow-icon"></span></span></a>
+        <a class="badge button" onclick="execute_action('down')"><span>Little Down <span class="down-arrow-icon"></span></span></a>
         <br/>
         <input type="text" id="targetPosition" placeholder="Target position (mm)">
-        <a href="#" class="button" onclick="moveToTarget()"><span>Go to Target</span></a>
+        <a href="#" class="badge button" onclick="moveToTarget()"><span>Go to Target</span></a>
     </div>
 
     <script>
         var accordionElements = document.getElementsByClassName("accordion");
+        const messageSpan = document.getElementById("messageHeader");
+
+        function set_status_message(message) {
+            console.log(message);
+            messageSpan.innerText = message;
+        }
+        function do_fetch(url) {
+            return fetch(url)
+                .then(response =>
+                    response.headers.get('content-type')?.includes('application/json')
+                        ? response.json()
+                        : null
+                ).catch(set_status_message);
+        }
 
         for (var accordionIndex = 0; accordionIndex < accordionElements.length; accordionIndex++) {
             accordionElements[accordionIndex].addEventListener("click", function() {
@@ -174,14 +194,15 @@ const char* HTML_PANEL = R"=====(
                 }
             });
         }
-
+        function execute_action(action) {
+            do_fetch(`/${action}`);
+            const action_str = action.replace('_', ' ')
+                .replace('?', ' ')
+                .replace('=', ' ');
+            set_status_message(`Move ${action_str}`);
+        }
         function toggleDisplayLock() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/toggle_lock', true);
-            xhr.onreadystatechange = function () {
-                loadStateValues();
-            };
-            xhr.send();
+            do_fetch('/toggle_lock').then(loadStateValues);
         }
         function moveToM1() {
             doMoveToTarget(document.getElementById('m1_value').innerText);
@@ -190,45 +211,34 @@ const char* HTML_PANEL = R"=====(
             doMoveToTarget(document.getElementById('m2_value').innerText);
         }
         function loadStateValues() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/status', true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var jsonResponse = JSON.parse(xhr.responseText);
-                        document.getElementById('m1_value').innerText = jsonResponse.memory_m1_mm;
-                        document.getElementById('m2_value').innerText = jsonResponse.memory_m2_mm;
-                        var displayElement = document.getElementById('is_display_locked');
-                        if (jsonResponse.is_display_locked) {
-                            displayElement.classList.add('lock-closed-icon');
-                            displayElement.classList.remove('lock-open-icon');
-                            displayElement.innerText = 'UNLOCK';
-                        } else {
-                            displayElement.classList.add('lock-open-icon');
-                            displayElement.classList.remove('lock-closed-icon');
-                            displayElement.innerText = 'LOCK';
-                        }
-                    } else {
-                        console.error('Request failed with status:', xhr.status);
+            do_fetch('/status').then((jsonResponse) => {
+                    if (jsonResponse.is_moving) {
+                        return;
                     }
-                }
-            };
-            xhr.send();
+                    document.getElementById('m1_value').innerText = jsonResponse.memory_m1_mm;
+                    document.getElementById('m2_value').innerText = jsonResponse.memory_m2_mm;
+                    var displayElement = document.getElementById('is_display_locked');
+                    if (jsonResponse.is_display_locked) {
+                        displayElement.classList.add('lock-closed-icon');
+                        displayElement.classList.remove('lock-open-icon');
+                        displayElement.innerText = 'UNLOCK';
+                    } else {
+                        displayElement.classList.add('lock-open-icon');
+                        displayElement.classList.remove('lock-closed-icon');
+                        displayElement.innerText = 'LOCK';
+                    }
+                    set_status_message(`Current position: ${jsonResponse.current_position_mm} mm`)
+                });
         }
         loadStateValues();
         function moveToTarget() {
             doMoveToTarget(document.getElementById("targetPosition").value)
         }
         function doMoveToTarget(target) {
-            var newUrl = "/move_to?target=" + target;
-            window.location.href = newUrl;
+            do_fetch(`/move_to?target=${target}`)
+                .then(() => set_status_message(`Moved to target ${target}`));
         }
-        setTimeout(function () {
-            document.getElementById("messageHeader").style.display = "none";
-            if (window.location.pathname !== "/panel") {
-                window.location.href = "/panel";
-            }
-        }, 1000);
+        setInterval(loadStateValues, 2000);
     </script>
 </body>
 </html>

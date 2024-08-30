@@ -10,4 +10,9 @@ fi
 
 cd "$(dirname "$0")"
 
-curl -vvvv -F upload=@build/firmware.ino.bin "http://$1/u"
+response=$(curl -s -F upload=@build/firmware.ino.bin "http://$1/u")
+if echo "$response" | grep -q "Update Successful"; then
+    echo "- upload ok"
+else
+    echo "- error"
+fi

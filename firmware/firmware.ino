@@ -259,6 +259,7 @@ String generate_json_status() {
     parsedStatus["memory_m1_mm"] = calibration.memory_m1_mm;
     parsedStatus["memory_m2_mm"] = calibration.memory_m2_mm;
     parsedStatus["is_display_locked"] = is_display_locked;
+    parsedStatus["is_moving"] = motor_driver.isMoving();
     parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
     parsedStatus["current_state"] = get_state_name(current_state);
     String jsonStatus;
@@ -286,7 +287,7 @@ void config_api_endpoints() {
     });
 
     wifiManager.server->on("/up", [&]() {
-        motor_driver.moveUpForMillis(500);
+        motor_driver.moveUpForMillis(700);
         wifiManager.server->send(200, "text/html charset=utf-8", htmlPanelWithMessage("Moving UP"));
     });
 
@@ -296,7 +297,7 @@ void config_api_endpoints() {
     });
 
     wifiManager.server->on("/down", [&]() {
-        motor_driver.moveDownForMillis(400);
+        motor_driver.moveDownForMillis(600);
         wifiManager.server->send(200, "text/html charset=utf-8", htmlPanelWithMessage("Moving DOWN"));
     });
 
