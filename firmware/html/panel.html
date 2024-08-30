@@ -131,6 +131,12 @@
             display: inline-block;
             margin-right: 10px; /* Adjust spacing as needed */
         }
+        .moving-robot-icon::before {
+            content: "\1F916 \1F4A8"; /* Unicode character for robot face and dash symbol */
+            font-size: 18px; /* Ajusta el tamaño según sea necesario */
+            display: inline-block;
+            margin-right: 10px; /* Ajusta el espacio según sea necesario */
+        }
     </style>
 </head>
 <body>
@@ -195,6 +201,7 @@
             const action_str = action.replace('_', ' ')
                 .replace('?', ' ')
                 .replace('=', ' ');
+            set_status_icon_moving();
             set_status_message(`Move ${action_str}`);
         }
         function toggleDisplayLock() {
@@ -206,10 +213,21 @@
         function moveToM2() {
             doMoveToTarget(document.getElementById('m2_value').innerText);
         }
+        function set_status_icon_moving() {
+            messageSpan.classList.add('moving-robot-icon'); // Añadir clase de robot en movimiento
+            messageSpan.classList.remove('ruler-icon'); // Quitar clase de icono de regla
+        }
+        function set_status_icon_ruler() {
+            messageSpan.classList.remove('moving-robot-icon'); // Quitar clase de robot en movimiento
+            messageSpan.classList.add('ruler-icon'); // Restaurar clase de icono de regla
+        }
         function loadStateValues() {
             do_fetch('/status').then((jsonResponse) => {
                     if (jsonResponse.is_moving) {
+                        set_status_icon_moving();
                         return;
+                    } else {
+                        set_status_icon_ruler();
                     }
                     document.getElementById('m1_value').innerText = jsonResponse.memory_m1_mm;
                     document.getElementById('m2_value').innerText = jsonResponse.memory_m2_mm;
