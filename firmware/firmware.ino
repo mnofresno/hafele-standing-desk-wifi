@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.5"
+#define VERSION_STRING "v1.1.6"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -262,6 +262,7 @@ String generate_json_status() {
     parsedStatus["is_moving"] = motor_driver.isMoving();
     parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
     parsedStatus["current_state"] = get_state_name(current_state);
+    parsedStatus["version"] = VERSION_STRING;
     String jsonStatus;
     serializeJson(parsedStatus, jsonStatus);
     return jsonStatus;

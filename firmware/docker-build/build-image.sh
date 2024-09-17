@@ -2,4 +2,7 @@
 
 cd "$(dirname "$0")"
 
-docker build . -t ghcr.io/mnofresno/arduino-esp32-build:1.0.1
+source ./build.env
+
+docker build . -t "$IMAGE_NAME"
+docker push "$IMAGE_NAME"
