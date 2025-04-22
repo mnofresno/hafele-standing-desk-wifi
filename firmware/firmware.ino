@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.6"
+#define VERSION_STRING "v1.1.7"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -622,13 +622,16 @@ void reset_wdt() {
 
 void try_to_connect_wifi() {
     static unsigned long last_wifi_check = 0;
+    
     if (is_wifi_enabled && !WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
-        wifiManager.startConfigPortal(DEFAULT_AP_NAME, DEFAULT_AP_PASSWORD);
         if (use_ap_or_station == WIFI_STA) {
-            WiFi.begin();
-        } else {
+            WiFi.mode(WIFI_STA);
             wifiManager.autoConnect(DEFAULT_AP_NAME, DEFAULT_AP_PASSWORD);
+        } else {
+            WiFi.mode(WIFI_AP);
+            wifiManager.startConfigPortal(DEFAULT_AP_NAME, DEFAULT_AP_PASSWORD);
         }
+        
         last_wifi_check = millis();
     } else if (!is_wifi_enabled) {
         WiFi.disconnect(true);
