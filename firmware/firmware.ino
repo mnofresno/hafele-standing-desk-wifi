@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.7"
+#define VERSION_STRING "v1.1.8"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
