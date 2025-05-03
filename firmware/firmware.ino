@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.8"
+#define VERSION_STRING "v1.1.9"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -393,10 +393,11 @@ void wifi_print_disconnected() {
 }
 
 void wifi_print_connecting(String connecting_bar) {
+    String mode = use_ap_or_station == WIFI_STA ? "STA" : "AP";
     display_handler.println_with_pad("");
-    display_handler.println_with_pad("Connecting" + connecting_bar);
+    display_handler.println_with_pad("Connecting " + mode + connecting_bar);
     display_handler.println_with_pad("");
-    display_handler.println_with_pad("");
+    display_handler.println_with_pad("Press BACK to cancel");
 }
 
 String this_parameter_is_selected(int current_parameter, int selected_parameter) {
@@ -429,6 +430,13 @@ int states_transformation() {
                 display_handler.anti_flickering([&](){
                     connecting_bar += ".";
                 }, 200);
+                
+                if (buttons_handler.readBackButton()) {
+                    connecting = false;
+                    WiFi.disconnect(true);
+                    display_handler.println_with_pad("Cancelando...");
+                    delay(500);
+                }
             } else {
                 wifi_print_disconnected();
                 if (last_dial_position != encoder.getCount()) {
