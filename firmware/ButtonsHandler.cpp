@@ -10,6 +10,8 @@ ButtonsHandler::ButtonsHandler(
     _back_button_pin = back_button_pin;
     _invert_enter_button = invert_enter_button;
     _invert_back_button = invert_back_button;
+    _back_button_is_pressed = false;
+    _back_button_press_start_time = 0;
     pinMode(_back_button_pin, INPUT);
     pinMode(_enter_button_pin, INPUT);
 }
@@ -24,6 +26,25 @@ bool ButtonsHandler::readBackButton() {
     bool button_reading = do_read_back_button();
 
     return debounce_state_change(BACK_BUTTON_CLICK, button_reading);
+}
+
+bool ButtonsHandler::readBackButtonLongPress() {
+    bool button_reading = do_read_back_button();
+    unsigned long current_time = millis();
+
+    if (button_reading && !_back_button_is_pressed) {
+        _back_button_is_pressed = true;
+        _back_button_press_start_time = current_time;
+    } else if (!button_reading && _back_button_is_pressed) {
+        _back_button_is_pressed = false;
+    }
+
+    if (_back_button_is_pressed && (current_time - _back_button_press_start_time >= LONG_PRESS_TIME)) {
+        _back_button_is_pressed = false;
+        return true;
+    }
+
+    return false;
 }
 
 bool ButtonsHandler::debounce_state_change(int button_index, bool button_reading) {

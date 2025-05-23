@@ -11,6 +11,11 @@ jobs:
       - name: Build docker image
         run: docker build firmware/docker-build -t "$IMAGE_NAME"
 
+      - name: Run unit tests
+        run: |
+          cd firmware/tests
+          ./run_tests.sh
+
       - name: Transpile html into header files
         run: ./firmware/transpile_html.sh
 
