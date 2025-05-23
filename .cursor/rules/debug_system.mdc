@@ -1,0 +1,51 @@
+---
+description: Este documento describe el sistema de depuración y diagnóstico del escritorio ajustable, incluyendo herramientas de monitoreo y diagnóstico
+globs: 
+alwaysApply: false
+---
+# Sistema de Depuración y Diagnóstico
+
+## Descripción
+Este documento describe el sistema de depuración y diagnóstico del escritorio ajustable, incluyendo herramientas de monitoreo y diagnóstico.
+
+## Componentes de Depuración
+### Display de Información
+- Visualización de estado del sistema
+- Monitoreo de posición
+- Estado de configuración
+- Información de depuración
+
+### Control de Depuración
+- Habilitación/deshabilitación de modo debug
+- Monitoreo de posición del encoder
+- Estado de almacenamiento de configuración
+- Estado de lectura de configuración
+
+## Funcionalidades
+### Monitoreo
+- Posición actual del escritorio
+- Estado del motor
+- Configuración del sistema
+- Estado de la conexión WiFi
+
+### Diagnóstico
+- Verificación de calibración
+- Estado de la EEPROM
+- Validación de parámetros
+- Monitoreo de memoria
+
+## Interfaz de Depuración
+### Comandos
+- Visualización de configuración
+- Estado del sistema
+- Información de depuración
+- Limpieza de pantalla
+
+## Consideraciones
+- Modo de depuración no intrusivo
+- Persistencia de información
+- Actualización en tiempo real
+- Interfaz intuitiva
+
+## Tags
+#debug #diagnostics #monitoring #system-status #troubleshooting

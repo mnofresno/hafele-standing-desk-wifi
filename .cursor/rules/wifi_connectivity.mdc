@@ -1,0 +1,53 @@
+---
+description: Este documento detalla el sistema de conectividad WiFi y configuración del escritorio ajustable, incluyendo el portal de configuración y parámetros del sistema
+globs: 
+alwaysApply: false
+---
+# Conectividad WiFi y Configuración
+
+## Descripción
+Este documento detalla el sistema de conectividad WiFi y configuración del escritorio ajustable, incluyendo el portal de configuración y parámetros del sistema.
+
+## Configuración WiFi
+### Modos de Operación
+- Modo AP (Access Point)
+- Modo Estación (STA)
+- Portal de configuración web
+
+### Parámetros de Red
+- Nombre AP predeterminado: "WIFI_STANDING_DESK"
+- Contraseña AP predeterminada: "PASSWORD"
+- Portal de configuración no bloqueante
+
+## Parámetros de Configuración
+### Calibración
+- Posición actual (mm)
+- Velocidad de subida (mm/s)
+- Velocidad de bajada (mm/s)
+
+### Sincronización de Tiempo
+- Servidor NTP: pool.ntp.org
+- Zona horaria: -10800 (UTC-3)
+- Intervalo de actualización: 3600000ms
+
+## API Web
+### Endpoints
+- Configuración de parámetros
+- Estado del sistema
+- Control de movimiento
+- Gestión de memorias
+
+## Seguridad
+- Validación de parámetros
+- Almacenamiento seguro de configuración
+- Manejo de reconexión WiFi
+- Callback para actualizaciones OTA
+
+## Consideraciones
+- Modo de configuración no bloqueante
+- Persistencia de configuración
+- Manejo de errores de conexión
+- Actualización OTA
+
+## Tags
+#wifi #configuration #web-portal #IoT #network

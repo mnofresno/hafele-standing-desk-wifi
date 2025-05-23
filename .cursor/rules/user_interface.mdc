@@ -1,0 +1,63 @@
+---
+description: Este documento describe el sistema de interfaz de usuario del escritorio ajustable, incluyendo la navegación por menú, control de display y manejo de botones
+globs: 
+alwaysApply: false
+---
+# Interfaz de Usuario y Sistema de Menú
+
+## Descripción
+Este documento describe el sistema de interfaz de usuario del escritorio ajustable, incluyendo la navegación por menú, control de display y manejo de botones.
+
+## Componentes de UI
+### Display OLED
+- Resolución: 128x64 píxeles
+- Controlador: SSD1306
+- Comunicación: I2C
+
+### Estructura de Menú
+- Tamaño máximo de menú: 6 elementos visibles
+- Tamaño de fuente predeterminado: 2
+- Tamaño de subtítulo: 1
+- Incremento de dial: 0.5
+
+## Navegación
+### Botones
+- Botón Enter: GPIO34
+- Botón Back: GPIO35
+- Encoder rotativo: GPIO18 (A), GPIO19 (B)
+
+### Estados de Menú
+- Menú Principal
+- Menú de Movimiento
+- Menú de Calibración
+- Menú de Memorias
+- Configuración WiFi
+
+## Funcionalidades
+### Menú Principal
+- Configuración WiFi
+- Memorias
+- Movimiento
+- Calibración
+
+### Menú de Movimiento
+- Subir
+- Bajar
+- Subida completa
+- Bajada completa
+- Movimiento de 1 segundo
+
+### Menú de Memorias
+- Ir a M1
+- Ir a M2
+- Configurar M1
+- Configurar M2
+
+## Consideraciones de UI
+- Manejo de scroll suave
+- Resaltado de opción seleccionada
+- Títulos y subtítulos configurables
+- Tamaño de fuente ajustable
+
+## Tags
+#UI #menu-system #display #user-interface #navigation

@@ -1,0 +1,46 @@
+---
+description: Este documento detalla el sistema de control del motor para el escritorio ajustable, incluyendo límites de seguridad, calibración y control de movimiento
+globs: 
+alwaysApply: false
+---
+# Control de Motor y Sistema de Movimiento
+
+## Descripción
+Este documento detalla el sistema de control del motor para el escritorio ajustable, incluyendo límites de seguridad, calibración y control de movimiento.
+
+## Límites de Movimiento
+- Altura máxima: 1220mm
+- Altura mínima: 725mm
+- Margen de seguridad: 5mm
+
+## Estados de Movimiento
+- MOVE_STATE_UP (1): Movimiento hacia arriba
+- MOVE_STATE_DOWN (2): Movimiento hacia abajo
+- MOVE_STATE_STOP (3): Motor detenido
+
+## Control de Motor
+### Pines de Control
+- Pin de subida: GPIO32
+- Pin de bajada: GPIO33
+
+### Funciones Principales
+- `moveUp()`: Movimiento continuo hacia arriba
+- `moveDown()`: Movimiento continuo hacia abajo
+- `moveToTarget(position)`: Movimiento a posición específica
+- `moveFullUp()`: Movimiento a altura máxima
+- `moveFullDown()`: Movimiento a altura mínima
+- `stop()`: Detención del motor
+
+## Calibración
+- Sistema de calibración para precisión de movimiento
+- Almacenamiento de datos de calibración en EEPROM
+- Callback para cambios en calibración
+
+## Seguridad
+- Verificación de límites de movimiento
+- Control de tiempo de movimiento
+- Detección de final de carrera
+- Validación de posición actual
+
+## Tags
+#motor-control #safety #calibration #position-control #hardware

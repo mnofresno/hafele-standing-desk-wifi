@@ -1,0 +1,44 @@
+---
+description: Este documento describe la arquitectura general del sistema de escritorio ajustable basado en ESP32, incluyendo sus componentes principales y flujo de control.
+globs: 
+alwaysApply: false
+---
+# Arquitectura del Sistema de Escritorio Ajustable
+
+## Descripción
+Este documento describe la arquitectura general del sistema de escritorio ajustable basado en ESP32, incluyendo sus componentes principales y flujo de control.
+
+## Componentes Principales
+- **Controlador Principal**: ESP32
+- **Periféricos**:
+  - Display OLED SSD1306 (I2C)
+  - Encoder rotativo
+  - Relés para control de motor
+  - Botones de control
+  - WiFi para conectividad
+
+## Estados del Sistema
+El sistema opera en los siguientes estados (definidos en firmware.ino):
+- STATE_CLOCK (0): Modo reloj
+- STATE_MENU (1): Menú principal
+- STATE_WIFI_CONFIG (2): Configuración WiFi
+- STATE_CALIBRATION (3): Calibración
+- STATE_MEMORIES (4): Gestión de memorias
+- STATE_MOVE (5): Control de movimiento
+- STATE_DEBUG_CONFIG (6): Configuración de depuración
+- STATE_LOCKED (7): Sistema bloqueado
+
+## Dependencias Principales
+- WiFiManager: Gestión de conexión WiFi
+- Adafruit_GFX y Adafruit_SSD1306: Control de display
+- ESP32Encoder: Manejo del encoder
+- ArduinoJson: Procesamiento JSON
+- NTPClient: Sincronización de tiempo
+
+## Consideraciones de Seguridad
+- Watchdog Timer implementado (WDT_TIMEOUT = 2)
+- Validación de datos de calibración
+- Manejo de errores en EEPROM
+
+## Tags
+#architecture #state-machine #ESP32 #IoT #control-system

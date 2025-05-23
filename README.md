@@ -16,8 +16,10 @@ This project details the steps to modify a Hafele® Standing Desk to be controll
 3. [Software](#software)
    - [Firmware](#firmware)
    - [Firmware Compilation & Deployment](#firmware-compilation--deployment)
-4. [Contributing](#contributing)
-5. [References](#references)
+4. [System Features](#system-features)
+5. [Technical Specifications](#technical-specifications)
+6. [Contributing](#contributing)
+7. [References](#references)
 
 ### Hardware
 
@@ -70,6 +72,8 @@ The following files are included in the `plastic_case` directory:
 
 The firmware was developed in Arduino C++, based on the [WiFi Manager platform](https://github.com/tzapu/WiFiManager).
 
+Current version: v1.1.9
+
 #### Firmware Compilation & Deployment
 
 1. **Install Docker:**
@@ -91,6 +95,66 @@ The firmware was developed in Arduino C++, based on the [WiFi Manager platform](
    make TARGET_IP=x.x.x.x
    ```
    (Replace `x.x.x.x` with the device's IP address)
+
+### System Features
+
+#### Core Functionality
+- Height adjustment with position memory (M1, M2)
+- Real-time clock display
+- System calibration
+- Lock mode for safety
+- Debug mode for troubleshooting
+
+#### User Interface
+- OLED display (128x64 pixels)
+- Rotary encoder for navigation
+- Two control buttons (Enter, Back)
+- Intuitive menu system
+
+#### Movement Control
+- Continuous up/down movement
+- One-second movement increments
+- Full up/down positions
+- Memory positions (M1, M2)
+- Height limits with safety margins
+
+### Technical Specifications
+
+#### GPIO Configuration
+- Motor Control:
+  - Up Relay: GPIO32
+  - Down Relay: GPIO33
+- User Interface:
+  - Enter Button: GPIO34
+  - Back Button: GPIO35
+  - Encoder A: GPIO18
+  - Encoder B: GPIO19
+
+#### System Limits
+- Maximum Height: 1220mm
+- Minimum Height: 725mm
+- Safety Margin: 5mm
+
+#### WiFi Configuration
+- Default AP Name: "WIFI_STANDING_DESK"
+- Default AP Password: "PASSWORD"
+- Non-blocking configuration portal
+- OTA update support
+
+#### Dependencies
+- WiFiManager: WiFi configuration
+- Adafruit_GFX: Display graphics
+- Adafruit_SSD1306: OLED display control
+- ESP32Encoder: Rotary encoder handling
+- ArduinoJson: JSON processing
+- NTPClient: Time synchronization
+
+#### Safety Features
+- Watchdog Timer (2-second timeout)
+- EEPROM error handling
+- Movement limit validation
+- Configuration validation
+- Emergency stop functionality
 
 ### Contributing
 
