@@ -52,8 +52,11 @@ void MenuInstance::show() {
 }
 
 void MenuInstance::assert_extra_option() {
+    int max_extra_option = _total_menu_size > totalDisplayableItems()
+        ? _total_menu_size - totalDisplayableItems()
+        : 0;
     assert(extra_option >= 0);
-    assert(extra_option <= _total_menu_size - totalDisplayableItems());
+    assert(extra_option <= max_extra_option);
 }
 
 void MenuInstance::show_menu_header() {

@@ -22,6 +22,9 @@ void Calibration::fetch(CalibrationData &data) {
     data.up_traverse_mm_sec = parsedJson["up_traverse_mm_sec"];
     data.memory_m1_mm = parsedJson["memory_m1_mm"];
     data.memory_m2_mm = parsedJson["memory_m2_mm"];
+    if (parsedJson.containsKey("display_timeout_seconds")) {
+        data.display_timeout_seconds = parsedJson["display_timeout_seconds"];
+    }
     data.is_dirty = false;
 
 
@@ -38,6 +41,7 @@ void Calibration::store(CalibrationData &data) {
     parsedJson["up_traverse_mm_sec"] = data.up_traverse_mm_sec;
     parsedJson["memory_m1_mm"] = data.memory_m1_mm;
     parsedJson["memory_m2_mm"] = data.memory_m2_mm;
+    parsedJson["display_timeout_seconds"] = data.display_timeout_seconds;
 
     String serializedJson;
 

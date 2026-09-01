@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.1.9"
+#define VERSION_STRING "v1.2.2"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -55,6 +55,7 @@
 #define ITEM_INDEX_CALIBRATION_UP_SPEED 10
 #define ITEM_INDEX_CALIBRATION_DOWN_SPEED 11
 #define ITEM_INDEX_CALIBRATION_DOWN_STATUS 12
+#define ITEM_INDEX_DISPLAY_TIMEOUT 17
 
 #define ITEM_INDEX_MEMORIES_GOTO_M1 13
 #define ITEM_INDEX_MEMORIES_GOTO_M2 14
@@ -72,6 +73,9 @@
 
 #define ARRAY_SIZE(array) (sizeof(array)/sizeof((array)[0]))
 #define WDT_TIMEOUT 2
+#define DISPLAY_TIMEOUT_MIN_SECONDS 10
+#define DISPLAY_TIMEOUT_MAX_SECONDS 120
+#define DISPLAY_TIMEOUT_STEP_SECONDS 10
 
 ESP32Encoder encoder;
 WiFiManager wifiManager;
@@ -104,7 +108,7 @@ const char* get_state_name(int state) {
 
 MenuItem main_menu[] = {
     {ITEM_INDEX_WIFI, "WiFi Cfg."},
-    // {ITEM_INDEX_CALIBRATION, "Calibr."},
+    {ITEM_INDEX_CALIBRATION, "Calibr."},
     {ITEM_INDEX_MEMORIES, "Memories"},
     // {ITEM_INDEX_CLOCK, "Clock"},
     {ITEM_INDEX_MOVE, "Move"},
@@ -121,10 +125,11 @@ MenuItem move_menu[] = {
 };
 
 MenuItem calibration_menu[] = {
-    {ITEM_INDEX_CALIBRATION_CURRENT_POSITION, "Curr. Pos."},
-    {ITEM_INDEX_CALIBRATION_UP_SPEED, "Up spd."},
-    {ITEM_INDEX_CALIBRATION_DOWN_SPEED, "Down spd."},
-    {ITEM_INDEX_CALIBRATION_DOWN_STATUS, "Status: "},
+    {ITEM_INDEX_CALIBRATION_CURRENT_POSITION, "Pos:"},
+    {ITEM_INDEX_CALIBRATION_UP_SPEED, "Up:"},
+    {ITEM_INDEX_CALIBRATION_DOWN_SPEED, "Dn:"},
+    {ITEM_INDEX_CALIBRATION_DOWN_STATUS, "St:"},
+    {ITEM_INDEX_DISPLAY_TIMEOUT, "Off:"},
 };
 
 MenuItem memories_menu[] = {
@@ -154,7 +159,7 @@ MenuInstance calibration_menu_instance(
     &display_handler,
     calibration_menu,
     ARRAY_SIZE(calibration_menu),
-    "Calibration:",
+    "Calib:",
     &buttons_handler
 );
 
@@ -174,6 +179,11 @@ bool is_wifi_enabled = true;
 int use_ap_or_station = WIFI_STA;
 bool is_display_locked = false;
 bool wifi_currently_connected = false;
+unsigned long last_display_activity_millis = 0;
+int64_t last_activity_encoder_position = 0;
+int last_activity_enter_level = HIGH;
+int last_activity_back_level = HIGH;
+bool display_is_off = false;
 
 void on_corrupted_eeprom() {
     display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
@@ -190,13 +200,18 @@ void setup() {
     ESP32Encoder::useInternalWeakPullResistors=UP;
   	encoder.attachHalfQuad(ENCODER_PIN_B, ENCODER_PIN_A);
 
+    last_activity_encoder_position = encoder.getCount();
+    last_activity_enter_level = digitalRead(ENTER_BUTTON_PIN);
+    last_activity_back_level = digitalRead(BACK_BUTTON_PIN);
+    last_display_activity_millis = millis();
+
     WiFi.mode(WIFI_STA);
 
     calibration_storage.fetch(calibration);
 
     setup_wifi_manager();
 
-    calibration_menu_instance.setFontSize(1);
+    calibration_menu_instance.setFontSize(2);
     display.dim(true);
 
     motor_driver.setOnCalibrationChangedCallback(&store_calibration);
@@ -259,6 +274,7 @@ String generate_json_status() {
     parsedStatus["memory_m1_mm"] = calibration.memory_m1_mm;
     parsedStatus["memory_m2_mm"] = calibration.memory_m2_mm;
     parsedStatus["is_display_locked"] = is_display_locked;
+    parsedStatus["display_timeout_seconds"] = calibration.display_timeout_seconds;
     parsedStatus["is_moving"] = motor_driver.isMoving();
     parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
     parsedStatus["current_state"] = get_state_name(current_state);
@@ -454,10 +470,11 @@ int states_transformation() {
         }
         break;
         case STATE_CALIBRATION: {
-            String("Curr. pos.: " + String(calibration.current_position_mm) + " mm").toCharArray(calibration_menu[0].title, 20);
-            String("Up spd.: " + String(calibration.up_traverse_mm_sec) + " mm/s").toCharArray(calibration_menu[1].title, 20);
-            String("Down spd.: " + String(calibration.down_traverse_mm_sec) + " mm/s").toCharArray(calibration_menu[2].title, 20);
-            String("Status: " + String(calibration.is_dirty ? "dirty" : "saved")).toCharArray(calibration_menu[3].title, 20);
+            String("Pos: " + String(calibration.current_position_mm)).toCharArray(calibration_menu[0].title, 20);
+            String("Up: " + String(calibration.up_traverse_mm_sec)).toCharArray(calibration_menu[1].title, 20);
+            String("Dn: " + String(calibration.down_traverse_mm_sec)).toCharArray(calibration_menu[2].title, 20);
+            String("St: " + String(calibration.is_dirty ? "dirty" : "saved")).toCharArray(calibration_menu[3].title, 20);
+            String("Off: " + String(calibration.display_timeout_seconds) + "s").toCharArray(calibration_menu[4].title, 20);
 
             calibration_menu_instance.show();
 
@@ -478,6 +495,18 @@ int states_transformation() {
                         case ITEM_INDEX_CALIBRATION_DOWN_SPEED:
                             calibration.down_traverse_mm_sec += current_encoder_position > last_encoder_position ? -1 : 1;
                             break;
+                        case ITEM_INDEX_DISPLAY_TIMEOUT: {
+                            int next_timeout = calibration.display_timeout_seconds
+                                + (current_encoder_position > last_encoder_position
+                                    ? -DISPLAY_TIMEOUT_STEP_SECONDS
+                                    : DISPLAY_TIMEOUT_STEP_SECONDS);
+                            calibration.display_timeout_seconds = constrain(
+                                next_timeout,
+                                DISPLAY_TIMEOUT_MIN_SECONDS,
+                                DISPLAY_TIMEOUT_MAX_SECONDS
+                            );
+                            break;
+                        }
                     }
                     calibration.is_dirty = true;
                     last_encoder_position = current_encoder_position;
@@ -597,6 +626,7 @@ int get_next_state_or_back(int state) {
 
 void loop() {
     wifiManager.process();
+    update_display_power();
     handle_states_machine();
     debug_info.print();
     int64_t encoder_count = encoder.getCount();
@@ -610,6 +640,33 @@ void loop() {
     try_to_connect_wifi();
     update_clock();
     report_wifi_on_display();
+}
+
+void update_display_power() {
+    int64_t encoder_position = encoder.getCount();
+    int enter_level = digitalRead(ENTER_BUTTON_PIN);
+    int back_level = digitalRead(BACK_BUTTON_PIN);
+    bool activity = encoder_position != last_activity_encoder_position
+        || enter_level != last_activity_enter_level
+        || back_level != last_activity_back_level;
+
+    last_activity_encoder_position = encoder_position;
+    last_activity_enter_level = enter_level;
+    last_activity_back_level = back_level;
+
+    if (activity) {
+        last_display_activity_millis = millis();
+        if (display_is_off) {
+            display.ssd1306_command(SSD1306_DISPLAYON);
+            display_is_off = false;
+            display.clearDisplay();
+        }
+    } else if (!display_is_off
+        && millis() - last_display_activity_millis
+            >= calibration.display_timeout_seconds * 1000UL) {
+        display.ssd1306_command(SSD1306_DISPLAYOFF);
+        display_is_off = true;
+    }
 }
 
 void update_clock() {
