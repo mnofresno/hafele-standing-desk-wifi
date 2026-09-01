@@ -618,6 +618,10 @@ void handle_states_machine() {
 }
 
 int get_next_state_or_back(int state) {
+    if (buttons_handler.readBackButtonLongPress()) {
+        toggle_lock();
+        return get_default_state();
+    }
     if (buttons_handler.readBackButton()) {
         return get_default_state();
     }

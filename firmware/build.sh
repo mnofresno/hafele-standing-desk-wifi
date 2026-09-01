@@ -11,3 +11,9 @@ arduinocli() {
 }
 
 arduinocli compile --fqbn esp32:esp32:esp32 . --build-path ./build --verbose
+
+# Compile main firmware
+arduinocli compile --fqbn esp32:esp32:esp32 firmware.ino
+
+# Compile and run tests
+arduinocli compile --fqbn esp32:esp32:esp32 tests/ButtonsHandler_test.ino

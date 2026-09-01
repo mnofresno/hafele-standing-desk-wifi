@@ -14,5 +14,5 @@ jobs:
       - name: Transpile html into header files
         run: ./firmware/transpile_html.sh
 
-      - name: Build arduino firmware
+      - name: Build and test firmware
         run: ./firmware/build.sh
