@@ -1,6 +1,6 @@
 FROM python:3.7-slim
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl g++
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/bin sh
 RUN pip install pyserial
 RUN arduino-cli core update-index

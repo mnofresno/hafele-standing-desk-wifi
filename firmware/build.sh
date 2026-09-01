@@ -12,8 +12,6 @@ arduinocli() {
 
 arduinocli compile --fqbn esp32:esp32:esp32 . --build-path ./build --verbose
 
-# Compile main firmware
-arduinocli compile --fqbn esp32:esp32:esp32 firmware.ino
-
-# Compile and run tests
-arduinocli compile --fqbn esp32:esp32:esp32 tests/ButtonsHandler_test.ino
+# Run native unit tests in the same reproducible Docker image.
+docker run --rm -v `pwd`:/firmware -t $IMAGE_NAME bash -c \
+    'cd /firmware && g++ -I. -Itests -std=c++11 tests/ButtonsHandler_test.cpp ButtonsHandler.cpp -o /tmp/test_buttons && /tmp/test_buttons'

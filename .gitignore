@@ -1,2 +1,4 @@
 firmware/build
+firmware/build-tests
 *.bin
+*.log
