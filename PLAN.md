@@ -158,14 +158,30 @@ El sensor no reemplaza protecciones eléctricas ni un límite temporal. Una lect
 
 No se debe asumir que cualquier GPIO libre es seguro. Se verificará el modelo exacto de placa ESP32 y su comportamiento durante boot antes de soldar o desplegar.
 
-## Estimación de esfuerzo
+## Estimación correcta para un agente AI
 
-- OpenSCAD y comparación CAD: **16–32 h**.
-- Sensor, soporte y cableado: **7–14 h**.
-- Driver, filtrado y firmware de control: **32–63 h**.
-- Tests, pruebas físicas y entrega: **16–30 h**.
+La estimación no se expresa como horas de un desarrollador humano. El agente puede generar y modificar código, CAD, tests y documentación en una sesión mucho más corta. Lo que no puede saltarse es la inspección de la geometría real, el armado eléctrico y la validación física.
 
-**Total estimado: 71–139 h.** Una primera prueba funcional puede reducirse a aproximadamente 45–65 h, pero no debe considerarse lista para uso diario hasta completar la validación física.
+### Tiempo activo aproximado del agente
+
+- Inspección de repo, `.FCStd`, STL y pinout: **10–30 min**.
+- Primera reconstrucción OpenSCAD, exports y comparación: **30–120 min**.
+- Driver de sensor, filtrado y máquina de estados: **60–180 min**.
+- Integración con firmware, UI, API y tests: **45–120 min**.
+- Build, revisión de errores y preparación del PR/OTA: **20–60 min**.
+
+**Primera implementación completa: aproximadamente 3–8 horas activas del agente**, suponiendo que el hardware, la referencia geométrica y el pin libre estén claros.
+
+### Tiempo externo o no acelerable por el agente
+
+- Comprar o disponer del sensor, resistencias, cables y soporte: depende de disponibilidad.
+- Montar el sensor y cablearlo físicamente: **30–90 min**.
+- Medir la referencia y ajustar el soporte: **30–120 min**.
+- Ejecutar ciclos físicos y observar errores: **1–3 h de pruebas**, distribuidas según las iteraciones necesarias.
+
+El resultado realista es una primera versión funcional el mismo día, más **una o varias rondas de validación física**. Si el HC-SR04 produce ecos inestables o la referencia mecánica no es adecuada, el tiempo adicional no será de “más código”: será cambiar la ubicación, el soporte o el tipo de sensor y repetir las pruebas.
+
+No se debe prometer una duración exacta para la versión final antes de completar la Fase 0 y ver una medición real durante todo el recorrido.
 
 ## Fuera de alcance de este plan
 
