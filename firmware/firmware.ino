@@ -424,10 +424,14 @@ int states_transformation() {
     switch (current_state) {
         case STATE_MENU: {
             main_menu_instance.show();
-            return menu_item_to_state(
+            int next = menu_item_to_state(
                 main_menu_instance.get_selection()
             );
+            if (next != STATE_MENU) {
+                return next;
+            }
         }
+        break;
         case STATE_CLOCK: {
             Serial.println("Clock...");
             display_handler.show_message("CLOCK!");
