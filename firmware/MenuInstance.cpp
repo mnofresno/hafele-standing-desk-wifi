@@ -21,6 +21,10 @@ void MenuInstance::updatePosition(int64_t dialPosition) {
 
 void MenuInstance::show() {
     assert_extra_option();
+    if (selected_option == MENU_ITEM_GO_BACK) {
+        selected_option = 1;
+        extra_option = 0;
+    }
     if (!_buttons_handler->readEnterButton()) {
         if (current_dial_position != last_dial_position) {
 

@@ -12,7 +12,7 @@ typedef struct CalibrationData {
     unsigned int current_position_mm = 500;
     unsigned int memory_m1_mm = 700;
     unsigned int memory_m2_mm = 800;
-    unsigned int display_timeout_seconds = 10;
+    unsigned int display_timeout_seconds = 0;
     bool is_dirty = false;
 };
 

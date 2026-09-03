@@ -73,7 +73,7 @@
 
 #define ARRAY_SIZE(array) (sizeof(array)/sizeof((array)[0]))
 #define WDT_TIMEOUT 2
-#define DISPLAY_TIMEOUT_MIN_SECONDS 10
+#define DISPLAY_TIMEOUT_MIN_SECONDS 0
 #define DISPLAY_TIMEOUT_MAX_SECONDS 120
 #define DISPLAY_TIMEOUT_STEP_SECONDS 10
 
@@ -478,7 +478,10 @@ int states_transformation() {
             String("Up: " + String(calibration.up_traverse_mm_sec)).toCharArray(calibration_menu[1].title, 20);
             String("Dn: " + String(calibration.down_traverse_mm_sec)).toCharArray(calibration_menu[2].title, 20);
             String("St: " + String(calibration.is_dirty ? "dirty" : "saved")).toCharArray(calibration_menu[3].title, 20);
-            String("Off: " + String(calibration.display_timeout_seconds) + "s").toCharArray(calibration_menu[4].title, 20);
+            String timeout_label = calibration.display_timeout_seconds == 0
+                ? "Off: dis."
+                : "Off: " + String(calibration.display_timeout_seconds) + "s";
+            timeout_label.toCharArray(calibration_menu[4].title, 20);
 
             calibration_menu_instance.show();
 
@@ -665,13 +668,15 @@ void update_display_power() {
     if (activity) {
         last_display_activity_millis = millis();
         if (display_is_off) {
+            display.ssd1306_command(SSD1306_CHARGEPUMP);
+            display.ssd1306_command(0x14);
             display.ssd1306_command(SSD1306_DISPLAYON);
             display_is_off = false;
-            display.clearDisplay();
         }
     } else if (!display_is_off
-        && millis() - last_display_activity_millis
-            >= calibration.display_timeout_seconds * 1000UL) {
+        && calibration.display_timeout_seconds > 0
+        && (millis() - last_display_activity_millis
+            >= calibration.display_timeout_seconds * 1000UL)) {
         display.ssd1306_command(SSD1306_DISPLAYOFF);
         display_is_off = true;
     }

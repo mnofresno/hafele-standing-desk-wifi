@@ -24,6 +24,8 @@ void Calibration::fetch(CalibrationData &data) {
     data.memory_m2_mm = parsedJson["memory_m2_mm"];
     if (parsedJson.containsKey("display_timeout_seconds")) {
         data.display_timeout_seconds = parsedJson["display_timeout_seconds"];
+    } else {
+        data.display_timeout_seconds = 0;
     }
     data.is_dirty = false;
 
