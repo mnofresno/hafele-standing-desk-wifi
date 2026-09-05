@@ -10,6 +10,12 @@ ButtonsHandler::ButtonsHandler(
     _back_button_pin = back_button_pin;
     _invert_enter_button = invert_enter_button;
     _invert_back_button = invert_back_button;
+    _last_button_state_for[ENTER_BUTTON_CLICK] = false;
+    _last_button_state_for[BACK_BUTTON_CLICK] = false;
+    _last_millis_time_for[STATE_CHANGE] = millis();
+    _last_millis_time_for[ENTER_BUTTON_CLICK] = millis();
+    _last_millis_time_for[BACK_BUTTON_CLICK] = millis();
+    _state_has_changed_recently = false;
     _back_button_is_pressed = false;
     _back_button_press_start_time = 0;
     pinMode(_back_button_pin, INPUT);

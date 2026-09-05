@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.2.2"
+#define VERSION_STRING "v1.2.3"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -670,7 +670,9 @@ void update_display_power() {
         if (display_is_off) {
             display.ssd1306_command(SSD1306_CHARGEPUMP);
             display.ssd1306_command(0x14);
+            display.dim(false);
             display.ssd1306_command(SSD1306_DISPLAYON);
+            display.display();
             display_is_off = false;
         }
     } else if (!display_is_off
