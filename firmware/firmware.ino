@@ -18,9 +18,10 @@
 #include <WiFiUdp.h>
 #include <NTPClient.h>
 #include <ESPmDNS.h>
+#include <esp_wifi.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.2.5"
+#define VERSION_STRING "v1.2.7"
 
 #define DEFAULT_HOSTNAME "hafele-standing-desk"
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
