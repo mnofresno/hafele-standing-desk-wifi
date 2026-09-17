@@ -19,7 +19,7 @@
 #include <NTPClient.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.2.3"
+#define VERSION_STRING "v1.2.4"
 
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
@@ -212,7 +212,6 @@ void setup() {
     setup_wifi_manager();
 
     calibration_menu_instance.setFontSize(2);
-    display.dim(true);
 
     motor_driver.setOnCalibrationChangedCallback(&store_calibration);
     motor_driver.setCalibrationData(&calibration);
