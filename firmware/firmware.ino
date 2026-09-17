@@ -17,10 +17,13 @@
 #include "html/panel.h"
 #include <WiFiUdp.h>
 #include <NTPClient.h>
+#include <ESPmDNS.h>
+#include <esp_wifi.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.2.3"
+#define VERSION_STRING "v1.2.7"
 
+#define DEFAULT_HOSTNAME "hafele-standing-desk"
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
 #define DEFAULT_AP_PASSWORD "PASSWORD"
 
@@ -206,13 +209,14 @@ void setup() {
     last_display_activity_millis = millis();
 
     WiFi.mode(WIFI_STA);
+    WiFi.setHostname(DEFAULT_HOSTNAME);
+    MDNS.begin(DEFAULT_HOSTNAME);
 
     calibration_storage.fetch(calibration);
 
     setup_wifi_manager();
 
     calibration_menu_instance.setFontSize(2);
-    display.dim(true);
 
     motor_driver.setOnCalibrationChangedCallback(&store_calibration);
     motor_driver.setCalibrationData(&calibration);
@@ -278,6 +282,7 @@ String generate_json_status() {
     parsedStatus["is_moving"] = motor_driver.isMoving();
     parsedStatus["wifi_ssid"] = wifiManager.getWiFiSSID();
     parsedStatus["current_state"] = get_state_name(current_state);
+    parsedStatus["hostname"] = DEFAULT_HOSTNAME;
     parsedStatus["version"] = VERSION_STRING;
     String jsonStatus;
     serializeJson(parsedStatus, jsonStatus);
@@ -706,6 +711,7 @@ void try_to_connect_wifi() {
     if (is_wifi_enabled && !WiFi.isConnected() && wifi_check_timed_out(last_wifi_check)) {
         if (use_ap_or_station == WIFI_STA) {
             WiFi.mode(WIFI_STA);
+            WiFi.setHostname(DEFAULT_HOSTNAME);
             wifiManager.autoConnect(DEFAULT_AP_NAME, DEFAULT_AP_PASSWORD);
         } else {
             WiFi.mode(WIFI_AP);

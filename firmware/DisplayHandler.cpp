@@ -49,10 +49,24 @@ void DisplayHandler::draw_starting(String version_string) {
 }
 
 void DisplayHandler::initialize() {
-    if(!_display->begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-      Serial.println(F("SSD1306 allocation failed"));
-      for(;;);
+    delay(100);
+    Wire.setTimeOut(50);
+    bool initialized = false;
+    for (int retry = 0; retry < 5; retry++) {
+        if (_display->begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+            initialized = true;
+            break;
+        }
+        Serial.println(F("SSD1306 init attempt failed, retrying..."));
+        delay(100);
     }
+
+    if (!initialized) {
+        Serial.println(F("SSD1306 initialization failed after retries"));
+        return;
+    }
+
+    _display->dim(false);
     _display->display();
     delay(200);
 }
