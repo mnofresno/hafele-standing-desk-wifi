@@ -70,13 +70,13 @@ FreeCAD API BRep (exact-kernel) and STL measurements are recorded in the invento
 
 | Part | FreeCAD STL volume (mm³) | OpenSCAD volume (mm³) | Abs volume delta (mm³) | Voxel symmetric difference estimate (mm³) | Max sampled surface distance (mm) | Result |
 |---|---:|---:|---:|---:|---:|---|
-| Case | 42,069.51 | 40,426.60 | 1,642.91 | 2,394 | 9.00 | Fail |
+| Case | 42,069.51 | 40,550.79 | 1,518.73 | 2,155 | 3.71 | Fail |
 | Lid | 31,103.08 | 31,103.14 | 0.06 | 0 | 0.001 | Pass |
 
-The tessellated FreeCAD STL volume differs slightly from its exact BRep volume. Both reference and OpenSCAD meshes are watertight at the default values. The case has 5 connected OpenSCAD components versus 1 FreeCAD component. Bounding boxes match within 0.001 mm, but that does not imply matching surfaces.
+The tessellated FreeCAD STL volume differs slightly from its exact BRep volume. After replacing the unsupported rectangular support bars with native CSG profiles transcribed from FreeCAD `Sketch006` and `Sketch007`, both default meshes are watertight and have one connected component. The default case remains outside tolerance; its bounding boxes match within 0.001 mm, but its sampled surface deviation remains up to 3.71 mm.
 
 ## Parameter configurations and known gaps
 
 The automated matrix includes default, longer/thicker, and short-case configurations. All run through FreeCAD recompute and OpenSCAD export. Every case comparison fails 0.05 mm; the lid also fails the maximum sampled deviation criterion. The source FreeCAD tree itself leaves some dependent feature tips marked touched after headless parameter recompute; the exporter recomputes touched feature objects and exports each body tip, but this behavior is recorded in the inventory. The parameter runs are evidence of divergence, not proof of equivalence.
 
-The current CSG still needs a feature-by-feature reconstruction of the exact FreeCAD shell operation, display/button face placement, screw tower locations/support details, and lid hole cuts. Some spreadsheet parameters are exposed but do not yet drive the same geometric effects as their source constraints. No geometric identity or 0.05 mm fit is claimed. These are outstanding acceptance gaps, not intentionally removed design features.
+The current CSG still needs a feature-by-feature reconstruction of the exact FreeCAD shell operation, display/button face placement, screw tower details, and lid hole cuts. `Sketch006` and `Sketch007` support-wall profiles now follow their source sketches instead of the prior rectangular bars, removing the false lower ledge those bars introduced. Some spreadsheet parameters are exposed but do not yet drive the same geometric effects as their source constraints. No geometric identity or 0.05 mm fit is claimed. These are outstanding acceptance gaps, not intentionally removed design features.

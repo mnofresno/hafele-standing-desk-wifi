@@ -26,6 +26,12 @@ distancia_botones = 40;
 altura_botones = 3;
 pos_x_botones = 75;
 dia_botones = 8.68;
+panel_sketch_offset = 19.113; // FreeCAD attachment offset from the panel's top corner.
+
+/* [Internal support walls] */
+support_floor_left_x = 6.0813014172; // Sketch006 constrained profile point.
+support_inner_offset = 7.25; // Sketch007 constrained profile offset.
+support_near_offset = 9; // Near support sketch plane from the Y=0 end.
 
 /* [Lid] */
 espesor_tapa = 1.5; // Preserved spreadsheet parameter; no final feature references it.
@@ -82,9 +88,60 @@ module end_closures() {
             rounded_profile_2d();
 }
 
+module support_wall_profiles() {
+    // Native CSG transcription of Sketch006 and Sketch007. These are irregular
+    // 12-edge walls; rectangular blocks create a false lower ledge in the case.
+    r = radio_curvaturas;
+    a = angulo_del_panel;
+    t = ancho_pared;
+    z_left_outer = r-r*sin(90-a);
+    z_right_outer = r+r*sin(90-a);
+    x_left_outer = -r*cos(90-a);
+    x_top_left = x_left_outer-(alto-z_left_outer)/tan(a);
+    x_top_right = x_top_left+profundidad;
+    x_right_outer = x_top_right+(alto-z_right_outer)/tan(a);
+    x_right_center = x_right_outer-r*cos(90-a);
+
+    z_left_inner = z_left_outer+t*cos(a);
+    x_left_inner = x_left_outer+t*sin(a);
+    z_right_inner = z_right_outer-t*cos(a);
+    x_right_inner = x_right_outer-t*sin(a);
+    z_support_top = alto-t;
+    x_left_inner_top = x_left_inner-(z_support_top-z_left_inner)/tan(a);
+    x_right_inner_top = x_right_inner-(z_support_top-z_right_inner)/tan(a);
+
+    support_right_x = panel_inset()-support_inner_offset;
+
+    // Near support: Y=-9 mm, pad proceeds 1.5 mm toward the enclosure interior.
+    translate([0,-support_near_offset,0]) rotate([90,0,0]) linear_extrude(height=t,convexity=5)
+        polygon([[support_floor_left_x,z_support_top],
+                 [x_left_inner_top,z_support_top],
+                 [x_left_inner,z_left_inner],
+                 [0,t],[0,0],
+                 [x_right_center,0],[x_right_center,t],
+                 [x_right_inner,z_right_inner],
+                 [x_right_inner_top,z_support_top],
+                 [support_right_x,z_support_top],
+                 [support_right_x,t],
+                 [support_floor_left_x,t]]);
+
+    // Far support position is linked to the tower separation in the source sketch.
+    translate([0,-longitud+2*separacion_torres_tornillos-t,0])
+        rotate([90,0,0]) linear_extrude(height=t,convexity=5)
+            polygon([[x_left_inner,z_left_inner],
+                     [x_left_inner_top,z_support_top],
+                     [support_inner_offset,z_support_top],
+                     [support_inner_offset,t],
+                     [support_right_x,t],
+                     [support_right_x,z_support_top],
+                     [x_right_inner_top,z_support_top],
+                     [x_right_inner,z_right_inner],
+                     [x_right_center,t],
+                     [x_right_center,0],[0,0],[0,t]]);
+}
+
 module display_and_button_openings() {
     // Exact Sketch001 coordinates transformed from its attached panel plane.
-    panel_sketch_offset = 19.113;
     theta = 90-angulo_del_panel;
     a = angulo_del_panel;
     z_left_tan = radio_curvaturas-radio_curvaturas*sin(90-a);
@@ -113,16 +170,15 @@ module screw_tower(x,y) {
 }
 
 module case_body() {
+    tower_edge_offset = separacion_torres_tornillos + dia_torres_tornillos/2;
     difference() {
         union() {
             enclosure_shell();
             end_closures();
             // Four cylindrical screw lands at the source sketch coordinates.
-            for (x=[9.5,51.1217782649], y=[-9.5,-longitud+9.5])
+            for (x=[tower_edge_offset,panel_inset()-tower_edge_offset], y=[-tower_edge_offset,-longitud+tower_edge_offset])
                 translate([x,y,ancho_pared]) screw_tower(x,y);
-            // The source pads reinforce the end supports; keep their wall thickness parameterized.
-            for (y=[-9,-longitud+10.5])
-                translate([0,y-ancho_pared,ancho_pared]) cube([panel_inset(),ancho_pared,9.65]);
+            support_wall_profiles();
         }
         display_and_button_openings();
     }

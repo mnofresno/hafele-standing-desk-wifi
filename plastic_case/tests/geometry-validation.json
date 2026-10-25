@@ -37,24 +37,24 @@
               35.0
             ]
           ],
-          "volume_mm3": 40426.60009734031,
-          "area_mm2": 54994.04687192998,
+          "volume_mm3": 40550.78534777071,
+          "area_mm2": 55045.05551943131,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 1642.911146810009,
-          "symmetric_difference_voxel_mm3_estimate": 2394.0,
+          "volume_abs_delta_mm3": 1518.725896379612,
+          "symmetric_difference_voxel_mm3_estimate": 2155.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.5,
-            "max_sampled": 7.578193411925577
+            "p95": 1.2194105584971835,
+            "max_sampled": 3.3023851576150554
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 1.3127839923323614,
-            "max_sampled": 9.0
+            "p95": 0.4269517407920666,
+            "max_sampled": 3.7059047743678093
           },
           "components_a": 1,
           "components_b": 1,
@@ -152,7 +152,7 @@
               38.0
             ]
           ],
-          "volume_mm3": 68138.20240009103,
+          "volume_mm3": 68138.20239976946,
           "area_mm2": 68706.93454455587,
           "components": 1,
           "watertight": true,
@@ -171,24 +171,24 @@
               38.0
             ]
           ],
-          "volume_mm3": 65064.539467450326,
-          "area_mm2": 66440.36961327629,
+          "volume_mm3": 65455.08135508321,
+          "area_mm2": 67050.89917017803,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 3073.6629326407055,
-          "symmetric_difference_voxel_mm3_estimate": 3334.0,
+          "volume_abs_delta_mm3": 2683.1210446862533,
+          "symmetric_difference_voxel_mm3_estimate": 3016.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 2.0,
-            "max_sampled": 7.311285016498192
+            "p95": 1.4728465239594388,
+            "max_sampled": 3.711030269941803
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 1.8684668083790044,
-            "max_sampled": 8.519428457359982
+            "p95": 0.8582707022875906,
+            "max_sampled": 3.7059047743678093
           },
           "components_a": 1,
           "components_b": 1,
@@ -285,7 +285,7 @@
               33.5
             ]
           ],
-          "volume_mm3": 25448.167924125926,
+          "volume_mm3": 25448.167923958084,
           "area_mm2": 42280.23139563175,
           "components": 1,
           "watertight": true,
@@ -304,29 +304,29 @@
               30.0
             ]
           ],
-          "volume_mm3": 24062.95537855501,
-          "area_mm2": 39778.66663224104,
+          "volume_mm3": 24351.997843137648,
+          "area_mm2": 40359.225943551995,
           "components": 3,
-          "watertight": true,
+          "watertight": false,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 5.558586530387402,
-          "volume_abs_delta_mm3": 1385.2125455709174,
-          "symmetric_difference_voxel_mm3_estimate": 1403.0,
+          "volume_abs_delta_mm3": 1096.1700808204369,
+          "symmetric_difference_voxel_mm3_estimate": 1207.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 3.5000944926018334,
-            "max_sampled": 8.307971755139244
+            "p95": 1.647007711837729,
+            "max_sampled": 6.921928684414653
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 1.687400350654845,
-            "max_sampled": 11.455361941827434
+            "p95": 0.8017348135637988,
+            "max_sampled": 9.910993823301283
           },
           "components_a": 1,
           "components_b": 3,
           "watertight_a": true,
-          "watertight_b": true
+          "watertight_b": false
         },
         "within_0_05_mm": false
       },
