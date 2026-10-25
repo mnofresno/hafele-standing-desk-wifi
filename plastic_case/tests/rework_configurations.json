@@ -1,0 +1,45 @@
+[
+  {
+    "name": "rework_case_default_candidates",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "case"
+    }
+  },
+  {
+    "name": "rework_ports_enabled",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "case",
+      "enable_usb_access": true,
+      "enable_motor_cable_exit": true,
+      "usb_access_end": "near",
+      "motor_cable_end": "far"
+    }
+  },
+  {
+    "name": "short_m3_insert_and_tighter_pockets",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "case",
+      "m3_insert_pilot_diameter": 3.8,
+      "m3_insert_length": 4.0,
+      "oled_pcb_clearance": 0.2,
+      "encoder_body_clearance": 0.2
+    }
+  },
+  {
+    "name": "oled_retainer_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "oled_retainer"
+    }
+  },
+  {
+    "name": "encoder_retainer_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "encoder_retainer"
+    }
+  }
+]

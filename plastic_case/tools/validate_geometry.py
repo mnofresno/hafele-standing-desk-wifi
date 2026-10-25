@@ -3,6 +3,7 @@
 Requires FreeCAD Python, OpenSCAD CLI, trimesh, numpy, and rtree.
 """
 import argparse, json, os, subprocess, tempfile
+from pathlib import Path
 import numpy as np
 import trimesh
 
@@ -47,10 +48,17 @@ def main():
     ap.add_argument('--source',required=True); ap.add_argument('--scad',required=True); ap.add_argument('--configs',required=True)
     ap.add_argument('--freecad-python',required=True); ap.add_argument('--openscad',default='openscad'); ap.add_argument('--out',default='geometry-validation.json')
     args=ap.parse_args(); configs=json.load(open(args.configs)); result=[]
+    inventory=json.load(open(Path(__file__).resolve().parents[1]/'freecad_model_inventory.json'))
+    sheet=next(o for o in inventory['objects'] if o['type']=='Spreadsheet::Sheet')
+    spreadsheet_aliases={c['alias'] for c in sheet['cells'] if c.get('alias')}
     for cfg in configs:
         name=cfg['name']; params=cfg['parameters']
         with tempfile.TemporaryDirectory(prefix='hafele-validate-') as td:
-            paramfile=os.path.join(td,'parameters.json'); json.dump(params,open(paramfile,'w'))
+            # OpenSCAD revisions have selectors such as design_revision that do
+            # not exist in the source spreadsheet. Apply only source aliases to
+            # FreeCAD, while forwarding the complete parameter set to OpenSCAD.
+            fc_params={k:v for k,v in params.items() if k in spreadsheet_aliases}
+            paramfile=os.path.join(td,'parameters.json'); json.dump(fc_params,open(paramfile,'w'))
             subprocess.run([args.freecad_python,os.path.join(os.path.dirname(__file__),'export_freecad.py'),args.source,td,paramfile],check=True,env={**os.environ,'PYTHONPATH':'/Applications/FreeCAD.app/Contents/Resources/lib','LD_LIBRARY_PATH':'/Applications/FreeCAD.app/Contents/Resources/lib'},stdout=subprocess.DEVNULL)
             sr=[]
             for part in ('case','lid'):
