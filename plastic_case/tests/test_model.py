@@ -1,6 +1,9 @@
 """Lightweight structural checks; full CAD comparison is tools/validate_geometry.py."""
 import json
 from pathlib import Path
+import shutil
+import subprocess
+import pytest
 ROOT=Path(__file__).resolve().parents[1]
 def test_inventory_has_all_objects_and_parameters():
     d=json.loads((ROOT/'freecad_model_inventory.json').read_text())
@@ -13,3 +16,53 @@ def test_model_has_case_lid_and_assembly_selector():
     for module in ('case_body','case_lid','assembly','screw_tower','lid_fastener_holes'):
         assert f'module {module}(' in s
     assert 'show_part' in s and 'linear_extrude' in s
+    assert 'design_revision = "rework"' in s
+    assert 'module rework_panel_pockets(' in s
+    assert 'module external_access_cutouts(' in s
+
+def test_fit_coupons_cover_reported_hardware_interfaces():
+    s=(ROOT/'tests'/'fit_test_coupons.scad').read_text()
+    selectors=('oled','encoder','button','usb','motor_cable','dupont','m3_insert',
+               'm3_screw','board_edge','board_outline')
+    selector_line=next(line for line in s.splitlines() if line.startswith('test_set ='))
+    assert all(f',{name}' in selector_line or f'[{name}' in selector_line for name in selectors)
+    for parameter in ('oled_pcb_width_default','encoder_body_x','m3_insert_length',
+                      'usb_plug_width','board_outline_target'):
+        assert parameter in s
+
+def test_rework_plan_marks_unverified_board_and_component_dimensions():
+    s=(ROOT/'REWORK_PLAN.md').read_text()
+    assert 'CP2102' in s
+    assert 'not the ESP32 PCB' in s
+    assert 'still unknown' in s.lower() or 'unknown' in s.lower()
+    assert 'removable internal electronics carrier' in s
+
+@pytest.mark.parametrize('definitions', [
+    ['-D', 'show_part="case"'],
+    ['-D', 'show_part="case"', '-D', 'enable_usb_access=true',
+     '-D', 'enable_motor_cable_exit=true', '-D', 'motor_cable_end="far"',
+     '-D', 'usb_access_end="near"'],
+    ['-D', 'show_part="case"', '-D', 'm3_insert_pilot_diameter=3.8',
+     '-D', 'm3_insert_length=4.0'],
+    ['-D', 'show_part="oled_retainer"'],
+    ['-D', 'show_part="encoder_retainer"'],
+    ['-D', 'design_revision="baseline"', '-D', 'show_part="case"'],
+])
+def test_case_revision_and_hardware_retainer_meshes_are_manifold(tmp_path,definitions):
+    openscad=shutil.which('openscad')
+    if not openscad:
+        pytest.skip('OpenSCAD CLI is required for native mesh smoke checks')
+    output=tmp_path/'part.stl'
+    command=[openscad,'-o',str(output),*definitions,str(ROOT/'hafele_control_box.scad')]
+    result=subprocess.run(command,capture_output=True,text=True,check=True)
+    log=result.stdout+result.stderr
+    assert 'Top level object is a 3D object (manifold)' in log
+    assert 'Status:     NoError' in log
+    assert output.is_file() and output.stat().st_size>0
+    import trimesh
+    mesh=trimesh.load(output,force='mesh')
+    assert mesh.is_watertight and mesh.is_winding_consistent
+    shells=mesh.split(only_watertight=False)
+    # Blind M3 insert bores are enclosed voids and appear as inward-wound STL
+    # shells. Count positive-volume solids separately from those cavity shells.
+    assert sum(part.volume>0 for part in shells)==1

@@ -26,6 +26,10 @@ Source archive: `Hafele Standing Desk-1-001.zip` (five photos). These notes desc
 
 The source repository identifies a 128×64 I2C OLED using the SSD1306 library and records a visible window of about 26.7 × 14.7 mm. The FreeCAD opening is 26.64 × 14.46 mm. This is the **window**, not the outer PCB size; the PCB and its inactive border sit behind the case face. The loose photo's nearly square four-hole board and 4-pin header are consistent with a common 1.3-inch breakout, but the generic photos do not uniquely identify the vendor/module.
 
+## ESP32 USB identification
+
+On 2026-10-25 the Mac enumerated `/dev/cu.usbserial-0001` as a **Silicon Labs CP2102 USB-to-UART bridge** (USB VID `0x10C4`, PID `0xEA60`, bridge serial `0001`). This confirms a USB data path and narrows the interface to a common USB-UART bridge. It does **not** identify the ESP32 carrier PCB or its dimensions; the same bridge is used on many unrelated boards. The existing serial code starts at 115200 baud and prints a small number of firmware messages, but the repository has no network serial console. The generic Arduino FQBN remains `esp32:esp32:esp32`. Treat the README's “Wemos D1 ESP32” as a project label until its silkscreen/layout is matched.
+
 Useful published envelopes:
 
 | Candidate | Board/module envelope | Active display area | Mechanical implication |
@@ -47,6 +51,12 @@ The photographed encoder is consistent with the standard EC11-family 11 mm incre
 - Keep mains switching/power hardware in a physically distinct zone from ESP32/display signal wiring; add a printed divider and wire channels only after the actual supply, relay-board, and cable dimensions are entered. Leave lid screw towers and lid closure paths as explicit keep-outs.
 - Expose print-fit clearances as parameters. Initial rigid PCB pocket clearance should be small and configurable; flexible capture lips should absorb printer and vendor variation without squeezing the glass or relying on friction alone.
 
+## M3 inserts and glue-free board mounts
+
+The baseline reconstruction has 7 mm outside diameter with a 4.25 mm **through-bore**. The new rework revision changes those towers to blind M3 insert seats using a provisional 8 mm boss, 4.0 mm pilot, 5.7 mm insert length and 1 mm pilot reserve. Common insert references vary: one table lists 4.0 mm pilot, 4.6 mm OD, 4–6 mm insert length and 6.5 mm minimum boss; another manufacturer's specific M3 insert is 4.2 mm OD by 4 mm long with a 4 mm installation hole. The insert's own maker and the printed coupon must determine final settings.
+
+The redesign should make the case/lid towers blind insert seats with a bottom stop and top lead-in. M3 screws through the lid and internal carrier should be checked with a clearance-hole coupon and head recess, rather than inheriting the existing 4 mm lid clearance automatically. Reuse M3 inserts for the removable lid, a removable electronics carrier, an encoder bracket and a two-screw motor-cable clamp where the bosses can be kept thick and clear of moving connectors. Do not put M3 screws through the fine-pitch perfboard: retain its edges in rails or clips, and put the metal inserts in the carrier.
+
 ## Still unknown
 
 - OLED controller and exact board SKU; the four-wire header and visible screen alone cannot distinguish SSD1306 from compatible modules.
@@ -59,4 +69,4 @@ The photographed encoder is consistent with the standard EC11-family 11 mm incre
 
 ## Measurements to capture before adding component pockets
 
-Use calipers where possible and record millimetres: display PCB width/height and all four hole-center coordinates; display glass opening; pushbutton thread OD, body length and nut OD; encoder body width/height/depth and shaft diameter; each PCB outline, mounting-hole locations and component heights; rocker cutout dimensions; cable/boot diameters; and the desired lower-edge profile. A ruler in a square-on photo can serve as a fallback for inaccessible dimensions.
+Use calipers where possible and record millimetres: OLED PCB width/height/thickness and connector direction (its mounting-hole coordinates are not a retention requirement); pushbutton thread OD, body length and nut OD; each red-centered part's body/cutout; each PCB outline and component heights; cable/boot diameters; and the desired lower-edge profile. For the encoder, start with the EC11-family parametric envelope and refine it only if the first fit coupon exposes a mismatch. A ruler in a square-on photo can serve as a fallback for inaccessible dimensions.
