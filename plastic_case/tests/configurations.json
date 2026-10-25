@@ -1,0 +1,5 @@
+[
+  {"name":"default","parameters":{}},
+  {"name":"longer_and_thicker","parameters":{"longitud":170,"ancho_pared":2,"alto":38,"profundidad":76,"dia_botones":9,"dia_torres_tornillos":8,"separacion_torres_tornillos":7}},
+  {"name":"short_boundary_valid","parameters":{"longitud":120,"ancho_pared":1.2,"alto":30,"profundidad":62,"angulo_del_panel":72,"radio_curvaturas":4}}
+]

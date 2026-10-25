@@ -1,0 +1,7399 @@
+{
+  "source": "/tmp/hafele-standing-desk-wifi/plastic_case/hafele_control_box_with_lid.FCStd",
+  "freecad_version": [
+    "1",
+    "0",
+    "2",
+    "39319 (Git)",
+    "https://github.com/FreeCAD/FreeCAD",
+    "2025/08/05 20:19:07",
+    "(HEAD detached at 1.0.2)",
+    "256fc7eff3379911ab5daf88e10182c509aa8052"
+  ],
+  "document": "hafele_control_box_with_lid",
+  "objects": [
+    {
+      "name": "Sketch",
+      "label": "Perfil_Lateral",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[]",
+        "FullyConstrained": true,
+        "Label": "Perfil_Lateral",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "Deactivated",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          ".Constraints.Alto",
+          "<<parameters>>.alto"
+        ],
+        [
+          "Constraints[14]",
+          "<<parameters>>.radio_curvaturas"
+        ],
+        [
+          "Constraints[16]",
+          "<<parameters>>.angulo_del_panel"
+        ],
+        [
+          "Constraints[17]",
+          "Spreadsheet001.profundidad"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation": "Rotation (0.7071067811865471, 0.0, 0.0, 0.7071067811865479)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -13.214856674984095,
+            35.0,
+            0.0
+          ],
+          "EndPoint": [
+            56.78514332501591,
+            35.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 70.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -4.8296291314453415,
+            3.7059047744873963,
+            0.0
+          ],
+          "EndPoint": [
+            -13.214856674984096,
+            35.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 32.39803137445811
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            56.78514332501591,
+            35.0,
+            0.0
+          ],
+          "EndPoint": [
+            64.47686732734451,
+            6.294095225512606,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 29.718539450146874
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -9.184850993605148e-16,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 59.64723819589917
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            59.64723819589917,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            64.47686732734451,
+            6.2940952255126055,
+            0.0
+          ],
+          "Center": [
+            59.64723819589917,
+            5.0,
+            0.0
+          ],
+          "Radius": 5.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 4.71238898038469,
+          "last_parameter": 6.544984694978736
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            -4.8296291314453415,
+            3.7059047744873963,
+            0.0
+          ],
+          "EndPoint": [
+            -9.184850993605148e-16,
+            0.0,
+            0.0
+          ],
+          "Center": [
+            0.0,
+            5.0,
+            0.0
+          ],
+          "Radius": 5.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 3.4033920413889427,
+          "last_parameter": 4.71238898038469
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            64.64723819589916,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            64.64723819589916,
+            5.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 5.0
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Parallel",
+          "value": 0.0,
+          "first": -1,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Parallel",
+          "value": 0.0,
+          "first": 1,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Parallel",
+          "value": 0.0,
+          "first": 0,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": 1.5707963267948966,
+          "first": 2,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": -1.5707963267948966,
+          "first": 3,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": -1.5707963267948966,
+          "first": 3,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": 1.5707963267948966,
+          "first": 1,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 35.0,
+          "first": 0,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": -1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 6,
+          "second": -1,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 6,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": -1.5707963267948966,
+          "first": 6,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Radius",
+          "value": 5.0,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 5,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Angle",
+          "value": 1.3089969389957472,
+          "first": 2,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 70.0,
+          "first": 0,
+          "second": 0,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -13.214856674984098,
+          0.0,
+          0.0,
+          64.64723819589918,
+          3.885780586188048e-14,
+          35.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Body",
+      "label": "case_body",
+      "type": "PartDesign::Body",
+      "properties": {
+        "AllowCompound": false,
+        "BaseFeature": "None",
+        "Label": "case_body",
+        "Label2": "",
+        "Tip": "<PartDesign::Pad>",
+        "Visibility": true,
+        "_GroupTouched": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 42071.602466511846,
+        "area_mm2": 56628.99839029548,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Origin001",
+      "label": "Origin001",
+      "type": "App::Origin",
+      "properties": {
+        "Label": "Origin001",
+        "Label2": "",
+        "Visibility": false,
+        "_GroupTouched": false
+      },
+      "expressions": []
+    },
+    {
+      "name": "X_Axis001",
+      "label": "X_Axis001",
+      "type": "App::Line",
+      "properties": {
+        "Label": "X_Axis001",
+        "Label2": "",
+        "Role": "X_Axis",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100,
+          0.0,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Y_Axis001",
+      "label": "Y_Axis001",
+      "type": "App::Line",
+      "properties": {
+        "Label": "Y_Axis001",
+        "Label2": "",
+        "Role": "Y_Axis",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          0.0,
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Z_Axis001",
+      "label": "Z_Axis001",
+      "type": "App::Line",
+      "properties": {
+        "Label": "Z_Axis001",
+        "Label2": "",
+        "Role": "Z_Axis",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          0.0,
+          0.0,
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "XY_Plane001",
+      "label": "XY_Plane001",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "XY_Plane001",
+        "Label2": "",
+        "Role": "XY_Plane",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          -1e+100,
+          -1e+100,
+          0.0,
+          1e+100,
+          1e+100,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "XZ_Plane001",
+      "label": "XZ_Plane001",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "XZ_Plane001",
+        "Label2": "",
+        "Role": "XZ_Plane",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": -1.1972621413014757e+152,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          -1e+100,
+          0.0,
+          -1e+100,
+          1e+100,
+          0.0,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "YZ_Plane001",
+      "label": "YZ_Plane001",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "YZ_Plane001",
+        "Label2": "",
+        "Role": "YZ_Plane",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 1.7958932119522137e+152,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          0.0,
+          -1e+100,
+          -1e+100,
+          0.0,
+          1e+100,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad",
+      "label": "Gabinete",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "None",
+        "Label": "Gabinete",
+        "Label2": "",
+        "Length": {
+          "value": 150.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 100.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Length",
+          "<<parameters>>.longitud"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 365625.91487240524,
+        "area_mm2": 35995.7780415667,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Thickness",
+      "label": "Thickness",
+      "type": "PartDesign::Thickness",
+      "properties": {
+        "Base": "(<PartDesign::Pad>, ['Face2'])",
+        "BaseFeature": "<PartDesign::Pad>",
+        "Intersection": false,
+        "Join": "Arc",
+        "Label": "Thickness",
+        "Label2": "",
+        "Mode": "Skin",
+        "Refine": false,
+        "Reversed": true,
+        "SupportTransform": false,
+        "Suppressed": false,
+        "Value": {
+          "value": 1.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Value",
+          "<<parameters>>.ancho_pared"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 37105.50320196468,
+        "area_mm2": 50147.62964831756,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Spreadsheet001",
+      "label": "parameters",
+      "type": "Spreadsheet::Sheet",
+      "properties": {
+        "A1": "ancho_gabinete",
+        "A10": "pos_display_y",
+        "A11": "distancia_botones",
+        "A12": "pos_y_botones",
+        "A13": "pos_x_botones",
+        "A14": "dia_botones",
+        "A15": "espesor_tapa",
+        "A16": "dia_torres_tornillos",
+        "A17": "long_torres_tornillos",
+        "A18": "separacion_torres_tornillos",
+        "A19": "dia_interno_torres_tornillos",
+        "A2": "alto_gabinete",
+        "A3": "profundidad_gabinete",
+        "A4": "ancho_display",
+        "A5": "alto_display",
+        "A6": "radio_curvaturas",
+        "A7": "angulo_del_panel",
+        "A8": "ancho_pared",
+        "A9": "pos_display_x",
+        "B1": 150,
+        "B10": 15,
+        "B11": 40,
+        "B12": 3,
+        "B13": 75,
+        "B14": 8.68,
+        "B15": 1.5,
+        "B16": 7,
+        "B17": 33.5,
+        "B18": 6,
+        "B19": 4.25,
+        "B2": 35,
+        "B3": 70,
+        "B4": 26.64,
+        "B5": 14.46,
+        "B6": 5,
+        "B7": 75,
+        "B8": 1.5,
+        "B9": 20,
+        "Label": "parameters",
+        "Label2": "",
+        "Visibility": true
+      },
+      "expressions": [],
+      "cells": [
+        {
+          "cell": "A1",
+          "contents": "'ancho_gabinete",
+          "alias": null
+        },
+        {
+          "cell": "B1",
+          "contents": "150",
+          "alias": "longitud"
+        },
+        {
+          "cell": "A2",
+          "contents": "'alto_gabinete",
+          "alias": null
+        },
+        {
+          "cell": "B2",
+          "contents": "35",
+          "alias": "alto"
+        },
+        {
+          "cell": "A3",
+          "contents": "'profundidad_gabinete",
+          "alias": null
+        },
+        {
+          "cell": "B3",
+          "contents": "70",
+          "alias": "profundidad"
+        },
+        {
+          "cell": "A4",
+          "contents": "'ancho_display",
+          "alias": null
+        },
+        {
+          "cell": "B4",
+          "contents": "26.64",
+          "alias": "ancho_display"
+        },
+        {
+          "cell": "A5",
+          "contents": "'alto_display",
+          "alias": null
+        },
+        {
+          "cell": "B5",
+          "contents": "14.46",
+          "alias": "alto_display"
+        },
+        {
+          "cell": "A6",
+          "contents": "'radio_curvaturas",
+          "alias": null
+        },
+        {
+          "cell": "B6",
+          "contents": "5",
+          "alias": "radio_curvaturas"
+        },
+        {
+          "cell": "A7",
+          "contents": "'angulo_del_panel",
+          "alias": null
+        },
+        {
+          "cell": "B7",
+          "contents": "75",
+          "alias": "angulo_del_panel"
+        },
+        {
+          "cell": "A8",
+          "contents": "'ancho_pared",
+          "alias": null
+        },
+        {
+          "cell": "B8",
+          "contents": "1.5",
+          "alias": "ancho_pared"
+        },
+        {
+          "cell": "A9",
+          "contents": "'pos_display_x",
+          "alias": null
+        },
+        {
+          "cell": "B9",
+          "contents": "20",
+          "alias": "pos_display_x"
+        },
+        {
+          "cell": "A10",
+          "contents": "'pos_display_y",
+          "alias": null
+        },
+        {
+          "cell": "B10",
+          "contents": "15",
+          "alias": "pos_display_y"
+        },
+        {
+          "cell": "A11",
+          "contents": "'distancia_botones",
+          "alias": null
+        },
+        {
+          "cell": "B11",
+          "contents": "40",
+          "alias": "distancia_botones"
+        },
+        {
+          "cell": "A12",
+          "contents": "'pos_y_botones",
+          "alias": null
+        },
+        {
+          "cell": "B12",
+          "contents": "3",
+          "alias": "altura_botones"
+        },
+        {
+          "cell": "A13",
+          "contents": "'pos_x_botones",
+          "alias": null
+        },
+        {
+          "cell": "B13",
+          "contents": "75",
+          "alias": "pos_x_botones"
+        },
+        {
+          "cell": "A14",
+          "contents": "'dia_botones",
+          "alias": null
+        },
+        {
+          "cell": "B14",
+          "contents": "8.68",
+          "alias": "dia_botones"
+        },
+        {
+          "cell": "A15",
+          "contents": "'espesor_tapa",
+          "alias": null
+        },
+        {
+          "cell": "B15",
+          "contents": "1.5",
+          "alias": "espesor_tapa"
+        },
+        {
+          "cell": "A16",
+          "contents": "'dia_torres_tornillos",
+          "alias": null
+        },
+        {
+          "cell": "B16",
+          "contents": "7",
+          "alias": "dia_torres_tornillos"
+        },
+        {
+          "cell": "A17",
+          "contents": "'long_torres_tornillos",
+          "alias": null
+        },
+        {
+          "cell": "B17",
+          "contents": "=B2 - B8",
+          "alias": "long_torres_tornillos"
+        },
+        {
+          "cell": "A18",
+          "contents": "'separacion_torres_tornillos",
+          "alias": null
+        },
+        {
+          "cell": "B18",
+          "contents": "6",
+          "alias": "separacion_torres_tornillos"
+        },
+        {
+          "cell": "A19",
+          "contents": "'dia_interno_torres_tornillos",
+          "alias": null
+        },
+        {
+          "cell": "B19",
+          "contents": "4.25",
+          "alias": "dia_interno_torres_tornillos"
+        }
+      ]
+    },
+    {
+      "name": "Sketch001",
+      "label": "Aujero_display_botonera",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<PartDesign::Thickness>, ('Face3',))]",
+        "FullyConstrained": true,
+        "Label": "Aujero_display_botonera",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "FlatFace",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          "Constraints[10]",
+          "+<<parameters>>.pos_display_y - <<parameters>>.alto + <<parameters>>.alto_display"
+        ],
+        [
+          "Constraints[14]",
+          "<<parameters>>.altura_botones"
+        ],
+        [
+          "Constraints[15]",
+          "Spreadsheet001.dia_botones"
+        ],
+        [
+          "Constraints[16]",
+          "Spreadsheet001.dia_botones"
+        ],
+        [
+          "Constraints[17]",
+          "Spreadsheet001.longitud"
+        ],
+        [
+          "Constraints[18]",
+          "<<parameters>>.pos_display_x"
+        ],
+        [
+          "Constraints[19]",
+          "Spreadsheet001.pos_x_botones"
+        ],
+        [
+          "Constraints[20]",
+          "Spreadsheet001.distancia_botones"
+        ],
+        [
+          "Constraints[8]",
+          "<<parameters>>.ancho_display"
+        ],
+        [
+          "Constraints[9]",
+          "<<parameters>>.alto_display"
+        ]
+      ],
+      "placement": {
+        "base": [
+          61.731260001010035,
+          1.6527620537191882e-14,
+          16.540841265026295
+        ],
+        "rotation": "Rotation (0.43045933457687957, 0.43045933457687946, 0.5609855267969309, 0.5609855267969309)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -130.0,
+            8.920000000000002,
+            0.0
+          ],
+          "EndPoint": [
+            -103.36,
+            8.920000000000002,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 26.64
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -103.36,
+            8.920000000000002,
+            0.0
+          ],
+          "EndPoint": [
+            -103.36,
+            -5.539999999999999,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 14.46
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -103.36,
+            -5.539999999999999,
+            0.0
+          ],
+          "EndPoint": [
+            -130.0,
+            -5.539999999999999,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 26.64
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -130.0,
+            -5.539999999999999,
+            0.0
+          ],
+          "EndPoint": [
+            -130.0,
+            8.920000000000002,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 14.46
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            -75.00000000000001,
+            3.0,
+            0.0
+          ],
+          "Radius": 4.34,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            -35.000000000000014,
+            3.0,
+            0.0
+          ],
+          "Radius": 4.34,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -75.00000000000001,
+            3.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.000000000000014,
+            3.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 40.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -150.0,
+            -7.229999999992669,
+            0.0
+          ],
+          "EndPoint": [
+            -150.0,
+            7.229999999992669,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 14.459999999985339
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 0,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 1,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 26.64,
+          "first": 2,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": 14.46,
+          "first": 3,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": -5.539999999999999,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Parallel",
+          "value": 0.0,
+          "first": 6,
+          "second": -1,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 3.0,
+          "first": 4,
+          "second": -1,
+          "third": -2000
+        },
+        {
+          "type": "Diameter",
+          "value": 8.68,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Diameter",
+          "value": 8.68,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 150.0,
+          "first": 7,
+          "second": -2,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 20.0,
+          "first": 2,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 75.0,
+          "first": 4,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 40.0,
+          "first": 6,
+          "second": 6,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 7,
+          "second": 7,
+          "third": -1
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 3,
+          "second": 7,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          59.42259411869555,
+          -130.0,
+          11.189612187384842,
+          63.165117510878,
+          -30.66,
+          25.156899635524777
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "ShapeBinder",
+      "label": "ShapeBinder",
+      "type": "PartDesign::ShapeBinder",
+      "properties": {
+        "Label": "ShapeBinder",
+        "Label2": "",
+        "Support": "[(<Sketcher::SketchObject>, ('',))]",
+        "TraceSupport": false,
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          59.42259411869559,
+          -130.0,
+          11.189612187384864,
+          63.16511751087806,
+          -30.660000000000007,
+          25.1568996355248
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pocket",
+      "label": "Aujeros_display_y_botones_pocket",
+      "type": "PartDesign::Pocket",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Thickness>",
+        "Label": "Aujeros_display_y_botones_pocket",
+        "Label2": "",
+        "Length": {
+          "value": 5.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 100.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 36350.16025420661,
+        "area_mm2": 49345.612790673214,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Body001",
+      "label": "case_lid_body",
+      "type": "PartDesign::Body",
+      "properties": {
+        "AllowCompound": false,
+        "BaseFeature": "None",
+        "Label": "case_lid_body",
+        "Label2": "",
+        "Tip": "<PartDesign::Pocket>",
+        "Visibility": false,
+        "_GroupTouched": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 31103.004440784607,
+        "area_mm2": 23459.699111843074,
+        "bbox_mm": [
+          -35.0,
+          -91.0,
+          0.0,
+          35.0,
+          91.0,
+          3.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Origin",
+      "label": "Origin",
+      "type": "App::Origin",
+      "properties": {
+        "Label": "Origin",
+        "Label2": "",
+        "Visibility": false,
+        "_GroupTouched": false
+      },
+      "expressions": []
+    },
+    {
+      "name": "X_Axis",
+      "label": "X_Axis",
+      "type": "App::Line",
+      "properties": {
+        "Label": "X_Axis",
+        "Label2": "",
+        "Role": "X_Axis",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100,
+          0.0,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Y_Axis",
+      "label": "Y_Axis",
+      "type": "App::Line",
+      "properties": {
+        "Label": "Y_Axis",
+        "Label2": "",
+        "Role": "Y_Axis",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          0.0,
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Z_Axis",
+      "label": "Z_Axis",
+      "type": "App::Line",
+      "properties": {
+        "Label": "Z_Axis",
+        "Label2": "",
+        "Role": "Z_Axis",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          0.0,
+          0.0,
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "XY_Plane",
+      "label": "XY_Plane",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "XY_Plane",
+        "Label2": "",
+        "Role": "XY_Plane",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          -1e+100,
+          -1e+100,
+          0.0,
+          1e+100,
+          1e+100,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "XZ_Plane",
+      "label": "XZ_Plane",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "XZ_Plane",
+        "Label2": "",
+        "Role": "XZ_Plane",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": -1.1972621413014757e+152,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          -1e+100,
+          0.0,
+          -1e+100,
+          1e+100,
+          0.0,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "YZ_Plane",
+      "label": "YZ_Plane",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "YZ_Plane",
+        "Label2": "",
+        "Role": "YZ_Plane",
+        "Visibility": true
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 1.7958932119522137e+152,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          0.0,
+          -1e+100,
+          -1e+100,
+          0.0,
+          1e+100,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Part",
+      "label": "StandingDeskCase",
+      "type": "App::Part",
+      "properties": {
+        "Id": "",
+        "Label": "StandingDeskCase",
+        "Label2": "",
+        "License": "",
+        "LicenseURL": "",
+        "Type": "",
+        "Uid": "708c0b67-5d51-48c7-b4f0-575c7a66cbb3",
+        "Visibility": true,
+        "_GroupTouched": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 42071.602466511846,
+        "area_mm2": 56628.99839029548,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Origin002",
+      "label": "OriginDuplicado",
+      "type": "App::Origin",
+      "properties": {
+        "Label": "OriginDuplicado",
+        "Label2": "",
+        "Visibility": false,
+        "_GroupTouched": false
+      },
+      "expressions": []
+    },
+    {
+      "name": "X_Axis002",
+      "label": "X_Axis002",
+      "type": "App::Line",
+      "properties": {
+        "Label": "X_Axis002",
+        "Label2": "",
+        "Role": "X_Axis",
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100,
+          0.0,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Y_Axis002",
+      "label": "Y_Axis002",
+      "type": "App::Line",
+      "properties": {
+        "Label": "Y_Axis002",
+        "Label2": "",
+        "Role": "Y_Axis",
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          0.0,
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Z_Axis002",
+      "label": "Z_Axis002",
+      "type": "App::Line",
+      "properties": {
+        "Label": "Z_Axis002",
+        "Label2": "",
+        "Role": "Z_Axis",
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          0.0,
+          0.0,
+          -1e+100,
+          0.0,
+          0.0,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "XY_Plane002",
+      "label": "XY_Plane002",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "XY_Plane002",
+        "Label2": "",
+        "Role": "XY_Plane",
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          -1e+100,
+          -1e+100,
+          0.0,
+          1e+100,
+          1e+100,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "XZ_Plane002",
+      "label": "XZ_Plane002",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "XZ_Plane002",
+        "Label2": "",
+        "Role": "XZ_Plane",
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": -1.1972621413014757e+152,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          -1e+100,
+          0.0,
+          -1e+100,
+          1e+100,
+          0.0,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "YZ_Plane002",
+      "label": "YZ_Plane002",
+      "type": "App::Plane",
+      "properties": {
+        "Label": "YZ_Plane002",
+        "Label2": "",
+        "Role": "YZ_Plane",
+        "Visibility": false
+      },
+      "expressions": [],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 1.7958932119522137e+152,
+        "area_mm2": 8e+100,
+        "bbox_mm": [
+          0.0,
+          -1e+100,
+          -1e+100,
+          0.0,
+          1e+100,
+          1e+100
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch003",
+      "label": "base_gabinete_con_torres_para_tornillos",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<GeoFeature object>, ('',))]",
+        "FullyConstrained": true,
+        "Label": "base_gabinete_con_torres_para_tornillos",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "FlatFace",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          "Constraints[0]",
+          "Spreadsheet001.dia_torres_tornillos / 2"
+        ],
+        [
+          "Constraints[10]",
+          "Spreadsheet001.longitud"
+        ],
+        [
+          "Constraints[11]",
+          "Spreadsheet001.profundidad - Spreadsheet001.alto / tan(Spreadsheet001.angulo_del_panel)"
+        ],
+        [
+          "Constraints[17]",
+          "(Spreadsheet001.profundidad - Spreadsheet001.alto / tan(Spreadsheet001.angulo_del_panel)) / 2"
+        ],
+        [
+          "Constraints[19]",
+          "Spreadsheet001.separacion_torres_tornillos + Spreadsheet001.dia_torres_tornillos / 2"
+        ],
+        [
+          "Constraints[20]",
+          "Spreadsheet001.separacion_torres_tornillos + Spreadsheet001.dia_torres_tornillos / 2"
+        ],
+        [
+          "Constraints[22]",
+          "Spreadsheet001.dia_interno_torres_tornillos"
+        ],
+        [
+          "Constraints[40]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[45]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[60]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[61]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[79]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[80]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[89]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[90]",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "geometry": [
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            8.75,
+            -6.0813014172056645,
+            0.0
+          ],
+          "EndPoint": [
+            6.081301417205664,
+            -8.75,
+            0.0
+          ],
+          "Center": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 1.7867568254798532,
+          "last_parameter": 2.925632154904837
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            6.0813014172056645,
+            -141.25,
+            0.0
+          ],
+          "EndPoint": [
+            8.75000000000001,
+            -143.91869858279435,
+            0.0
+          ],
+          "Center": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 3.3575531522747504,
+          "last_parameter": 4.496428481699737
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 60.6217782649107
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            60.6217782649107,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 150.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            60.6217782649107,
+            -150.0,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 60.6217782649107
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            0.0,
+            -150.0,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 150.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            0.0,
+            -75.0,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 60.6217782649107
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            30.31088913245535,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            30.31088913245535,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 150.0
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "Radius": 2.125,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            51.1217782649107,
+            -9.5,
+            0.0
+          ],
+          "Radius": 2.125,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            51.12177826491076,
+            -140.50000000000026,
+            0.0
+          ],
+          "Radius": 2.125,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "Radius": 2.125,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "EndPoint": [
+            51.1217782649107,
+            -9.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 41.6217782649107
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.1217782649107,
+            -9.5,
+            0.0
+          ],
+          "EndPoint": [
+            51.1217782649107,
+            -140.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 131.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.1217782649107,
+            -140.5,
+            0.0
+          ],
+          "EndPoint": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 41.6217782649107
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "EndPoint": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 131.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.1217782649107,
+            -9.5,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            -9.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.1217782649107,
+            -9.5,
+            0.0
+          ],
+          "EndPoint": [
+            51.1217782649107,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            54.54047684770504,
+            -10.249999999999998,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            -10.249999999999998,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205665
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            54.54047684770504,
+            -8.749999999999998,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            -8.749999999999998,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205665
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            50.3717782649107,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            50.3717782649107,
+            -6.081301417205665,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205665
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.8717782649107,
+            -6.081301417205665,
+            0.0
+          ],
+          "EndPoint": [
+            51.8717782649107,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205665
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -9.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "EndPoint": [
+            9.5,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.75,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            8.75,
+            -6.0813014172056645,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.0813014172056645
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.081301417205664,
+            -8.75,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -8.75,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205664
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.081301417205664,
+            -10.25,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -10.25,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205664
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            10.249999999999998,
+            -6.081301417205664,
+            0.0
+          ],
+          "EndPoint": [
+            10.249999999999998,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205664
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.12177826491076,
+            -140.50000000000026,
+            0.0
+          ],
+          "EndPoint": [
+            51.12177826491076,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.499999999999744
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.1217782649107,
+            -140.5,
+            0.0
+          ],
+          "EndPoint": [
+            60.62177826491071,
+            -140.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.500000000000007
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "EndPoint": [
+            9.5,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -140.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            0.0,
+            -141.25,
+            0.0
+          ],
+          "EndPoint": [
+            6.0813014172056645,
+            -141.25,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.0813014172056645
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            10.250000000000009,
+            -143.91869858279432,
+            0.0
+          ],
+          "EndPoint": [
+            10.250000000000009,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.08130141720568
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.75000000000001,
+            -143.91869858279435,
+            0.0
+          ],
+          "EndPoint": [
+            8.75000000000001,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205651
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.081301417205664,
+            -139.75,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -139.75,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205664
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            50.37177826491079,
+            -143.91869858279432,
+            0.0
+          ],
+          "EndPoint": [
+            50.37177826491079,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.08130141720568
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.87177826491079,
+            -143.91869858279458,
+            0.0
+          ],
+          "EndPoint": [
+            51.87177826491079,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205424
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            0.0,
+            -141.25,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -139.75,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.75000000000001,
+            -150.0,
+            0.0
+          ],
+          "EndPoint": [
+            10.250000000000009,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.4999999999999982
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            50.37177826491079,
+            -150.0,
+            0.0
+          ],
+          "EndPoint": [
+            51.87177826491079,
+            -150.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            60.62177826491071,
+            -141.25000000000003,
+            0.0
+          ],
+          "EndPoint": [
+            60.62177826491071,
+            -139.75000000000003,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            60.6217782649107,
+            -10.249999999999998,
+            0.0
+          ],
+          "EndPoint": [
+            60.6217782649107,
+            -8.749999999999998,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            51.8717782649107,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            50.3717782649107,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            10.249999999999998,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            8.75,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.4999999999999982
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            0.0,
+            -10.25,
+            0.0
+          ],
+          "EndPoint": [
+            0.0,
+            -8.75,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            10.250000000000009,
+            -143.91869858279432,
+            0.0
+          ],
+          "EndPoint": [
+            6.081301417205664,
+            -139.75,
+            0.0
+          ],
+          "Center": [
+            9.5,
+            -140.5,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 4.928349479069649,
+          "last_parameter": 9.208817462084424
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            6.0813014172056645,
+            -10.25,
+            0.0
+          ],
+          "EndPoint": [
+            10.249999999999998,
+            -6.081301417205664,
+            0.0
+          ],
+          "Center": [
+            9.5,
+            -9.5,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 3.3575531522747495,
+          "last_parameter": 7.638021135289527
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            51.87177826491079,
+            -143.91869858279458,
+            0.0
+          ],
+          "EndPoint": [
+            50.3717782649107,
+            -143.91869858279458,
+            0.0
+          ],
+          "Center": [
+            51.12177826491076,
+            -140.50000000000026,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 4.928349479069655,
+          "last_parameter": 10.779613788879303
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            60.62177826491071,
+            -141.25000000000003,
+            0.0
+          ],
+          "EndPoint": [
+            54.54047684770515,
+            -141.25000000000003,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205559
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            60.62177826491071,
+            -139.75000000000003,
+            0.0
+          ],
+          "EndPoint": [
+            54.540476847705044,
+            -139.75000000000003,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.081301417205665
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            50.3717782649107,
+            -6.081301417205665,
+            0.0
+          ],
+          "EndPoint": [
+            51.8717782649107,
+            -6.081301417205665,
+            0.0
+          ],
+          "Center": [
+            51.1217782649107,
+            -9.5,
+            0.0
+          ],
+          "Radius": 3.4999999999999987,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 1.786756825479852,
+          "last_parameter": 7.638021135289526
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.0813014172056645,
+            -10.25,
+            0.0
+          ],
+          "EndPoint": [
+            6.081301417205664,
+            -8.75,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.0813014172056645,
+            -141.25,
+            0.0
+          ],
+          "EndPoint": [
+            6.081301417205664,
+            -139.75,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Radius",
+          "value": 3.5,
+          "first": 0,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 4,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 5,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": -1,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": 150.0,
+          "first": 5,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 60.6217782649107,
+          "first": 2,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 6,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 6,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 7,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 7,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 7,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 30.31088913245535,
+          "first": 4,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 0,
+          "second": 1,
+          "third": 6
+        },
+        {
+          "type": "Distance",
+          "value": 9.5,
+          "first": 0,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 9.5,
+          "first": 0,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 8,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Diameter",
+          "value": 4.25,
+          "first": 8,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 9,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 9,
+          "second": 11,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 10,
+          "second": 11,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 12,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 14,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 15,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 15,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 0,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 16,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 16,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 17,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 17,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 18,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 18,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 19,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": 1.5,
+          "first": 18,
+          "second": 19,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 19,
+          "second": 18,
+          "third": 16
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 21,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 20,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 21,
+          "second": 20,
+          "third": 17
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 21,
+          "second": 20,
+          "third": -2000
+        },
+        {
+          "type": "Perpendicular",
+          "value": 0.0,
+          "first": 2,
+          "second": 21,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 22,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 22,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 22,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 23,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 23,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 23,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 27,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 24,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 25,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 25,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 26,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 27,
+          "second": 24,
+          "third": 23
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 25,
+          "second": 26,
+          "third": 22
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 26,
+          "second": 25,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 24,
+          "second": 27,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 26,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 27,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 28,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 28,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 29,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 29,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 30,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 30,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 30,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 31,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 31,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 31,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 32,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 32,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 34,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 32,
+          "second": 35,
+          "third": 31
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 34,
+          "second": 33,
+          "third": 30
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 34,
+          "second": 33,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 32,
+          "second": 35,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 35,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 34,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 33,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 36,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 36,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 41,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 41,
+          "second": 41,
+          "third": 29
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 37,
+          "second": 36,
+          "third": 28
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 41,
+          "second": 41,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 37,
+          "second": 36,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 37,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 38,
+          "second": 32,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 38,
+          "second": 35,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 39,
+          "second": 34,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 39,
+          "second": 33,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 40,
+          "second": 36,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 40,
+          "second": 37,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 42,
+          "second": 18,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 42,
+          "second": 19,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 43,
+          "second": 21,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 43,
+          "second": 20,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 44,
+          "second": 27,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 44,
+          "second": 24,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 45,
+          "second": 26,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 45,
+          "second": 25,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 32,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 46,
+          "second": 35,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 1,
+          "second": 46,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 46,
+          "second": 33,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 46,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 34,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 24,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 47,
+          "second": 27,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 0,
+          "second": 47,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 25,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 47,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 47,
+          "second": 26,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 48,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 48,
+          "second": 36,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 48,
+          "second": 37,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 46,
+          "second": 48,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 33,
+          "second": 36,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 49,
+          "second": 41,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 49,
+          "second": 48,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 49,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 50,
+          "second": 41,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 50,
+          "second": 48,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 50,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 49,
+          "second": 32,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 50,
+          "second": 35,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 14,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 13,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 26,
+          "second": 18,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 25,
+          "second": 19,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 51,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 16,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 19,
+          "second": 51,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 51,
+          "second": 20,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 51,
+          "second": 21,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 9,
+          "second": 13,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 17,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 20,
+          "second": 24,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 28,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": 14,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": 29,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 52,
+          "second": 47,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 52,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 53,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 53,
+          "second": 46,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 3,
+          "second": 2,
+          "third": 6
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          6.081301417205664,
+          -150.0,
+          0.0,
+          54.62177826491076,
+          0.0,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad002",
+      "label": "Torres_tornillos_base_gabinete_pad",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Pocket>",
+        "Label": "Torres_tornillos_base_gabinete_pad",
+        "Label2": "",
+        "Length": {
+          "value": 33.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 10.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.long_torres_tornillos"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 40324.300356379295,
+        "area_mm2": 54656.06846441456,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch006",
+      "label": "Pared_Soporte_Torres_Tornillos_Inferior",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<GeoFeature object>, ('',))]",
+        "FullyConstrained": true,
+        "Label": "Pared_Soporte_Torres_Tornillos_Inferior",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "FlatFace",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          ".AttachmentOffset.Base.z",
+          "Spreadsheet001.longitud - Spreadsheet001.separacion_torres_tornillos * 2 + Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          -139.5,
+          3.097522238704187e-14
+        ],
+        "rotation": "Rotation (0.7071067811865475, 0.0, 0.0, 0.7071067811865476)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -9e-16,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 59.64723819589917
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -11.260018615722288,
+            33.5,
+            0.0
+          ],
+          "EndPoint": [
+            -3.380740392011739,
+            4.09413334214118,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 30.443193315196293
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            63.02797858791091,
+            5.905866657858827,
+            0.0
+          ],
+          "EndPoint": [
+            55.63415284304748,
+            33.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 28.56754896817843
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            33.5,
+            0.0
+          ],
+          "EndPoint": [
+            55.63415284304748,
+            33.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 2.2623745781366935
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            33.5,
+            0.0
+          ],
+          "EndPoint": [
+            53.37177826491079,
+            1.5000000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 31.999999999999996
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.081301417205665,
+            33.5,
+            0.0
+          ],
+          "EndPoint": [
+            6.081301417205665,
+            1.5000000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 31.999999999999996
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -5e-16,
+            1.5000000000000027,
+            0.0
+          ],
+          "EndPoint": [
+            -9e-16,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5000000000000027
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.081301417205665,
+            33.5,
+            0.0
+          ],
+          "EndPoint": [
+            -11.260018615722288,
+            33.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 17.341320032927953
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            33.5,
+            0.0
+          ],
+          "EndPoint": [
+            6.081301417205665,
+            33.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 47.29047684770512
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            59.64723819589917,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            1.5000000000000027,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5000000000000027
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            -3.38074039201174,
+            4.0941333421411805,
+            0.0
+          ],
+          "EndPoint": [
+            -5.429395695523605e-16,
+            1.5000000000000027,
+            0.0
+          ],
+          "Center": [
+            1e-16,
+            5.0000000000000036,
+            0.0
+          ],
+          "Radius": 3.500000000000001,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 3.4033920413889427,
+          "last_parameter": 4.71238898038469
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            59.64723819589917,
+            1.5000000000000027,
+            0.0
+          ],
+          "EndPoint": [
+            63.02797858791091,
+            5.905866657858827,
+            0.0
+          ],
+          "Center": [
+            59.64723819589917,
+            5.000000000000003,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 4.71238898038469,
+          "last_parameter": 6.544984694978736
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -5e-16,
+            1.5000000000000027,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            1.5000000000000027,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 59.64723819589917
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            6.081301417205665,
+            1.5000000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            53.37177826491079,
+            1.5000000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 47.29047684770512
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": -15,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": -4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": -7,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": -18,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": -14,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 6,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 8,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 8,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 8,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": -3,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 9,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 9,
+          "second": -7,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 2,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 7,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 1,
+          "second": -4,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": 0.0,
+          "first": 10,
+          "second": -18,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 10,
+          "second": 6,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 10,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": 6,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 5,
+          "second": 12,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 4,
+          "second": 12,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 11,
+          "second": -7,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 5,
+          "second": -3,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 3,
+          "second": -12,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -11.260018615722288,
+          -139.5,
+          3.064215547965432e-14,
+          63.14723819589917,
+          -139.5,
+          33.50000000000003
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch007",
+      "label": "Pared_Soporte_Torres_Tornillos_Superior",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<GeoFeature object>, ('',))]",
+        "FullyConstrained": true,
+        "Label": "Pared_Soporte_Torres_Tornillos_Superior",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "FlatFace",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          ".AttachmentOffset.Base.z",
+          "Spreadsheet001.separacion_torres_tornillos + 2 * Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[13]",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[2]",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          -9.0,
+          1.9984014443252818e-15
+        ],
+        "rotation": "Rotation (0.7071067811865475, 0.0, 0.0, 0.7071067811865476)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            7.250000000000011,
+            1.5000000000000018,
+            0.0
+          ],
+          "EndPoint": [
+            53.37177826491079,
+            1.5000000000000018,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 46.12177826491077
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            7.250000000000011,
+            1.5000000000000018,
+            0.0
+          ],
+          "EndPoint": [
+            7.250000000000011,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 32.000000000000036
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            1.5000000000000018,
+            0.0
+          ],
+          "EndPoint": [
+            53.37177826491079,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 32.000000000000036
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -11.260018615722299,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            7.250000000000011,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 18.51001861572231
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -11.260018615722299,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            -3.3807403920117403,
+            4.094133342141181,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 30.44319331519633
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -1e-15,
+            1.5000000000000022,
+            0.0
+          ],
+          "EndPoint": [
+            -1e-15,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5000000000000022
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -1e-15,
+            0.0,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 59.64723819589917
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            63.02797858791091,
+            5.905866657858823,
+            0.0
+          ],
+          "EndPoint": [
+            55.63415284304747,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 28.56754896817847
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            1.5000000000000018,
+            0.0
+          ],
+          "EndPoint": [
+            53.37177826491079,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5000000000000018
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            59.64723819589917,
+            1.5000000000000018,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            0.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5000000000000018
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -1e-15,
+            1.5000000000000022,
+            0.0
+          ],
+          "EndPoint": [
+            59.64723819589917,
+            1.5000000000000018,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 59.64723819589917
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            55.63415284304747,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            -11.260018615722295,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 66.89417145876976
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            55.63415284304747,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 2.2623745781366793
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            55.63415284304747,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 2.2623745781366793
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            55.63415284304747,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            53.37177826491079,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 2.2623745781366793
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            53.37177826491079,
+            33.500000000000036,
+            0.0
+          ],
+          "EndPoint": [
+            55.63415284304747,
+            33.500000000000036,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 2.2623745781366793
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            -3.380740392011739,
+            4.0941333421411805,
+            0.0
+          ],
+          "EndPoint": [
+            -9.515640385028016e-16,
+            1.5000000000000022,
+            0.0
+          ],
+          "Center": [
+            2.8e-15,
+            5.000000000000005,
+            0.0
+          ],
+          "Radius": 3.500000000000003,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 3.403392041388943,
+          "last_parameter": 4.712388980384689
+        },
+        {
+          "type": "ArcOfCircle",
+          "StartPoint": [
+            59.64723819589917,
+            1.5000000000000018,
+            0.0
+          ],
+          "EndPoint": [
+            63.02797858791091,
+            5.905866657858823,
+            0.0
+          ],
+          "Center": [
+            59.64723819589917,
+            5.000000000000002,
+            0.0
+          ],
+          "Radius": 3.5,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 4.712388980384691,
+          "last_parameter": 6.544984694978735
+        },
+        {
+          "type": "Point"
+        },
+        {
+          "type": "Point"
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 1,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Distance",
+          "value": 1.5,
+          "first": 1,
+          "second": -11,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 3,
+          "second": -5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 4,
+          "second": -8,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 6,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 8,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 9,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 8,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 8,
+          "second": 6,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 1.5,
+          "first": -14,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 7,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": -7,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 9,
+          "second": -7,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 10,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 0,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 0,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 11,
+          "second": -5,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 11,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 12,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 4,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 1,
+          "second": 11,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": -11,
+          "second": 11,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 14,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 14,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 15,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 15,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Tangent",
+          "value": 0.0,
+          "first": 16,
+          "second": -8,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 18,
+          "second": 16,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 19,
+          "second": -8,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 5,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 5,
+          "second": -8,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 16,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 16,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 17,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 17,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 6,
+          "second": -1,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": -7,
+          "second": 17,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 5,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -11.260018615722299,
+          -9.0,
+          1.7763568394002505e-15,
+          63.14723819589917,
+          -8.999999999999993,
+          33.50000000000004
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad004",
+      "label": "Pared_Soporte_Torres_Tornillos_Superior_Pad",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Pad>",
+        "Label": "Pared_Soporte_Torres_Tornillos_Superior_Pad",
+        "Label2": "",
+        "Length": {
+          "value": 1.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 10.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 41198.074043673914,
+        "area_mm2": 55635.43466586567,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad005",
+      "label": "Pared_Soporte_Torres_Tornillos_Inferior_Pad",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Pad>",
+        "Label": "Pared_Soporte_Torres_Tornillos_Inferior_Pad",
+        "Label2": "",
+        "Length": {
+          "value": 1.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 10.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 42071.602466511846,
+        "area_mm2": 56628.99839029548,
+        "bbox_mm": [
+          -13.214856674984098,
+          -150.0,
+          0.0,
+          64.64723819589918,
+          3.497202527569244e-14,
+          35.00000000000015
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch008",
+      "label": "Tapa_Perfil_principal",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<GeoFeature object>, ('',))]",
+        "FullyConstrained": true,
+        "Label": "Tapa_Perfil_principal",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "ObjectXY",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Constraints[8]",
+          "Spreadsheet001.profundidad"
+        ],
+        [
+          "Constraints[9]",
+          "Spreadsheet001.longitud"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -35.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 70.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            35.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 150.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            35.0,
+            -75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.0,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 70.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -35.0,
+            -75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.0,
+            75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 150.0
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 1,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 0,
+          "second": 0,
+          "third": -2
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 0,
+          "second": 2,
+          "third": -1
+        },
+        {
+          "type": "DistanceX",
+          "value": 70.0,
+          "first": 0,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": 150.0,
+          "first": 3,
+          "second": 3,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -35.0,
+          -75.0,
+          0.0,
+          35.0,
+          75.0,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch009",
+      "label": "Alzada_de_tapa",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<GeoFeature object>, ('',))]",
+        "FullyConstrained": true,
+        "Label": "Alzada_de_tapa",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "ObjectXY",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          ".AttachmentOffset.Base.z",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[23]",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          0.0,
+          1.5
+        ],
+        "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -33.5,
+            73.5,
+            0.0
+          ],
+          "EndPoint": [
+            33.5,
+            73.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 67.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            33.5,
+            73.5,
+            0.0
+          ],
+          "EndPoint": [
+            33.5,
+            -73.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 147.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            33.5,
+            -73.5,
+            0.0
+          ],
+          "EndPoint": [
+            -33.5,
+            -73.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 67.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -33.5,
+            -73.5,
+            0.0
+          ],
+          "EndPoint": [
+            -33.5,
+            73.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 147.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -33.5,
+            -73.5,
+            0.0
+          ],
+          "EndPoint": [
+            -33.5,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -33.5,
+            73.5,
+            0.0
+          ],
+          "EndPoint": [
+            -35.0,
+            73.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            33.5,
+            73.5,
+            0.0
+          ],
+          "EndPoint": [
+            33.5,
+            75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            33.5,
+            -73.5,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            -73.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 1.5
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 0,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 1,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 4,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 4,
+          "second": -5,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 5,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 5,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 6,
+          "second": -3,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 6,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 7,
+          "second": -4,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 7,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 6,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 5,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 7,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 1.5,
+          "first": 5,
+          "second": 5,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -33.5,
+          -73.5,
+          1.5,
+          33.5,
+          73.5,
+          1.5
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch010",
+      "label": "Pestanias_sujecion",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[]",
+        "FullyConstrained": true,
+        "Label": "Pestanias_sujecion",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "Deactivated",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": false
+      },
+      "expressions": [],
+      "placement": {
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            35.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.00000000000001,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 165.5294535724685
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            35.0,
+            -75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.00000000000001,
+            75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 165.5294535724685
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -35.0,
+            91.0,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 70.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -35.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.0,
+            91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 16.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            35.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 16.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -35.0,
+            -75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -35.0,
+            -91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 16.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            35.0,
+            -75.0,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            -91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 16.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -35.0,
+            -91.0,
+            0.0
+          ],
+          "EndPoint": [
+            35.0,
+            -91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 70.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -8.0,
+            91.0,
+            0.0
+          ],
+          "EndPoint": [
+            8.0,
+            91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 16.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -8.0,
+            91.0,
+            0.0
+          ],
+          "EndPoint": [
+            -8.0,
+            -91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 182.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.0,
+            91.0,
+            0.0
+          ],
+          "EndPoint": [
+            8.0,
+            -91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 182.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.0,
+            -91.0,
+            0.0
+          ],
+          "EndPoint": [
+            -8.0,
+            -91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 16.0
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": -5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": -5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 1,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 4,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 5,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 6,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": 6,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 7,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 3,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": 16.0,
+          "first": 3,
+          "second": 3,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 9,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 9,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 9,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 10,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 10,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 10,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": 9,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 8,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Symmetric",
+          "value": 0.0,
+          "first": 8,
+          "second": 8,
+          "third": -2
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 8,
+          "second": 3,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -8.0,
+          -91.0,
+          0.0,
+          8.0,
+          91.0,
+          0.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Sketch011",
+      "label": "Aujeros_tornillos",
+      "type": "Sketcher::SketchObject",
+      "properties": {
+        "ArcFitTolerance": 0.0,
+        "AttacherEngine": "Engine Plane",
+        "AttacherType": "Attacher::AttachEnginePlane",
+        "AttachmentSupport": "[(<Sketcher::SketchObject>, ('',))]",
+        "FullyConstrained": true,
+        "Label": "Aujeros_tornillos",
+        "Label2": "",
+        "MakeInternals": false,
+        "MapMode": "ObjectXY",
+        "MapPathParameter": 0.0,
+        "MapReversed": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          ".AttachmentOffset.Base.z",
+          "Spreadsheet001.ancho_pared"
+        ],
+        [
+          "Constraints[19]",
+          "Spreadsheet001.separacion_torres_tornillos + Spreadsheet001.dia_torres_tornillos / 2"
+        ],
+        [
+          "Constraints[45]",
+          "Spreadsheet001.profundidad - Spreadsheet001.alto / tan(Spreadsheet001.angulo_del_panel)"
+        ]
+      ],
+      "placement": {
+        "base": [
+          0.0,
+          0.0,
+          1.5
+        ],
+        "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "geometry": [
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -25.50000000000731,
+            -65.50000000007454,
+            0.0
+          ],
+          "EndPoint": [
+            16.121778264918767,
+            -65.50000000007454,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 41.62177826492608
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -25.50000000000731,
+            65.5,
+            0.0
+          ],
+          "EndPoint": [
+            16.121778264918767,
+            65.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 41.62177826492608
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -25.50000000000731,
+            65.5,
+            0.0
+          ],
+          "EndPoint": [
+            -25.50000000000731,
+            -65.50000000007452,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 131.00000000007452
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            16.121778264918767,
+            -65.50000000007454,
+            0.0
+          ],
+          "EndPoint": [
+            16.121778264918767,
+            65.49999999999999,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 131.00000000007452
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -25.50000000000731,
+            65.5,
+            0.0
+          ],
+          "EndPoint": [
+            -25.50000000000731,
+            75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.5
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            16.121778264918767,
+            -65.50000000007454,
+            0.0
+          ],
+          "EndPoint": [
+            16.121778264918767,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.499999999925464
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -25.50000000000731,
+            -65.50000000007454,
+            0.0
+          ],
+          "EndPoint": [
+            -35.0,
+            -65.50000000007454,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.499999999992689
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            -25.50000000000731,
+            65.5,
+            0.0
+          ],
+          "Radius": 2.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            16.121778264918767,
+            65.5,
+            0.0
+          ],
+          "Radius": 2.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            -25.50000000000731,
+            -65.50000000007454,
+            0.0
+          ],
+          "Radius": 2.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            16.121778264918767,
+            -65.50000000007454,
+            0.0
+          ],
+          "Radius": 2.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -8.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            8.0,
+            91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 22.627416997969522
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.0,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            -8.0,
+            91.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 22.627416997969522
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            -8.0,
+            -91.0,
+            0.0
+          ],
+          "EndPoint": [
+            8.0,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 22.627416997969522
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            8.0,
+            -91.0,
+            0.0
+          ],
+          "EndPoint": [
+            -8.0,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 22.627416997969522
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            -5.3e-15,
+            -83.0,
+            0.0
+          ],
+          "Radius": 2.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "Circle",
+          "Center": [
+            -5.6e-15,
+            83.0,
+            0.0
+          ],
+          "Radius": 2.0,
+          "Axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "XAxis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "YAxis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 6.283185307179586
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            25.6217782649107,
+            75.0,
+            0.0
+          ],
+          "EndPoint": [
+            25.6217782649107,
+            -75.0,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 150.0
+        },
+        {
+          "type": "LineSegment",
+          "StartPoint": [
+            16.121778264918767,
+            65.5,
+            0.0
+          ],
+          "EndPoint": [
+            25.621778264910702,
+            65.5,
+            0.0
+          ],
+          "first_parameter": 0.0,
+          "last_parameter": 9.499999999991935
+        }
+      ],
+      "constraints": [
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 0,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 1,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 2,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 3,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 2,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 3,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 0,
+          "second": 2,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 4,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 4,
+          "second": -3,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 4,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 5,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 5,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 5,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 6,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 6,
+          "second": -4,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 6,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 6,
+          "second": 5,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 6,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "DistanceY",
+          "value": 9.5,
+          "first": 4,
+          "second": 4,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 7,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 8,
+          "second": 1,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 9,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 10,
+          "second": 0,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 7,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 10,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 9,
+          "second": 10,
+          "third": -2000
+        },
+        {
+          "type": "Diameter",
+          "value": 4.0,
+          "first": 7,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": -9,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 11,
+          "second": -8,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": -7,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 12,
+          "second": -9,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": -11,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 13,
+          "second": -12,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 14,
+          "second": -12,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 14,
+          "second": -10,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 15,
+          "second": 13,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 15,
+          "second": 14,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 16,
+          "second": 12,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 16,
+          "second": 11,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 16,
+          "second": 15,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 16,
+          "second": 7,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 17,
+          "second": -3,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 17,
+          "second": -6,
+          "third": -2000
+        },
+        {
+          "type": "Vertical",
+          "value": 0.0,
+          "first": 17,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "DistanceX",
+          "value": 60.6217782649107,
+          "first": -6,
+          "second": 17,
+          "third": -2000
+        },
+        {
+          "type": "Coincident",
+          "value": 0.0,
+          "first": 18,
+          "second": 8,
+          "third": -2000
+        },
+        {
+          "type": "PointOnObject",
+          "value": 0.0,
+          "first": 18,
+          "second": 17,
+          "third": -2000
+        },
+        {
+          "type": "Horizontal",
+          "value": 0.0,
+          "first": 18,
+          "second": -2000,
+          "third": -2000
+        },
+        {
+          "type": "Equal",
+          "value": 0.0,
+          "first": 18,
+          "second": 6,
+          "third": -2000
+        }
+      ],
+      "shape": {
+        "solids": 0,
+        "volume_mm3": 0.0,
+        "area_mm2": 0.0,
+        "bbox_mm": [
+          -27.50000000000731,
+          -85.0,
+          1.5,
+          18.121778264918767,
+          85.0,
+          1.5
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad006",
+      "label": "Perfil_tapa_pad",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "None",
+        "Label": "Perfil_tapa_pad",
+        "Label2": "",
+        "Length": {
+          "value": 1.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 10.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 15749.999999999998,
+        "area_mm2": 21660.0,
+        "bbox_mm": [
+          -35.0,
+          -75.0,
+          0.0,
+          35.0,
+          75.0,
+          1.5
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad007",
+      "label": "Alzada_tapa_pad",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Pad>",
+        "Label": "Alzada_tapa_pad",
+        "Label2": "",
+        "Length": {
+          "value": 1.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 10.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 30523.5,
+        "area_mm2": 22302.0,
+        "bbox_mm": [
+          -35.0,
+          -75.0,
+          0.0,
+          35.0,
+          75.0,
+          3.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pad008",
+      "label": "Pestania_sujecion_pad",
+      "type": "PartDesign::Pad",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Pad>",
+        "Label": "Pestania_sujecion_pad",
+        "Label2": "",
+        "Length": {
+          "value": 1.5,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 10.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": false,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": false
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.ancho_pared"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 31291.5,
+        "area_mm2": 23422.0,
+        "bbox_mm": [
+          -35.0,
+          -91.0,
+          0.0,
+          35.0,
+          91.0,
+          3.0
+        ],
+        "is_valid": true
+      }
+    },
+    {
+      "name": "Pocket001",
+      "label": "Aujeros_tornillos_pocket",
+      "type": "PartDesign::Pocket",
+      "properties": {
+        "AllowMultiFace": true,
+        "AlongSketchNormal": true,
+        "BaseFeature": "<PartDesign::Pad>",
+        "Label": "Aujeros_tornillos_pocket",
+        "Label2": "",
+        "Length": {
+          "value": 3.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Length2": {
+          "value": 5.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Midplane": true,
+        "Offset": {
+          "value": 0.0,
+          "unit": "Unit: mm (1,0,0,0,0,0,0,0) [Length]"
+        },
+        "Profile": "(<Sketcher::SketchObject>, [])",
+        "Refine": false,
+        "Reversed": false,
+        "Suppressed": false,
+        "TaperAngle": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "TaperAngle2": {
+          "value": 0.0,
+          "unit": "Unit: deg (0,0,0,0,0,0,0,1) [Angle]"
+        },
+        "Type": "Length",
+        "UseCustomVector": false,
+        "Visibility": true
+      },
+      "expressions": [
+        [
+          "Length",
+          "Spreadsheet001.ancho_pared * 2"
+        ]
+      ],
+      "shape": {
+        "solids": 1,
+        "volume_mm3": 31103.004440784607,
+        "area_mm2": 23459.699111843074,
+        "bbox_mm": [
+          -35.0,
+          -91.0,
+          0.0,
+          35.0,
+          91.0,
+          3.0
+        ],
+        "is_valid": true
+      }
+    }
+  ],
+  "spreadsheet": [],
+  "final_solids": [
+    {
+      "object": "Body",
+      "label": "case_body",
+      "stl": "case.stl",
+      "step": "case.step",
+      "solids": 1,
+      "volume_mm3": 42071.602466511846,
+      "area_mm2": 56628.99839029548,
+      "bbox_mm": [
+        -13.214856674984095,
+        -150.0,
+        0.0,
+        64.64673755473291,
+        3.497202527569243e-14,
+        35.00000000000015
+      ],
+      "is_valid": true,
+      "is_watertight_brep": true,
+      "recompute_state": [
+        "Touched"
+      ]
+    },
+    {
+      "object": "Body001",
+      "label": "case_lid_body",
+      "stl": "lid.stl",
+      "step": "lid.step",
+      "solids": 1,
+      "volume_mm3": 31103.004440784607,
+      "area_mm2": 23459.699111843074,
+      "bbox_mm": [
+        -35.0,
+        -91.0,
+        0.0,
+        35.0,
+        91.0,
+        3.0
+      ],
+      "is_valid": true,
+      "is_watertight_brep": true,
+      "recompute_state": [
+        "Up-to-date"
+      ]
+    }
+  ],
+  "source_decision": {
+    "selected": "target repository plastic_case/hafele_control_box_with_lid.FCStd",
+    "comparison": "The target and workspace FreeCAD documents both contain 45 objects and 9 sketches; corresponding bodies, feature order, spreadsheet aliases/values, volumes, surface areas, and bounding boxes match after recompute.",
+    "target_cad_added": "7fd1ede32fd79ccc4e8f1e2d872f4374dcdf2647 (2024-07-30); adds the FCStd and matching STL/render files.",
+    "workspace_cad_history": "Latest CAD-specific source commit: 91452eb (2022-07-03), “Move lid holes to align them into case needs”.",
+    "conclusion": "The target copy is the most recently incorporated complete design; no newer geometry difference was observed in the workspace source."
+  }
+}
