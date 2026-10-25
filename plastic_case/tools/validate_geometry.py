@@ -15,13 +15,21 @@ def metrics(path):
 
 def surface_samples(mesh,n,seed):
     p,_=trimesh.sample.sample_surface(mesh,n,seed=seed)
-    return p
+    # Add deterministic vertices and face centroids so narrow local features
+    # are not missed by random area sampling alone.
+    centroids=mesh.triangles_center
+    if len(centroids)>50000:
+        centroids=centroids[np.linspace(0,len(centroids)-1,50000,dtype=int)]
+    vertices=mesh.vertices
+    if len(vertices)>50000:
+        vertices=vertices[np.linspace(0,len(vertices)-1,50000,dtype=int)]
+    return np.vstack((p,centroids,vertices))
 
-def compare(a,b,pitch=1.0,n=2500):
+def compare(a,b,pitch=1.0,n=10000):
     am,bm=a['mesh'],b['mesh']
     pa=surface_samples(am,n,42); pb=surface_samples(bm,n,43)
-    da=trimesh.proximity.ProximityQuery(bm).on_surface(pa)[1]
-    db=trimesh.proximity.ProximityQuery(am).on_surface(pb)[1]
+    closest_b,da,_=trimesh.proximity.ProximityQuery(bm).on_surface(pa)
+    closest_a,db,_=trimesh.proximity.ProximityQuery(am).on_surface(pb)
     # Voxelize each surface, fill its interior, then align voxel centres on a shared grid.
     lo=np.minimum(am.bounds[0],bm.bounds[0])-pitch; hi=np.maximum(am.bounds[1],bm.bounds[1])+pitch
     dims=np.ceil((hi-lo)/pitch).astype(int)
@@ -34,12 +42,13 @@ def compare(a,b,pitch=1.0,n=2500):
         grid[tuple(ijk[good].T)]=True
         occ.append(grid)
     xor=int(np.count_nonzero(occ[0]^occ[1]))
+    ia=int(np.argmax(da)); ib=int(np.argmax(db))
     return {'bbox_max_abs_delta_mm':float(np.max(np.abs(am.bounds-bm.bounds))),
             'volume_abs_delta_mm3':abs(float(am.volume-bm.volume)),
             'symmetric_difference_voxel_mm3_estimate':xor*pitch**3,
             'voxel_pitch_mm':pitch,
-            'surface_distance_a_to_b_mm':{'p95':float(np.percentile(da,95)),'max_sampled':float(np.max(da))},
-            'surface_distance_b_to_a_mm':{'p95':float(np.percentile(db,95)),'max_sampled':float(np.max(db))},
+            'surface_distance_a_to_b_mm':{'p95':float(np.percentile(da,95)),'max_sampled':float(np.max(da)),'max_point_mm':pa[ia].tolist(),'closest_point_mm':closest_b[ia].tolist()},
+            'surface_distance_b_to_a_mm':{'p95':float(np.percentile(db,95)),'max_sampled':float(np.max(db)),'max_point_mm':pb[ib].tolist(),'closest_point_mm':closest_a[ib].tolist()},
             'components_a':a['components'],'components_b':b['components'],
             'watertight_a':a['watertight'],'watertight_b':b['watertight']}
 

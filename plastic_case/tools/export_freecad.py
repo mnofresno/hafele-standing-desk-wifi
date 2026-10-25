@@ -4,7 +4,7 @@ Run with FreeCAD's bundled Python: FreeCAD Python export_freecad.py file.FCStd o
 """
 import json, os, sys
 import FreeCAD as App
-import Part, Mesh
+import Part, Mesh, MeshPart
 
 
 def vector(v): return [float(v.x), float(v.y), float(v.z)]
@@ -41,6 +41,9 @@ def main(path,outdir,param_path=None):
         except: pass
         if o.TypeId=='Sketcher::SketchObject':
             rec['placement']={'base':vector(o.Placement.Base),'rotation':str(o.Placement.Rotation)}
+            rec['solver']={'fully_constrained':bool(getattr(o,'FullyConstrained',False)),
+                           'degrees_of_freedom':int(getattr(o,'DoF',-1)),
+                           'state':list(o.State)}
             rec['geometry']=[geom(g) for g in o.Geometry]
             rec['constraints']=[{'type':c.Type,'value':float(c.Value),'first':int(c.First), 'second':int(c.Second), 'third':int(c.Third)} for c in o.Constraints]
         if o.TypeId=='Spreadsheet::Sheet':
@@ -66,7 +69,11 @@ def main(path,outdir,param_path=None):
         if s.isNull() or not s.Solids: continue
         label='lid' if 'lid' in o.Label.lower() or 'tapa' in o.Label.lower() else 'case' if 'case' in o.Label.lower() else o.Name
         stl=os.path.join(outdir,label+'.stl'); step=os.path.join(outdir,label+'.step')
-        Mesh.export([feature],stl)
+        # Fine tessellation keeps mesh discretization below the requested
+        # 0.05 mm model tolerance; the STEP remains the exact BRep reference.
+        mesh=MeshPart.meshFromShape(Shape=s,LinearDeflection=0.01,
+                                    AngularDeflection=0.1,Relative=False)
+        mesh.write(stl)
         Part.export([feature],step)
         data['final_solids'].append({'object':o.Name,'label':o.Label,'stl':os.path.basename(stl),'step':os.path.basename(step),'solids':len(s.Solids),'volume_mm3':float(s.Volume),'area_mm2':float(s.Area),'bbox_mm':box(s.BoundBox),'is_valid':bool(s.isValid()),'is_watertight_brep':all(x.isClosed() for x in s.Solids),'recompute_state':list(feature.State)})
     with open(os.path.join(outdir,'freecad_model_inventory.json'),'w') as f: json.dump(data,f,indent=2,ensure_ascii=False)

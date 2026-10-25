@@ -19,6 +19,8 @@ def test_model_has_case_lid_and_assembly_selector():
     assert 'design_revision = "rework"' in s
     assert 'module rework_panel_pockets(' in s
     assert 'module external_access_cutouts(' in s
+    assert 'module electronics_carrier(' in s
+    assert 'module button_cap(' in s
 
 def test_fit_coupons_cover_reported_hardware_interfaces():
     s=(ROOT/'tests'/'fit_test_coupons.scad').read_text()

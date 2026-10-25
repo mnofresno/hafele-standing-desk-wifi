@@ -41,5 +41,19 @@
       "design_revision": "rework",
       "show_part": "encoder_retainer"
     }
+  },
+  {
+    "name": "electronics_carrier_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "electronics_carrier"
+    }
+  },
+  {
+    "name": "button_cap_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "button_cap"
+    }
   }
 ]

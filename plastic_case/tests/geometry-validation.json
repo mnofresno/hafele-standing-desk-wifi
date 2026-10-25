@@ -1,7 +1,9 @@
 [
   {
     "configuration": "default",
-    "parameters": {},
+    "parameters": {
+      "design_revision": "baseline"
+    },
     "parts": [
       {
         "part": "case",
@@ -37,31 +39,51 @@
               35.0
             ]
           ],
-          "volume_mm3": 40550.78534777071,
-          "area_mm2": 55045.05551943131,
+          "volume_mm3": 42084.50691763713,
+          "area_mm2": 56618.71047921847,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 1518.725896379612,
-          "symmetric_difference_voxel_mm3_estimate": 2155.0,
+          "volume_abs_delta_mm3": 14.99567348681012,
+          "symmetric_difference_voxel_mm3_estimate": 0.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.2194105584971835,
-            "max_sampled": 3.3023851576150554
+            "p95": 0.020000000000004074,
+            "max_sampled": 0.041992446008688525,
+            "max_point_mm": [
+              6.081301212310791,
+              -9.0,
+              1.5
+            ],
+            "closest_point_mm": [
+              6.0405168339068895,
+              -8.99,
+              1.5
+            ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 0.4269517407920666,
-            "max_sampled": 3.7059047743678093
+            "p95": 0.020000000000010232,
+            "max_sampled": 0.034962072460711015,
+            "max_point_mm": [
+              6.081301413476467,
+              -139.78496207246013,
+              1.5
+            ],
+            "closest_point_mm": [
+              6.081301212310791,
+              -139.75,
+              1.5
+            ]
           },
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
           "watertight_b": true
         },
-        "within_0_05_mm": false
+        "within_0_05_mm": true
       },
       {
         "part": "lid",
@@ -109,12 +131,32 @@
           "symmetric_difference_voxel_mm3_estimate": 0.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 7.380676601092271e-10,
-            "max_sampled": 0.0010120383330938848
+            "p95": 0.0003750664213107415,
+            "max_sampled": 0.0009868379352887676,
+            "max_point_mm": [
+              14.211297211391589,
+              66.09148706623914,
+              2.687218785163022
+            ],
+            "closest_point_mm": [
+              14.212241556416698,
+              66.0912006023076,
+              2.6872187851630227
+            ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 1.5869842914226955e-12,
-            "max_sampled": 0.0006277693045896039
+            "p95": 0.0004848251999837792,
+            "max_sampled": 0.001026439281143943,
+            "max_point_mm": [
+              18.11062496052602,
+              -65.70057022392,
+              1.706441377319662
+            ],
+            "closest_point_mm": [
+              18.111643434810883,
+              -65.70069784730715,
+              1.706441377319662
+            ]
           },
           "components_a": 1,
           "components_b": 1,
@@ -128,6 +170,7 @@
   {
     "configuration": "longer_and_thicker",
     "parameters": {
+      "design_revision": "baseline",
       "longitud": 170,
       "ancho_pared": 2,
       "alto": 38,
@@ -152,7 +195,7 @@
               38.0
             ]
           ],
-          "volume_mm3": 68138.20239976946,
+          "volume_mm3": 68138.20240052057,
           "area_mm2": 68706.93454455587,
           "components": 1,
           "watertight": true,
@@ -171,24 +214,44 @@
               38.0
             ]
           ],
-          "volume_mm3": 65455.08135508321,
-          "area_mm2": 67050.89917017803,
+          "volume_mm3": 68083.13647282952,
+          "area_mm2": 68829.29996554113,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 2683.1210446862533,
-          "symmetric_difference_voxel_mm3_estimate": 3016.0,
+          "volume_abs_delta_mm3": 55.06592769105919,
+          "symmetric_difference_voxel_mm3_estimate": 177.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.4728465239594388,
-            "max_sampled": 3.711030269941803
+            "p95": 0.020000000000010232,
+            "max_sampled": 3.998915493204099,
+            "max_point_mm": [
+              66.5697628778455,
+              -34.50534282132368,
+              20.875616308104824
+            ],
+            "closest_point_mm": [
+              66.73835676626187,
+              -30.559839514383576,
+              20.24640658352872
+            ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 0.8582707022875906,
-            "max_sampled": 3.7059047743678093
+            "p95": 0.020000000000010232,
+            "max_sampled": 3.2604916386612923,
+            "max_point_mm": [
+              66.40531465440948,
+              -96.09903757858694,
+              21.489336666538463
+            ],
+            "closest_point_mm": [
+              66.0203260947787,
+              -99.00045240910865,
+              22.92613223862321
+            ]
           },
           "components_a": 1,
           "components_b": 1,
@@ -231,37 +294,58 @@
               4.0
             ]
           ],
-          "volume_mm3": 50515.596243675034,
-          "area_mm2": 29054.164960729726,
+          "volume_mm3": 50516.851983756256,
+          "area_mm2": 29028.59374632499,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0,
-          "volume_abs_delta_mm3": 1.180431469118048,
-          "symmetric_difference_voxel_mm3_estimate": 19.0,
+          "volume_abs_delta_mm3": 0.07530861210398143,
+          "symmetric_difference_voxel_mm3_estimate": 0.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.7685938106826482e-09,
-            "max_sampled": 1.916097468976906
+            "p95": 0.0003752668728956381,
+            "max_sampled": 0.0010092989438891435,
+            "max_point_mm": [
+              18.282695959612468,
+              75.36171651462037,
+              2.162491530584218
+            ],
+            "closest_point_mm": [
+              18.28195930857471,
+              75.36102656563189,
+              2.162491530584218
+            ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 3.4362388429994756e-12,
-            "max_sampled": 1.9149823631283325
+            "p95": 0.00045148438719469177,
+            "max_sampled": 0.0010262120243983994,
+            "max_point_mm": [
+              16.373982432256994,
+              72.05096628780221,
+              2.8888394402344235
+            ],
+            "closest_point_mm": [
+              16.37377916404682,
+              72.04996040850838,
+              2.888839440234423
+            ]
           },
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
           "watertight_b": true
         },
-        "within_0_05_mm": false
+        "within_0_05_mm": true
       }
     ]
   },
   {
     "configuration": "short_boundary_valid",
     "parameters": {
+      "design_revision": "baseline",
       "longitud": 120,
       "ancho_pared": 1.2,
       "alto": 30,
@@ -285,7 +369,7 @@
               33.5
             ]
           ],
-          "volume_mm3": 25448.167923958084,
+          "volume_mm3": 25448.16792378946,
           "area_mm2": 42280.23139563175,
           "components": 1,
           "watertight": true,
@@ -294,39 +378,59 @@
         "openscad": {
           "bounds_mm": [
             [
-              -12.653760999441147,
+              -12.950843751430511,
               -120.0,
               0.0
             ],
             [
               57.588302202522755,
               0.0,
-              30.0
+              33.5
             ]
           ],
-          "volume_mm3": 24351.997843137648,
-          "area_mm2": 40359.225943551995,
-          "components": 3,
-          "watertight": false,
+          "volume_mm3": 25549.541421245343,
+          "area_mm2": 42109.19420242695,
+          "components": 1,
+          "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 5.558586530387402,
-          "volume_abs_delta_mm3": 1096.1700808204369,
-          "symmetric_difference_voxel_mm3_estimate": 1207.0,
+          "volume_abs_delta_mm3": 101.3734974558829,
+          "symmetric_difference_voxel_mm3_estimate": 1091.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.647007711837729,
-            "max_sampled": 6.921928684414653
+            "p95": 0.5545546004772235,
+            "max_sampled": 7.196377080292042,
+            "max_point_mm": [
+              55.634151458740234,
+              -8.399999618530273,
+              33.5
+            ],
+            "closest_point_mm": [
+              49.34623900055885,
+              -8.399999618530275,
+              30.0
+            ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 0.8017348135637988,
-            "max_sampled": 9.910993823301283
+            "p95": 0.4464227515627698,
+            "max_sampled": 4.663602278560671,
+            "max_point_mm": [
+              45.00240911543369,
+              -10.21,
+              33.5
+            ],
+            "closest_point_mm": [
+              48.0844841003418,
+              -10.21,
+              30.0
+            ]
           },
           "components_a": 1,
-          "components_b": 3,
+          "components_b": 1,
           "watertight_a": true,
-          "watertight_b": false
+          "watertight_b": true
         },
         "within_0_05_mm": false
       },
@@ -364,24 +468,44 @@
               2.4
             ]
           ],
-          "volume_mm3": 17953.152,
-          "area_mm2": 16842.88,
+          "volume_mm3": 18145.75919025375,
+          "area_mm2": 17063.760723896496,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 9.536743172944284e-08,
-          "volume_abs_delta_mm3": 343.29661204528384,
-          "symmetric_difference_voxel_mm3_estimate": 21.0,
+          "volume_abs_delta_mm3": 150.68942179153237,
+          "symmetric_difference_voxel_mm3_estimate": 12.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 9.536743172944541e-08,
-            "max_sampled": 1.686191714275526
+            "p95": 9.537034913462212e-08,
+            "max_sampled": 1.766420193420662,
+            "max_point_mm": [
+              -0.23254095757673632,
+              68.00282799174968,
+              0.0
+            ],
+            "closest_point_mm": [
+              -1.9980153875038404,
+              68.06062364035627,
+              0.0
+            ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 9.536743172944476e-08,
-            "max_sampled": 1.2
+            "p95": 0.7999999999999999,
+            "max_sampled": 1.161925808558205,
+            "max_point_mm": [
+              14.515342178113727,
+              49.55777664010144,
+              1.161925808558205
+            ],
+            "closest_point_mm": [
+              14.515342178113725,
+              49.55777664010144,
+              0.0
+            ]
           },
           "components_a": 1,
           "components_b": 1,
