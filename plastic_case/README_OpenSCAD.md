@@ -70,8 +70,8 @@ FreeCAD API BRep (exact-kernel) and STL measurements are recorded in the invento
 
 | Part | FreeCAD STL volume (mm³) | OpenSCAD volume (mm³) | Abs volume delta (mm³) | Voxel symmetric difference estimate (mm³) | Max sampled surface distance (mm) | Result |
 |---|---:|---:|---:|---:|---:|---|
-| Case | 42,069.51 | 53,849.27 | 11,779.76 | 11,797 | 32.83 | Fail |
-| Lid | 31,103.08 | 31,173.71 | 70.63 | 31 | 1.60 | Fail |
+| Case | 42,069.51 | 40,426.60 | 1,642.91 | 2,394 | 9.00 | Fail |
+| Lid | 31,103.08 | 31,103.14 | 0.06 | 0 | 0.001 | Pass |
 
 The tessellated FreeCAD STL volume differs slightly from its exact BRep volume. Both reference and OpenSCAD meshes are watertight at the default values. The case has 5 connected OpenSCAD components versus 1 FreeCAD component. Bounding boxes match within 0.001 mm, but that does not imply matching surfaces.
 

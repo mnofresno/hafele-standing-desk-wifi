@@ -37,27 +37,27 @@
               35.0
             ]
           ],
-          "volume_mm3": 53849.26807272637,
-          "area_mm2": 72431.02023380372,
-          "components": 5,
+          "volume_mm3": 40426.60009734031,
+          "area_mm2": 54994.04687192998,
+          "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 11779.75682857605,
-          "symmetric_difference_voxel_mm3_estimate": 11797.0,
+          "volume_abs_delta_mm3": 1642.911146810009,
+          "symmetric_difference_voxel_mm3_estimate": 2394.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.8057412673369162,
-            "max_sampled": 6.840902220688955
+            "p95": 1.5,
+            "max_sampled": 7.578193411925577
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 22.96075118189486,
-            "max_sampled": 32.83443905416286
+            "p95": 1.3127839923323614,
+            "max_sampled": 9.0
           },
           "components_a": 1,
-          "components_b": 5,
+          "components_b": 1,
           "watertight_a": true,
           "watertight_b": true
         },
@@ -97,31 +97,31 @@
               3.0
             ]
           ],
-          "volume_mm3": 31173.713164140627,
-          "area_mm2": 23489.917509822066,
+          "volume_mm3": 31103.13898781719,
+          "area_mm2": 23459.77310730718,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0,
-          "volume_abs_delta_mm3": 70.63064112348366,
-          "symmetric_difference_voxel_mm3_estimate": 31.0,
+          "volume_abs_delta_mm3": 0.05646480004725163,
+          "symmetric_difference_voxel_mm3_estimate": 0.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.5850470793533356e-11,
-            "max_sampled": 0.653511875650798
+            "p95": 7.380676601092271e-10,
+            "max_sampled": 0.0010120383330938848
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 1.7653349667881465e-12,
-            "max_sampled": 1.5952710940501706
+            "p95": 1.5869842914226955e-12,
+            "max_sampled": 0.0006277693045896039
           },
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
           "watertight_b": true
         },
-        "within_0_05_mm": false
+        "within_0_05_mm": true
       }
     ]
   },
@@ -152,7 +152,7 @@
               38.0
             ]
           ],
-          "volume_mm3": 68138.20239976946,
+          "volume_mm3": 68138.20240009103,
           "area_mm2": 68706.93454455587,
           "components": 1,
           "watertight": true,
@@ -171,27 +171,27 @@
               38.0
             ]
           ],
-          "volume_mm3": 87161.11458538809,
-          "area_mm2": 87844.39748307722,
-          "components": 5,
+          "volume_mm3": 65064.539467450326,
+          "area_mm2": 66440.36961327629,
+          "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 19022.912185618625,
-          "symmetric_difference_voxel_mm3_estimate": 14023.0,
+          "volume_abs_delta_mm3": 3073.6629326407055,
+          "symmetric_difference_voxel_mm3_estimate": 3334.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 2.3478657208805447,
-            "max_sampled": 7.700166900572441
+            "p95": 2.0,
+            "max_sampled": 7.311285016498192
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 24.8719724054203,
-            "max_sampled": 35.26429059168269
+            "p95": 1.8684668083790044,
+            "max_sampled": 8.519428457359982
           },
           "components_a": 1,
-          "components_b": 5,
+          "components_b": 1,
           "watertight_a": true,
           "watertight_b": true
         },
@@ -231,24 +231,24 @@
               4.0
             ]
           ],
-          "volume_mm3": 50611.36856933594,
-          "area_mm2": 29059.10648124609,
+          "volume_mm3": 50515.596243675034,
+          "area_mm2": 29054.164960729726,
           "components": 1,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0,
-          "volume_abs_delta_mm3": 94.59189419178438,
-          "symmetric_difference_voxel_mm3_estimate": 40.0,
+          "volume_abs_delta_mm3": 1.180431469118048,
+          "symmetric_difference_voxel_mm3_estimate": 19.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 1.623710972166208e-10,
+            "p95": 1.7685938106826482e-09,
             "max_sampled": 1.916097468976906
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 4.424027569639003e-12,
-            "max_sampled": 1.9
+            "p95": 3.4362388429994756e-12,
+            "max_sampled": 1.9149823631283325
           },
           "components_a": 1,
           "components_b": 1,
@@ -285,7 +285,7 @@
               33.5
             ]
           ],
-          "volume_mm3": 25448.167924125897,
+          "volume_mm3": 25448.167924125926,
           "area_mm2": 42280.23139563175,
           "components": 1,
           "watertight": true,
@@ -304,29 +304,29 @@
               30.0
             ]
           ],
-          "volume_mm3": 31408.72480536454,
-          "area_mm2": 51798.442371738,
-          "components": 7,
-          "watertight": false,
+          "volume_mm3": 24062.95537855501,
+          "area_mm2": 39778.66663224104,
+          "components": 3,
+          "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 5.558586530387402,
-          "volume_abs_delta_mm3": 5960.556881238645,
-          "symmetric_difference_voxel_mm3_estimate": 4683.0,
+          "volume_abs_delta_mm3": 1385.2125455709174,
+          "symmetric_difference_voxel_mm3_estimate": 1403.0,
           "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
-            "p95": 3.5689686251850588,
-            "max_sampled": 8.368255591810419
+            "p95": 3.5000944926018334,
+            "max_sampled": 8.307971755139244
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 18.88913504505668,
-            "max_sampled": 28.799999952316284
+            "p95": 1.687400350654845,
+            "max_sampled": 11.455361941827434
           },
           "components_a": 1,
-          "components_b": 7,
+          "components_b": 3,
           "watertight_a": true,
-          "watertight_b": false
+          "watertight_b": true
         },
         "within_0_05_mm": false
       },

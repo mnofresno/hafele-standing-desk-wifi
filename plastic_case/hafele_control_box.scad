@@ -70,18 +70,39 @@ module enclosure_shell() {
         difference() {
             rounded_profile_2d();
             offset(delta=-ancho_pared) rounded_profile_2d();
+            // Thickness Face2 is removed in the FreeCAD shell, leaving the top edge open.
+            translate([-100,alto-ancho_pared]) square([250,ancho_pared+2]);
         }
 }
 
+module end_closures() {
+    // Closing skins at extrusion ends are retained separately from the open shell profile.
+    for (y=[-0.02,-longitud+ancho_pared+0.02])
+        translate([0,y,0]) rotate([90,0,0]) linear_extrude(height=ancho_pared,convexity=5)
+            rounded_profile_2d();
+}
+
 module display_and_button_openings() {
-    // The display and two key openings are normal to the angled control panel.
-    // Their sketch locations are parameter linked; local sketch Y is the length axis.
-    xpanel = panel_inset();
-    for (y=[-longitud+pos_display_y+alto_display/2, -longitud+pos_display_y+alto_display/2+distancia_botones])
-        translate([xpanel+2,-y,altura_botones]) rotate([0,90-angulo_del_panel,0])
-            cylinder(d=dia_botones,h=ancho_pared*8,center=true);
-    translate([xpanel+2,-longitud+pos_display_y+alto_display/2,altura_botones])
-        rotate([0,90-angulo_del_panel,0]) cube([ancho_display,ancho_pared*8,alto_display],center=true);
+    // Exact Sketch001 coordinates transformed from its attached panel plane.
+    panel_sketch_offset = 19.113;
+    theta = 90-angulo_del_panel;
+    a = angulo_del_panel;
+    z_left_tan = radio_curvaturas-radio_curvaturas*sin(90-a);
+    x_left_tan = -radio_curvaturas*cos(90-a);
+    x_top_left = x_left_tan-(alto-z_left_tan)/tan(a);
+    x_top_right = x_top_left+profundidad;
+    ox = x_top_right+panel_sketch_offset*sin(theta);
+    oz = alto-panel_sketch_offset*cos(theta);
+    multmatrix([[0,-sin(theta),cos(theta),ox],
+                [1,0,0,0],
+                [0,cos(theta),sin(theta),oz],
+                [0,0,0,1]]) {
+        translate([-longitud+pos_display_x,
+                   pos_display_y-alto+alto_display,-8])
+            cube([ancho_display,alto_display,16]);
+        for (x=[-pos_x_botones,-pos_x_botones+distancia_botones])
+            translate([x,altura_botones,-8]) cylinder(d=dia_botones,h=16,$fn=96);
+    }
 }
 
 module screw_tower(x,y) {
@@ -95,12 +116,13 @@ module case_body() {
     difference() {
         union() {
             enclosure_shell();
+            end_closures();
             // Four cylindrical screw lands at the source sketch coordinates.
             for (x=[9.5,51.1217782649], y=[-9.5,-longitud+9.5])
                 translate([x,y,ancho_pared]) screw_tower(x,y);
             // The source pads reinforce the end supports; keep their wall thickness parameterized.
-            for (y=[-ancho_pared,-longitud+ancho_pared])
-                translate([0,y,ancho_pared]) cube([panel_inset(),ancho_pared,alto-2*ancho_pared]);
+            for (y=[-9,-longitud+10.5])
+                translate([0,y-ancho_pared,ancho_pared]) cube([panel_inset(),ancho_pared,9.65]);
         }
         display_and_button_openings();
     }
@@ -123,10 +145,11 @@ module lid_end_tabs() {
 }
 
 module lid_fastener_holes() {
+    // Four panel holes pierce the 3 mm raised panel; tab holes pierce the 1.5 mm base only.
     for (x=[-25.5,16.1217782649],y=[-65.5,65.5])
-        translate([x,y,-0.1]) cylinder(d=4,h=ancho_pared+0.2,$fn=48);
+        translate([x,y,-0.1]) cylinder(d=4,h=2*ancho_pared+0.2,$fn=96);
     for (y=[-83,83])
-        translate([0,y,-0.1]) cylinder(d=4,h=ancho_pared+0.2,$fn=48);
+        translate([0,y,-0.1]) cylinder(d=4,h=ancho_pared+0.2,$fn=96);
 }
 
 module case_lid() {
