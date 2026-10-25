@@ -1,0 +1,395 @@
+[
+  {
+    "configuration": "default",
+    "parameters": {},
+    "parts": [
+      {
+        "part": "case",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -13.21485710144043,
+              -150.0,
+              0.0
+            ],
+            [
+              64.64673614501953,
+              3.497202527569243e-14,
+              35.0
+            ]
+          ],
+          "volume_mm3": 42069.51124415032,
+          "area_mm2": 56628.196205974484,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -13.214856676757336,
+              -150.0,
+              0.0
+            ],
+            [
+              64.64723819494247,
+              0.0,
+              35.0
+            ]
+          ],
+          "volume_mm3": 40550.78534777071,
+          "area_mm2": 55045.05551943131,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 0.0005020499229431152,
+          "volume_abs_delta_mm3": 1518.725896379612,
+          "symmetric_difference_voxel_mm3_estimate": 2155.0,
+          "voxel_pitch_mm": 1.0,
+          "surface_distance_a_to_b_mm": {
+            "p95": 1.2194105584971835,
+            "max_sampled": 3.3023851576150554
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 0.4269517407920666,
+            "max_sampled": 3.7059047743678093
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true
+        },
+        "within_0_05_mm": false
+      },
+      {
+        "part": "lid",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -35.0,
+              -91.0,
+              0.0
+            ],
+            [
+              35.0,
+              91.0,
+              3.0
+            ]
+          ],
+          "volume_mm3": 31103.082523017143,
+          "area_mm2": 23459.742060445285,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -35.0,
+              -91.0,
+              0.0
+            ],
+            [
+              35.0,
+              91.0,
+              3.0
+            ]
+          ],
+          "volume_mm3": 31103.13898781719,
+          "area_mm2": 23459.77310730718,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 0.0,
+          "volume_abs_delta_mm3": 0.05646480004725163,
+          "symmetric_difference_voxel_mm3_estimate": 0.0,
+          "voxel_pitch_mm": 1.0,
+          "surface_distance_a_to_b_mm": {
+            "p95": 7.380676601092271e-10,
+            "max_sampled": 0.0010120383330938848
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 1.5869842914226955e-12,
+            "max_sampled": 0.0006277693045896039
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true
+        },
+        "within_0_05_mm": true
+      }
+    ]
+  },
+  {
+    "configuration": "longer_and_thicker",
+    "parameters": {
+      "longitud": 170,
+      "ancho_pared": 2,
+      "alto": 38,
+      "profundidad": 76,
+      "dia_botones": 9,
+      "dia_torres_tornillos": 8,
+      "separacion_torres_tornillos": 7
+    },
+    "parts": [
+      {
+        "part": "case",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -14.018704414367676,
+              -170.0,
+              0.0
+            ],
+            [
+              70.64673614501953,
+              3.7969627442180354e-14,
+              38.0
+            ]
+          ],
+          "volume_mm3": 68138.20239976946,
+          "area_mm2": 68706.93454455587,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -14.018704250454903,
+              -170.0,
+              0.0
+            ],
+            [
+              70.64723819494247,
+              0.0,
+              38.0
+            ]
+          ],
+          "volume_mm3": 65455.08135508321,
+          "area_mm2": 67050.89917017803,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 0.0005020499229431152,
+          "volume_abs_delta_mm3": 2683.1210446862533,
+          "symmetric_difference_voxel_mm3_estimate": 3016.0,
+          "voxel_pitch_mm": 1.0,
+          "surface_distance_a_to_b_mm": {
+            "p95": 1.4728465239594388,
+            "max_sampled": 3.711030269941803
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 0.8582707022875906,
+            "max_sampled": 3.7059047743678093
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true
+        },
+        "within_0_05_mm": false
+      },
+      {
+        "part": "lid",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -38.0,
+              -101.0,
+              0.0
+            ],
+            [
+              38.0,
+              101.0,
+              4.0
+            ]
+          ],
+          "volume_mm3": 50516.77667514415,
+          "area_mm2": 29028.567408552444,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -38.0,
+              -101.0,
+              0.0
+            ],
+            [
+              38.0,
+              101.0,
+              4.0
+            ]
+          ],
+          "volume_mm3": 50515.596243675034,
+          "area_mm2": 29054.164960729726,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 0.0,
+          "volume_abs_delta_mm3": 1.180431469118048,
+          "symmetric_difference_voxel_mm3_estimate": 19.0,
+          "voxel_pitch_mm": 1.0,
+          "surface_distance_a_to_b_mm": {
+            "p95": 1.7685938106826482e-09,
+            "max_sampled": 1.916097468976906
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 3.4362388429994756e-12,
+            "max_sampled": 1.9149823631283325
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true
+        },
+        "within_0_05_mm": false
+      }
+    ]
+  },
+  {
+    "configuration": "short_boundary_valid",
+    "parameters": {
+      "longitud": 120,
+      "ancho_pared": 1.2,
+      "alto": 30,
+      "profundidad": 62,
+      "angulo_del_panel": 72,
+      "radio_curvaturas": 4
+    },
+    "parts": [
+      {
+        "part": "case",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -12.65376091003418,
+              -120.0,
+              0.0
+            ],
+            [
+              63.146888732910156,
+              2.9976021664879227e-14,
+              33.5
+            ]
+          ],
+          "volume_mm3": 25448.167923958084,
+          "area_mm2": 42280.23139563175,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -12.653760999441147,
+              -120.0,
+              0.0
+            ],
+            [
+              57.588302202522755,
+              0.0,
+              30.0
+            ]
+          ],
+          "volume_mm3": 24351.997843137648,
+          "area_mm2": 40359.225943551995,
+          "components": 3,
+          "watertight": false,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 5.558586530387402,
+          "volume_abs_delta_mm3": 1096.1700808204369,
+          "symmetric_difference_voxel_mm3_estimate": 1207.0,
+          "voxel_pitch_mm": 1.0,
+          "surface_distance_a_to_b_mm": {
+            "p95": 1.647007711837729,
+            "max_sampled": 6.921928684414653
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 0.8017348135637988,
+            "max_sampled": 9.910993823301283
+          },
+          "components_a": 1,
+          "components_b": 3,
+          "watertight_a": true,
+          "watertight_b": false
+        },
+        "within_0_05_mm": false
+      },
+      {
+        "part": "lid",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -31.0,
+              -76.0,
+              0.0
+            ],
+            [
+              31.0,
+              76.0,
+              2.4000000953674316
+            ]
+          ],
+          "volume_mm3": 18296.448612045282,
+          "area_mm2": 17063.68016349792,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -31.0,
+              -76.0,
+              0.0
+            ],
+            [
+              31.0,
+              76.0,
+              2.4
+            ]
+          ],
+          "volume_mm3": 17953.152,
+          "area_mm2": 16842.88,
+          "components": 1,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 9.536743172944284e-08,
+          "volume_abs_delta_mm3": 343.29661204528384,
+          "symmetric_difference_voxel_mm3_estimate": 21.0,
+          "voxel_pitch_mm": 1.0,
+          "surface_distance_a_to_b_mm": {
+            "p95": 9.536743172944541e-08,
+            "max_sampled": 1.686191714275526
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 9.536743172944476e-08,
+            "max_sampled": 1.2
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true
+        },
+        "within_0_05_mm": false
+      }
+    ]
+  }
+]
