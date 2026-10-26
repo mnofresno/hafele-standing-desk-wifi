@@ -91,6 +91,16 @@ usb_access_width = 14;
 usb_access_height = 9;
 usb_access_corner_radius = 1.5;
 
+/* [Relay indicator windows: inferred from rear photo, location provisional] */
+enable_relay_indicator_windows = true;
+relay_indicator_end = "far"; // [near,far]
+relay_indicator_center_x = 48;
+relay_indicator_spacing = 9;
+relay_indicator_z = 10;
+relay_indicator_width = 5;
+relay_indicator_height = 7;
+relay_indicator_corner_radius = 2;
+
 /* [Internal support walls] */
 support_floor_left_x = 6.0813014172; // Sketch006 constrained profile point.
 support_inner_offset = 7.25; // Sketch007 constrained profile offset.
@@ -123,6 +133,10 @@ dia_interno_torres_tornillos = 4.25;
 // The old label pos_y_botones maps to alias altura_botones; pos_x_botones maps to x=75.
 
 function panel_inset() = profundidad - alto / tan(angulo_del_panel);
+function case_top_center_x() =
+    -radio_curvaturas*cos(90-angulo_del_panel)
+    -(alto-(radio_curvaturas-radio_curvaturas*sin(90-angulo_del_panel)))
+      /tan(angulo_del_panel)+profundidad/2;
 function support_near_offset() = separacion_torres_tornillos + 2*ancho_pared;
 function display_panel_x() = -longitud + pos_display_x;
 function display_panel_y() = pos_display_y - alto + alto_display;
@@ -404,6 +418,8 @@ module external_access_cutouts() {
     cable_rotation = motor_cable_end == "near" ? 90 : -90;
     usb_y = usb_access_end == "near" ? 0.1 : -longitud-0.1;
     usb_rotation = usb_access_end == "near" ? 90 : -90;
+    indicator_y = relay_indicator_end == "near" ? 0.1 : -longitud-0.1;
+    indicator_rotation = relay_indicator_end == "near" ? 90 : -90;
 
     if (design_revision == "rework" && enable_motor_cable_exit)
         translate([motor_cable_x,cable_y,motor_cable_z])
@@ -417,6 +433,16 @@ module external_access_cutouts() {
                 linear_extrude(height=ancho_pared+0.4)
                     rounded_rectangle_2d(usb_access_width,usb_access_height,
                                          usb_access_corner_radius);
+
+    if (design_revision == "rework" && enable_relay_indicator_windows)
+        for (x=[relay_indicator_center_x-relay_indicator_spacing/2,
+                relay_indicator_center_x+relay_indicator_spacing/2])
+            translate([x,indicator_y,relay_indicator_z])
+                rotate([indicator_rotation,0,0])
+                    linear_extrude(height=ancho_pared+0.4)
+                        rounded_rectangle_2d(relay_indicator_width,
+                                             relay_indicator_height,
+                                             relay_indicator_corner_radius);
 }
 
 module tower_land_and_ribs(x,y) {
@@ -491,8 +517,14 @@ module lid_fastener_holes() {
     // Four panel holes pierce the 3 mm raised panel; tab holes pierce the 1.5 mm base only.
     lid_hole_d = design_revision == "baseline" ? 4 : m3_lid_clearance_diameter;
     tower_edge = separacion_torres_tornillos+dia_torres_tornillos/2;
-    lid_left_hole_x = -profundidad/2+tower_edge;
-    lid_right_hole_x = panel_inset()-tower_edge-alto;
+    // Preserve the FreeCAD coordinates in baseline mode. Rework mode positions
+    // the holes over the case towers after centering the lid on the top opening.
+    lid_left_hole_x = design_revision == "baseline"
+        ? -profundidad/2+tower_edge
+        : tower_edge-case_top_center_x();
+    lid_right_hole_x = design_revision == "baseline"
+        ? panel_inset()-tower_edge-alto
+        : panel_inset()-tower_edge-case_top_center_x();
     lid_panel_hole_y = longitud/2-tower_edge;
     for (x=[lid_left_hole_x,lid_right_hole_x],y=[-lid_panel_hole_y,lid_panel_hole_y])
         translate([x,y,-0.1]) cylinder(d=lid_hole_d,h=2*ancho_pared+0.2,$fn=96);
@@ -580,7 +612,9 @@ module service_retainer_frame(outer_w,outer_h,inner_w,inner_h,thickness,
 
 function oled_retainer_outer_width() =
     oled_pcb_width+2*(oled_retainer_fastener_offset+m3_insert_boss_diameter/2);
-function oled_retainer_outer_height() = oled_pcb_height+2*(oled_retainer_overlap+2);
+// The PCB nearly fills the shell height along the angled panel; keep the
+// retainer within its outline so it does not protrude below the case floor.
+function oled_retainer_outer_height() = oled_pcb_height;
 function oled_retainer_spacer_height() =
     max(0,control_boss_depth+ancho_pared-(oled_front_skin+oled_module_depth)-oled_retainer_thickness);
 function encoder_retainer_outer_width() =
@@ -628,7 +662,10 @@ module encoder_retainer_installed() {
 
 module assembly() {
     case_body();
-    translate([0,0,show_exploded ? alto+explode_gap : alto]) case_lid();
+    // Center the independent lid plate on the case's top opening. Rework mode
+    // also moves its panel holes into the case tower coordinates.
+    translate([case_top_center_x(),-longitud/2,
+               show_exploded ? alto+explode_gap : alto]) case_lid();
     if (design_revision == "rework") {
         oled_retainer_installed();
         encoder_retainer_installed();

@@ -23,10 +23,31 @@ The SCAD `baseline` revision has 7 mm screw-tower outside diameters and 4.25 mm 
 | `motor_cable` | Circular opening series for the corrugated cable boot. This tests fit only; the final case also needs a separate clamp to take cable pull. |
 | `dupont` | Header and connector clearance coupons with adjustable depth/bend allowance. Test the actual female housings and wire direction. |
 | `m3_screw` | Through-hole and head recess sizes for M3 screws. |
-| `board_edge` | Edge-channel clearance for the soldered perfboard, plus standoff-height gauges for solder tails below it. The board is held by rails/clips; M3 inserts go in the carrier or case, not through tiny perfboard holes. |
+| `board_edge` | Edge-channel clearance for the soldered perfboard, plus standoff-height gauges for solder tails below it. This coupon is a gauge only; the current carrier is a universal grid and does not yet include board-specific rails or clips. M3 inserts go in the carrier/case, not through tiny perfboard holes. |
 | `board_outline` | Adjustable perimeter-frame coupons for the ESP32 board, relay/perfboard, or 5 V supply. Options include the official ESP32-DevKitC V4 outline (48.26 × 27.94 mm), a D1-mini-compatible outline (34.2 × 25.6 mm), and a D1 R32 outline (68 × 53 mm). The official LOLIN D1 mini is an ESP8266 board, so its outline is only a size alternative for a compatible clone, not evidence of the installed ESP32 board. The repo's `Wemos D1 ESP32` name and generic Arduino FQBN do not distinguish the installed PCB. Relay-board and supply outlines are editable starting values, not verified measurements. Dimensions are candidate profiles from the [Espressif DevKitC V4 drawing](https://dl.espressif.com/dl/schematics/esp32_devkitc_v4_dimensions.pdf), [LOLIN D1 mini specifications](https://www.wemos.cc/en/latest/d1/d1_mini.html), and [D1 R32 drawing](https://handsontec.com/dataspecs/module/ESP/WeMos%20D1%20R32.pdf). |
 
-For reusable mounts, use M3 inserts in the case/lid towers, a removable internal carrier, encoder cradle brackets, and a two-screw cable-clamp saddle. Capture the ESP32 and perfboard with edge rails or replaceable clips; hold the power-supply board in its own cradle. This avoids bonding boards with hot glue and lets each board be removed without undoing wiring. Keep insert bosses out of thin enclosure walls and away from connector and lid paths.
+## Corrugated motor-cable strain relief
+
+`motor_cable_clamp.scad` is a standalone two-piece accessory; it does not change the enclosure model. It has a semicircular saddle and a matching cap, two M3 cap screws seated in heat-set inserts in the saddle, and four M3 carrier mounting holes. Those four mounting-hole centers are at `(+/-mount_grid_pitch, +/-mount_grid_pitch)`: with the 10 mm default, they land on the existing 10 mm carrier grid (the four corners span 20 × 20 mm). The model's `cable_od` and `cable_interference` are calibration variables; the defaults do not assert the installed boot diameter or a proven squeeze. Measure across the cable corrugations, then use a printed gauge/clamp to tune fit and retention.
+
+The saddle prints with its flat mounting face on the bed. Print the cap upside down, with the broad outer face on the bed and semicircular groove facing upward. Both parts are designed for these orientations without support; use the same material and layer settings as the enclosure. Attach the saddle to the carrier grid with four M3 screws. Fit the cap with two M3 screws and the matching inserts installed in the saddle. Do not use this as the final cable strain relief until a pull test on the actual boot and wire has confirmed the cable cannot slide or load its electrical termination.
+
+Render and inspect both parts at candidate cable diameters 6, 8, 10, and 12 mm:
+
+```sh
+for d in 6 8 10 12; do
+  openscad -o "/tmp/motor-cable-saddle-${d}mm.stl" \
+    -D "cable_od=${d}" -D 'show_part="saddle"' \
+    plastic_case/tests/motor_cable_clamp.scad
+  openscad -o "/tmp/motor-cable-cap-${d}mm.stl" \
+    -D "cable_od=${d}" -D 'show_part="cap"' \
+    plastic_case/tests/motor_cable_clamp.scad
+done
+```
+
+Check the measured boot at its corrugation peaks and valleys. Adjust `cable_od`, `cable_interference`, `radial_channel_extra`, insert dimensions, and `clamp_length` in the Customizer or command line; start with zero interference, then test small increments. Verify that the clamp bolts close the cap, that the cable is retained without cutting its jacket, and that the installed saddle clears the carrier, boards, lid and cable bend. These STL calibration sizes are not the enclosure's final end-wall opening or cable-exit coordinates.
+
+For reusable mounts, use M3 inserts in the case/lid towers, a removable internal carrier, the encoder cradle, and the adjustable two-piece cable clamp. The carrier grid accepts small zip ties or screws at 10 mm pitch, so the existing ESP32, perfboard and supply can be secured without bonding; board-specific rails/clips and a supply cradle are still future refinements pending exact outlines. Keep insert bosses out of thin enclosure walls and away from connector and lid paths.
 
 ## Reproduction
 

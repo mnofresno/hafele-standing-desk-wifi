@@ -1,6 +1,6 @@
 # Häfele control box: OpenSCAD reconstruction
 
-This folder contains an editable OpenSCAD CSG reconstruction of the FreeCAD case and lid, plus a hardware rework revision. The FreeCAD document remains the geometric reference. The `baseline` reconstruction is **not yet equivalent**: the case misses the 0.05 mm tolerance and some parameter changes do not reproduce the FreeCAD feature behavior. The `rework` revision intentionally changes hardware interfaces and is still a fit-test prototype. Do not treat either OpenSCAD revision as physically validated for fabrication yet.
+This folder contains an editable OpenSCAD CSG reconstruction of the FreeCAD case and lid, plus a hardware rework revision. The FreeCAD document remains the geometric reference. The `baseline` reconstruction matches the default case/lid within the measured sampled 0.05 mm surface threshold, but still has a residual on a longer valid configuration and does not establish general parameter equivalence. The `rework` revision intentionally changes hardware interfaces and is still a fit-test prototype. Do not treat either OpenSCAD revision as physically validated for fabrication yet.
 
 ## Source selection
 
@@ -20,16 +20,16 @@ All spreadsheet aliases are exposed in OpenSCAD Customizer. The source labels ar
 | B6 | `radio_curvaturas` | 5 | `radio_curvaturas` | Two tangent profile corners |
 | B7 | `angulo_del_panel` | 75° | `angulo_del_panel` | Sloped panel and derived profile points |
 | B8 | `ancho_pared` | 1.5 | `ancho_pared` | Shell offset and pad depths |
-| B9 | `pos_display_x` | 20 | `pos_display_x` | Display sketch position; placement not yet faithfully reproduced |
-| B10 | `pos_display_y` | 15 | `pos_display_y` | Display sketch position; placement not yet faithfully reproduced |
+| B9 | `pos_display_x` | 20 | `pos_display_x` | Display sketch position in the source-aligned panel frame |
+| B10 | `pos_display_y` | 15 | `pos_display_y` | Display sketch position in the source-aligned panel frame |
 | B11 | `distancia_botones` | 40 | `distancia_botones` | Button spacing |
-| B12 | `altura_botones` / source label pos_y_botones | 3 | `altura_botones` | Button sketch position; placement not yet faithfully reproduced |
-| B13 | `pos_x_botones` | 75 | `pos_x_botones` | Button sketch location; not yet faithfully reproduced |
+| B12 | `altura_botones` / source label pos_y_botones | 3 | `altura_botones` | Button/encoder sketch elevation in the source-aligned panel frame |
+| B13 | `pos_x_botones` | 75 | `pos_x_botones` | Source location is `-longitud + pos_x_botones`; encoder adds `distancia_botones` |
 | B14 | `dia_botones` | 8.68 | `dia_botones` | Button opening diameter |
 | B15 | `espesor_tapa` | 1.5 | `espesor_tapa` | No final feature expression references this cell; retained but source geometry follows `ancho_pared` |
 | B16 | `dia_torres_tornillos` | 7 | `dia_torres_tornillos` | Tower outer diameter |
 | B17 | `long_torres_tornillos` | `=B2-B8` | `long_torres_tornillos` | Tower height |
-| B18 | `separacion_torres_tornillos` | 6 | `separacion_torres_tornillos` | Tower/support sketch spacing; not fully reproduced |
+| B18 | `separacion_torres_tornillos` | 6 | `separacion_torres_tornillos` | Tower spacing and near support plane offset; underconstrained support-profile points remain explicit extra parameters |
 | B19 | `dia_interno_torres_tornillos` | 4.25 | `dia_interno_torres_tornillos` | Tower bore diameter |
 
 The complete 45-object inventory, sketch geometry, constraints, object properties, expressions, and final-body measurements are in `freecad_model_inventory.json`.
@@ -94,8 +94,8 @@ The earlier short-boundary probe (`alto=30`, `longitud=120`, `ancho_pared=1.2`, 
 
 Parametric coupon models for the OLED pocket, EC11-family encoder body/knob, panel pushbutton, USB opening, motor cable boot, Dupont connector headroom, PCB outline/edge rails/solder clearance, and M3 brass inserts are in `plastic_case/tests/fit_test_coupons.scad`. Printing instructions, parameter ranges, and component-retention decisions are in `plastic_case/tests/FIT_TESTS.md`. Render one coupon family at a time with `-D 'test_set="m3_insert"'` (or another selector). A live read of `/info` reports ESP32 chip revision 1, 4 MB flash, no PSRAM and 240 MHz; the USB enumerates as a CP2102 bridge. Neither identifies the physical PCB outline, so the coupons keep ESP32/relay/supply profiles adjustable. Rework mode includes blind M3 insert seats; print the insert coupon and tune the pilot/boss dimensions before printing the enclosure.
 
-The hardware rework sequence and evidence-backed mechanical decisions are tracked in `plastic_case/REWORK_PLAN.md`. In `rework` mode, the model adds a candidate OLED pocket and removable retainer, an EC11-family encoder pocket/retainer, blind M3 insert towers, four M3 carrier mounts, a removable 10 mm grid carrier, configurable USB/motor-cable openings (enabled by default), and an adjustable optional button cap. The cap is a separate fit candidate and does not replace the metal panel button. The grid carrier is a generic mounting surface, not a dimensioned cradle for all three boards. ESP32 PCB revision, relay/perfboard outline, supply outline, solder height and connector keep-outs still need physical checks. The USB bridge is CP2102; it does not identify the controller PCB. A six-part, watertight print candidate set is in `plastic_case/print_candidate/`; see its README before printing. It is a prototype and does not certify physical fit.
+The hardware rework sequence is tracked in `plastic_case/REWORK_PLAN.md`, and photo/firmware identification evidence is in `plastic_case/HARDWARE_EVIDENCE.md`. In `rework` mode, the model adds a candidate OLED pocket and removable retainer, an EC11-family encoder pocket/retainer, blind M3 insert towers, four M3 carrier mounts, a removable 10 mm grid carrier, configurable USB/motor-cable openings and two photo-derived relay-indicator windows (enabled by default), and an adjustable optional button cap. Rework centers the lid plate on the case top and moves its four panel holes to the case tower coordinates; baseline retains the FreeCAD lid geometry. The standalone two-piece motor-cable clamp is in `tests/motor_cable_clamp.scad`; it mounts to the carrier grid and has a separate calibration STL pair. The cap is a separate fit candidate and does not replace the metal panel button. The grid carrier is a generic mounting surface, not a dimensioned cradle for all three boards. ESP32 PCB revision, relay/perfboard outline, supply outline, solder height and connector keep-outs still need physical checks. The USB bridge is CP2102; it does not identify the controller PCB. An eight-part print candidate set (six enclosure pieces plus a calibration clamp pair) is in `plastic_case/print_candidate/`; the folder also has assembled and exploded previews. See its README before printing. It is a prototype and does not certify physical fit.
 
 `validate_rework.py` reports mesh bounds, volume and area, watertightness, winding, connected positive-volume solids, and enclosed cavity shells across the candidate configuration matrix. The blind M3 insert bores create enclosed voids that STL represents as separate inward-wound shells; these are reported separately from printable solid components. This mesh check verifies CSG validity only, not fit to unmeasured hardware.
 
-The current `validate_rework.py` run reports OpenSCAD `NoError`, one connected positive-volume component, and watertight meshes for the case, OLED retainer, encoder retainer, electronics carrier and button cap configurations. These checks establish valid CSG output, not fit or electrical clearance.
+The current `validate_rework.py` run reports OpenSCAD `NoError`, one connected positive-volume component, and watertight meshes for the case, OLED retainer, encoder retainer, electronics carrier and button cap configurations. These checks establish valid CSG output, not fit or electrical clearance. The standalone clamp saddle/cap also rendered at 6, 8, 10 and 12 mm cable candidates; all eight meshes were watertight, consistently wound, and one positive-volume component.

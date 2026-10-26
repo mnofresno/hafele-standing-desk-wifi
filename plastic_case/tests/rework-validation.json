@@ -18,8 +18,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 45072.326681684186,
-      "area_mm2": 57072.75226054687,
+      "volume_mm3": 44974.943865284644,
+      "area_mm2": 57025.1236906237,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -51,8 +51,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 45072.326681684186,
-      "area_mm2": 57072.75226054687,
+      "volume_mm3": 44974.943865284644,
+      "area_mm2": 57025.1236906237,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -84,8 +84,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 45338.20089405123,
-      "area_mm2": 56876.09013162766,
+      "volume_mm3": 45240.81807765169,
+      "area_mm2": 56828.46156170449,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -104,17 +104,17 @@
       "bounds_mm": [
         [
           -26.7,
-          -19.95,
+          -16.75,
           0.0
         ],
         [
           26.7,
-          19.95,
+          16.75,
           8.8
         ]
       ],
-      "volume_mm3": 2203.554167405467,
-      "area_mm2": 3242.98791488348,
+      "volume_mm3": 1692.578167405467,
+      "area_mm2": 2533.86791488348,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -202,6 +202,35 @@
       ],
       "volume_mm3": 224.95760249814896,
       "area_mm2": 336.31192028977136,
+      "shells": 1,
+      "solid_components": 1,
+      "enclosed_cavity_shells": 0,
+      "watertight": true,
+      "winding_consistent": true
+    },
+    "openscad_status": "NoError"
+  },
+  {
+    "configuration": "rework_lid_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "lid"
+    },
+    "metrics": {
+      "bounds_mm": [
+        [
+          -35.0,
+          -91.0,
+          0.0
+        ],
+        [
+          35.0,
+          91.0,
+          3.0
+        ]
+      ],
+      "volume_mm3": 31155.40916869792,
+      "area_mm2": 23473.31996445375,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,

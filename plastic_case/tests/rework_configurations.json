@@ -55,5 +55,12 @@
       "design_revision": "rework",
       "show_part": "button_cap"
     }
+  },
+  {
+    "name": "rework_lid_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "lid"
+    }
   }
 ]
