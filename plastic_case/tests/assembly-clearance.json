@@ -1,0 +1,347 @@
+{
+  "source": "/Users/mariano.fresno/hafele-standing-desk-wifi-openscad/plastic_case/hafele_control_box.scad",
+  "source_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
+  "tolerance_mm3": 0.0001,
+  "boolean_engine": "manifold",
+  "passed": true,
+  "configurations": [
+    {
+      "configuration": "default",
+      "parameters": {},
+      "parts": {
+        "case": {
+          "volume_mm3": 47586.13164884905,
+          "bounds_mm": [
+            [
+              -13.214856676757336,
+              -150.0,
+              0.0
+            ],
+            [
+              64.64723819494247,
+              0.0,
+              35.0
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "lid": {
+          "volume_mm3": 30968.152376440015,
+          "bounds_mm": [
+            [
+              -13.214856674984095,
+              -166.0,
+              33.5
+            ],
+            [
+              56.78514332501591,
+              16.0,
+              36.5
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "oled_retainer": {
+          "volume_mm3": 2603.7736678880174,
+          "bounds_mm": [
+            [
+              36.5776018746202,
+              -143.38,
+              1.8500000014901161
+            ],
+            [
+              61.64551824976498,
+              -89.98,
+              33.3948830349174
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "encoder_retainer": {
+          "volume_mm3": 1341.5277353958916,
+          "bounds_mm": [
+            [
+              36.85971463378194,
+              -49.75,
+              1.8500000014901161
+            ],
+            [
+              54.451709921352936,
+              -20.25,
+              28.252682971642482
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "electronics_carrier": {
+          "volume_mm3": 9779.694966706242,
+          "bounds_mm": [
+            [
+              3.0,
+              -136.0,
+              8.5
+            ],
+            [
+              57.6217782649107,
+              -14.0,
+              10.5
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        }
+      },
+      "pairs": [
+        {
+          "first": "case",
+          "second": "lid",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "case",
+          "second": "oled_retainer",
+          "intersection_volume_mm3": 3.146520915227787e-05,
+          "passed": true
+        },
+        {
+          "first": "case",
+          "second": "encoder_retainer",
+          "intersection_volume_mm3": 1.5148648041455695e-05,
+          "passed": true
+        },
+        {
+          "first": "case",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "lid",
+          "second": "oled_retainer",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "lid",
+          "second": "encoder_retainer",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "lid",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "oled_retainer",
+          "second": "encoder_retainer",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "oled_retainer",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "encoder_retainer",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "configuration": "longer_thicker",
+      "parameters": {
+        "longitud": 170,
+        "ancho_pared": 2,
+        "alto": 38,
+        "profundidad": 76,
+        "dia_botones": 9,
+        "dia_torres_tornillos": 8,
+        "separacion_torres_tornillos": 7,
+        "support_floor_left_x": 7.12701665379,
+        "support_inner_offset": 8.0
+      },
+      "parts": {
+        "case": {
+          "volume_mm3": 71844.221328175,
+          "bounds_mm": [
+            [
+              -14.018704250454903,
+              -170.0,
+              0.0
+            ],
+            [
+              70.64723819494247,
+              0.0,
+              38.0
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "lid": {
+          "volume_mm3": 50296.50168754307,
+          "bounds_mm": [
+            [
+              -14.018704252277466,
+              -186.0,
+              36.0
+            ],
+            [
+              61.981295747722534,
+              16.0,
+              40.0
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "oled_retainer": {
+          "volume_mm3": 2503.858995634783,
+          "bounds_mm": [
+            [
+              42.469172308136535,
+              -163.38,
+              2.350000001490116
+            ],
+            [
+              67.50057987737925,
+              -109.98,
+              31.997105556050187
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "encoder_retainer": {
+          "volume_mm3": 1398.9491701698742,
+          "bounds_mm": [
+            [
+              41.97482793199072,
+              -69.75,
+              2.350000001490116
+            ],
+            [
+              60.049786132706245,
+              -40.25,
+              29.62327344909122
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        },
+        "electronics_carrier": {
+          "volume_mm3": 13125.05514856497,
+          "bounds_mm": [
+            [
+              3.0,
+              -154.5,
+              9.0
+            ],
+            [
+              62.817930687617334,
+              -15.5,
+              11.0
+            ]
+          ],
+          "watertight": true,
+          "winding_consistent": true,
+          "positive_components": 1,
+          "shells": 1
+        }
+      },
+      "pairs": [
+        {
+          "first": "case",
+          "second": "lid",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "case",
+          "second": "oled_retainer",
+          "intersection_volume_mm3": 5.129531079243558e-05,
+          "passed": true
+        },
+        {
+          "first": "case",
+          "second": "encoder_retainer",
+          "intersection_volume_mm3": 2.562661332679757e-05,
+          "passed": true
+        },
+        {
+          "first": "case",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "lid",
+          "second": "oled_retainer",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "lid",
+          "second": "encoder_retainer",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "lid",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "oled_retainer",
+          "second": "encoder_retainer",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "oled_retainer",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        },
+        {
+          "first": "encoder_retainer",
+          "second": "electronics_carrier",
+          "intersection_volume_mm3": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

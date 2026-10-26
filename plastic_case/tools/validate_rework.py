@@ -6,6 +6,7 @@ meshes. It does not compare the new mechanical interfaces against FreeCAD,
 which contains none of those features.
 """
 import argparse
+import hashlib
 import json
 import subprocess
 import tempfile
@@ -56,7 +57,7 @@ def main():
                 check=True, capture_output=True, text=True,
             )
             metrics = mesh_metrics(stl)
-            valid = (metrics["watertight"] and metrics["winding_consistent"]
+            valid = (metrics["watertight"] and metrics["winding_consistent"] and metrics["volume_mm3"] > 0
                      and metrics["solid_components"] == 1)
             if not valid:
                 raise RuntimeError(f"{config['name']} produced an invalid mesh: {metrics}")
@@ -65,6 +66,7 @@ def main():
                 raise RuntimeError(f"{config['name']} OpenSCAD reported a geometry warning:\n{status}")
             results.append({
                 "configuration": config["name"],
+                "scad_sha256":hashlib.sha256(scad.read_bytes()).hexdigest(),
                 "parameters": config["parameters"],
                 "metrics": metrics,
                 "openscad_status": "NoError",

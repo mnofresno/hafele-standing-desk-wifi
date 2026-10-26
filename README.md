@@ -26,7 +26,7 @@ This project details the steps to modify a Hafele® Standing Desk to be controll
 #### Materials
 
 - **Printing Filament:**
-  - Case: Approximately 52 grams and 17.46 meters
+  - Original FreeCAD case: Approximately 52 grams and 17.46 meters; slice the rework STL for its current estimate.
   - Lid: Approximately XX grams and YY meters
 
 - **Electronics:**
@@ -35,6 +35,8 @@ This project details the steps to modify a Hafele® Standing Desk to be controll
   - **Relay Module Shield:** 2 CH
 
 #### Case Design
+
+The improved, native OpenSCAD enclosure is in [`plastic_case/hafele_control_box.scad`](plastic_case/hafele_control_box.scad). Use the [current rework STL set](plastic_case/print_candidate/README.md) for its pockets, retainers, M3 insert seats, carrier and cable/USB openings. These are fit-test candidates; [measurements and reproduction](plastic_case/README_OpenSCAD.md) describe the remaining physical checks.
 
 The case was parametrically designed using FreeCAD 0.0.19 with adjustable parameters:
 
@@ -55,8 +57,8 @@ The case was parametrically designed using FreeCAD 0.0.19 with adjustable parame
 
 The following files are included in the `plastic_case` directory:
 
-- `control_box.stl`: STL file for the main control box.
-- `control_box_lid.stl`: STL file for the lid of the control box.
+- `control_box.stl`: Historical FreeCAD case export, without the OpenSCAD rework features.
+- `control_box_lid.stl`: Historical FreeCAD lid export, without the OpenSCAD rework features.
 - `hafele_control_box_with_lid.FCStd`: FreeCAD source file for the control box and lid.
 - `control_box_render.png`: Rendered image of the control box.
 - `control_box_lid_render.png`: Rendered image of the control box lid.

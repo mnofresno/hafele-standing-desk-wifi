@@ -11,6 +11,9 @@ def test_inventory_has_all_objects_and_parameters():
     sheet=next(o for o in d['objects'] if o['type']=='Spreadsheet::Sheet')
     aliases={c['alias'] for c in sheet['cells'] if c['alias']}
     assert {'longitud','alto','profundidad','ancho_pared','dia_botones','dia_interno_torres_tornillos'} <= aliases
+    tower_sketch=next(o for o in d['objects'] if o['name']=='Sketch003')
+    assert {g['construction'] for g in tower_sketch['geometry']} == {True,False}
+    assert 'dependencies' in tower_sketch and 'dependents' in tower_sketch
 def test_model_has_case_lid_and_assembly_selector():
     s=(ROOT/'hafele_control_box.scad').read_text()
     for module in ('case_body','case_lid','assembly','screw_tower','lid_fastener_holes'):
@@ -90,13 +93,3 @@ def test_assembled_preview_renders_with_registered_rework_lid(tmp_path):
     result=subprocess.run(command,capture_output=True,text=True,check=True)
     assert 'Status:     NoError' in result.stdout+result.stderr
     assert output.is_file() and output.stat().st_size>0
-
-def test_encoder_retainer_clears_electronics_carrier(tmp_path):
-    openscad=shutil.which('openscad')
-    if not openscad:
-        pytest.skip('OpenSCAD CLI is required for the CSG intersection check')
-    diagnostic=ROOT/'tests'/'encoder_carrier_intersection.scad'
-    output=tmp_path/'intersection.stl'
-    result=subprocess.run([openscad,'-o',str(output),'-D','show_part="none"',str(diagnostic)],
-                          capture_output=True,text=True)
-    assert 'Current top level object is empty.' in result.stdout+result.stderr
