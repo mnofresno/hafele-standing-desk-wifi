@@ -23,6 +23,8 @@
           "volume_mm3": 42069.51124415032,
           "area_mm2": 56628.196205974484,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
@@ -39,51 +41,65 @@
               35.0
             ]
           ],
-          "volume_mm3": 42093.43787050092,
-          "area_mm2": 56617.94183940909,
+          "volume_mm3": 42076.2397064442,
+          "area_mm2": 56626.69500766446,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 23.92662635059969,
-          "symmetric_difference_voxel_mm3_estimate": 0.0,
-          "voxel_pitch_mm": 1.0,
+          "volume_abs_delta_mm3": 6.7284622938750545,
           "surface_distance_a_to_b_mm": {
-            "p95": 0.02000000000000425,
-            "max_sampled": 0.04374020557908167,
+            "p95": 0.0026552827510947503,
+            "max_sampled": 0.04364195618976569,
             "max_point_mm": [
               6.081301212310791,
               -141.0,
               1.5
             ],
             "closest_point_mm": [
-              6.038719460537291,
-              -141.01000000000002,
+              6.038242167237018,
+              -141.0071090771134,
               1.5
             ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 0.020000000000010232,
-            "max_sampled": 0.0330710657563662,
+            "p95": 0.0014551516212757958,
+            "max_sampled": 0.03406166976552072,
             "max_point_mm": [
-              6.048230146554425,
-              -141.0676053756855,
+              6.04723954254527,
+              -141.0616053756855,
               12.166666666666666
             ],
             "closest_point_mm": [
               6.081301212310791,
-              -141.0676053756854,
-              12.166666666656965
+              -141.0616053756854,
+              12.166666666666668
             ]
           },
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
-          "watertight_b": true
+          "watertight_b": true,
+          "topology_passed": true,
+          "surface_sampling": {
+            "random_points_per_direction": 10000,
+            "total_points_a": 22077,
+            "total_points_b": 20556,
+            "certified_hausdorff_upper_bound": false
+          },
+          "symmetric_difference_method": "manifold3d_tessellated_mesh_boolean",
+          "symmetric_difference_mesh_mm3": 12.11504368711212,
+          "a_minus_b_mesh_mm3": 2.686118133541337,
+          "b_minus_a_mesh_mm3": 9.428925553570783,
+          "symmetric_difference_limitations": "Finite-precision boolean of tessellated inputs, not an exact BRep proof."
         },
-        "within_0_05_mm": true
+        "within_0_05_mm": true,
+        "distance_tolerance_mm": 0.05,
+        "passed": true
       },
       {
         "part": "lid",
@@ -103,6 +119,8 @@
           "volume_mm3": 31103.082523017143,
           "area_mm2": 23459.742060445285,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
@@ -122,14 +140,14 @@
           "volume_mm3": 31103.13898781719,
           "area_mm2": 23459.77310730718,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0,
           "volume_abs_delta_mm3": 0.05646480004725163,
-          "symmetric_difference_voxel_mm3_estimate": 0.0,
-          "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
             "p95": 0.0003750664213107415,
             "max_sampled": 0.0009868379352887676,
@@ -161,11 +179,460 @@
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
-          "watertight_b": true
+          "watertight_b": true,
+          "topology_passed": true,
+          "surface_sampling": {
+            "random_points_per_direction": 10000,
+            "total_points_a": 14664,
+            "total_points_b": 13572,
+            "certified_hausdorff_upper_bound": false
+          },
+          "symmetric_difference_method": "manifold3d_tessellated_mesh_boolean",
+          "symmetric_difference_mesh_mm3": 0.07649938672380092,
+          "a_minus_b_mesh_mm3": 0.01001610957322896,
+          "b_minus_a_mesh_mm3": 0.06648327715057196,
+          "symmetric_difference_limitations": "Finite-precision boolean of tessellated inputs, not an exact BRep proof."
         },
-        "within_0_05_mm": true
+        "within_0_05_mm": true,
+        "distance_tolerance_mm": 0.05,
+        "passed": true
       }
-    ]
+    ],
+    "passed": true,
+    "inputs_sha256": {
+      "freecad": "d802f398143987c46d609d4f0b25f8c2594be70b00e12cc8c2fa8a9c43ae7539",
+      "openscad": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00"
+    },
+    "source_validation": {
+      "classification": "source_snapshot_only",
+      "parameterized": false,
+      "parameter_equivalence_eligible": false,
+      "comparison_allowed": true,
+      "problems": [
+        {
+          "object": "Body",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Part",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Sketch006",
+          "state": [
+            "Touched",
+            "Invalid"
+          ]
+        },
+        {
+          "object": "Sketch007",
+          "state": [
+            "Touched",
+            "Invalid"
+          ]
+        },
+        {
+          "object": "Pad004",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Pad005",
+          "state": [
+            "Touched"
+          ]
+        }
+      ],
+      "object_states": [
+        {
+          "object": "Sketch",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Body",
+          "type": "PartDesign::Body",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Origin001",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Thickness",
+          "type": "PartDesign::Thickness",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Spreadsheet001",
+          "type": "Spreadsheet::Sheet",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch001",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "ShapeBinder",
+          "type": "PartDesign::ShapeBinder",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pocket",
+          "type": "PartDesign::Pocket",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Body001",
+          "type": "PartDesign::Body",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Part",
+          "type": "App::Part",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Origin002",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch003",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad002",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch006",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Touched",
+            "Invalid"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 1,
+            "state": [
+              "Touched",
+              "Invalid"
+            ]
+          }
+        },
+        {
+          "object": "Sketch007",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Touched",
+            "Invalid"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 1,
+            "state": [
+              "Touched",
+              "Invalid"
+            ]
+          }
+        },
+        {
+          "object": "Pad004",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Pad005",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Touched"
+          ]
+        },
+        {
+          "object": "Sketch008",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch009",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch010",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch011",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad006",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad007",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad008",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pocket001",
+          "type": "PartDesign::Pocket",
+          "state": [
+            "Up-to-date"
+          ]
+        }
+      ]
+    }
   },
   {
     "configuration": "longer_and_thicker_solver_points",
@@ -197,9 +664,11 @@
               38.0
             ]
           ],
-          "volume_mm3": 68138.20239976946,
+          "volume_mm3": 68138.20240052057,
           "area_mm2": 68706.93454455587,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
@@ -216,51 +685,65 @@
               38.0
             ]
           ],
-          "volume_mm3": 68164.90887011339,
-          "area_mm2": 68697.9337244136,
+          "volume_mm3": 68145.4547923717,
+          "area_mm2": 68706.61610353488,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0005020499229431152,
-          "volume_abs_delta_mm3": 26.706470343924593,
-          "symmetric_difference_voxel_mm3_estimate": 0.0,
-          "voxel_pitch_mm": 1.0,
+          "volume_abs_delta_mm3": 7.2523918511287775,
           "surface_distance_a_to_b_mm": {
-            "p95": 0.0200000000000008,
-            "max_sampled": 0.020000341449168412,
+            "p95": 0.0025621409968964366,
+            "max_sampled": 0.004556720908266182,
             "max_point_mm": [
-              68.62803649902344,
-              -168.0,
-              5.338906764984131
+              54.40301513671875,
+              -156.9158935546875,
+              2.0
             ],
             "closest_point_mm": [
-              68.62792038246657,
-              -167.98,
-              5.3388935351641775
+              54.40390410886808,
+              -156.92036271948123,
+              2.0
             ]
           },
           "surface_distance_b_to_a_mm": {
-            "p95": 0.020000000000010232,
-            "max_sampled": 0.020000000000036877,
+            "p95": 0.0014835240090818422,
+            "max_sampled": 0.004523735169515587,
             "max_point_mm": [
-              21.584291441936102,
-              -0.02,
-              37.94238681650908
+              7.12701665610075,
+              -159.99547626483186,
+              2.0
             ],
             "closest_point_mm": [
-              21.58429144193642,
-              3.6875851885724144e-14,
-              37.94238681650912
+              7.127016544342041,
+              -160.0,
+              2.0
             ]
           },
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
-          "watertight_b": true
+          "watertight_b": true,
+          "topology_passed": true,
+          "surface_sampling": {
+            "random_points_per_direction": 10000,
+            "total_points_a": 21936,
+            "total_points_b": 20478,
+            "certified_hausdorff_upper_bound": false
+          },
+          "symmetric_difference_method": "manifold3d_tessellated_mesh_boolean",
+          "symmetric_difference_mesh_mm3": 13.3298516740518,
+          "a_minus_b_mesh_mm3": 3.0299706567893736,
+          "b_minus_a_mesh_mm3": 10.299881017262427,
+          "symmetric_difference_limitations": "Finite-precision boolean of tessellated inputs, not an exact BRep proof."
         },
-        "within_0_05_mm": true
+        "within_0_05_mm": true,
+        "distance_tolerance_mm": 0.05,
+        "passed": true
       },
       {
         "part": "lid",
@@ -280,6 +763,8 @@
           "volume_mm3": 50516.77667514415,
           "area_mm2": 29028.567408552444,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
@@ -299,14 +784,14 @@
           "volume_mm3": 50516.851983756256,
           "area_mm2": 29028.59374632499,
           "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
           "watertight": true,
           "winding_consistent": true
         },
         "comparison": {
           "bbox_max_abs_delta_mm": 0.0,
           "volume_abs_delta_mm3": 0.07530861210398143,
-          "symmetric_difference_voxel_mm3_estimate": 0.0,
-          "voxel_pitch_mm": 1.0,
           "surface_distance_a_to_b_mm": {
             "p95": 0.0003752668728956381,
             "max_sampled": 0.0010092989438891435,
@@ -338,10 +823,1018 @@
           "components_a": 1,
           "components_b": 1,
           "watertight_a": true,
-          "watertight_b": true
+          "watertight_b": true,
+          "topology_passed": true,
+          "surface_sampling": {
+            "random_points_per_direction": 10000,
+            "total_points_a": 14664,
+            "total_points_b": 13572,
+            "certified_hausdorff_upper_bound": false
+          },
+          "symmetric_difference_method": "manifold3d_tessellated_mesh_boolean",
+          "symmetric_difference_mesh_mm3": 0.1020055074047832,
+          "a_minus_b_mesh_mm3": 0.013338068210146048,
+          "b_minus_a_mesh_mm3": 0.08866743919463715,
+          "symmetric_difference_limitations": "Finite-precision boolean of tessellated inputs, not an exact BRep proof."
         },
-        "within_0_05_mm": true
+        "within_0_05_mm": true,
+        "distance_tolerance_mm": 0.05,
+        "passed": true
       }
-    ]
+    ],
+    "passed": true,
+    "inputs_sha256": {
+      "freecad": "d802f398143987c46d609d4f0b25f8c2594be70b00e12cc8c2fa8a9c43ae7539",
+      "openscad": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00"
+    },
+    "source_validation": {
+      "classification": "recomputed_valid",
+      "parameterized": true,
+      "parameter_equivalence_eligible": true,
+      "comparison_allowed": true,
+      "problems": [],
+      "object_states": [
+        {
+          "object": "Sketch",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Body",
+          "type": "PartDesign::Body",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin001",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Thickness",
+          "type": "PartDesign::Thickness",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Spreadsheet001",
+          "type": "Spreadsheet::Sheet",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch001",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "ShapeBinder",
+          "type": "PartDesign::ShapeBinder",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pocket",
+          "type": "PartDesign::Pocket",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Body001",
+          "type": "PartDesign::Body",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Part",
+          "type": "App::Part",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin002",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch003",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad002",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch006",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch007",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad004",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad005",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch008",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch009",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch010",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch011",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad006",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad007",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad008",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pocket001",
+          "type": "PartDesign::Pocket",
+          "state": [
+            "Up-to-date"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "configuration": "fractional_angle_source_edge_remap",
+    "parameters": {
+      "design_revision": "baseline",
+      "longitud": 170,
+      "ancho_pared": 2,
+      "alto": 38,
+      "profundidad": 76,
+      "dia_botones": 9,
+      "dia_torres_tornillos": 8,
+      "separacion_torres_tornillos": 7,
+      "support_floor_left_x": 56.26881262189947,
+      "support_inner_offset": 8.0,
+      "angulo_del_panel": 78.5
+    },
+    "parts": [
+      {
+        "part": "case",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -11.81635856628418,
+              -170.0,
+              0.0
+            ],
+            [
+              70.79509735107422,
+              3.7969627442180354e-14,
+              38.0
+            ]
+          ],
+          "volume_mm3": 70498.86054467969,
+          "area_mm2": 70756.61163778327,
+          "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -11.816358730196953,
+              -170.0,
+              0.0
+            ],
+            [
+              70.79498608410358,
+              0.0,
+              38.0
+            ]
+          ],
+          "volume_mm3": 70508.2888696417,
+          "area_mm2": 70754.35013924772,
+          "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 0.00011126697063446045,
+          "volume_abs_delta_mm3": 9.42832496202027,
+          "surface_distance_a_to_b_mm": {
+            "p95": 0.0021251256695043455,
+            "max_sampled": 0.004556716279613126,
+            "max_point_mm": [
+              56.85389709472656,
+              -161.0841064453125,
+              2.0
+            ],
+            "closest_point_mm": [
+              56.85478606597289,
+              -161.07963728505848,
+              2.0
+            ]
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 0.001427073360111399,
+            "max_sampled": 0.00449585891512635,
+            "max_point_mm": [
+              55.50819191289322,
+              -12.181754447109913,
+              13.294254441724364
+            ],
+            "closest_point_mm": [
+              55.50441523319461,
+              -12.18419359405829,
+              13.294254496972977
+            ]
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true,
+          "topology_passed": true,
+          "surface_sampling": {
+            "random_points_per_direction": 10000,
+            "total_points_a": 21771,
+            "total_points_b": 20451,
+            "certified_hausdorff_upper_bound": false
+          },
+          "symmetric_difference_method": "manifold3d_tessellated_mesh_boolean",
+          "symmetric_difference_mesh_mm3": 15.094727895460284,
+          "a_minus_b_mesh_mm3": 2.822389468254793,
+          "b_minus_a_mesh_mm3": 12.272338427205492,
+          "symmetric_difference_limitations": "Finite-precision boolean of tessellated inputs, not an exact BRep proof."
+        },
+        "within_0_05_mm": true,
+        "distance_tolerance_mm": 0.05,
+        "passed": true
+      },
+      {
+        "part": "lid",
+        "freecad": {
+          "bounds_mm": [
+            [
+              -38.0,
+              -101.0,
+              0.0
+            ],
+            [
+              38.0,
+              101.0,
+              4.0
+            ]
+          ],
+          "volume_mm3": 50516.77667578979,
+          "area_mm2": 29028.56740855346,
+          "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "openscad": {
+          "bounds_mm": [
+            [
+              -38.0,
+              -101.0,
+              0.0
+            ],
+            [
+              38.0,
+              101.0,
+              4.0
+            ]
+          ],
+          "volume_mm3": 50516.851983756256,
+          "area_mm2": 29028.593746324997,
+          "components": 1,
+          "shells": 1,
+          "zero_volume_shells": 0,
+          "watertight": true,
+          "winding_consistent": true
+        },
+        "comparison": {
+          "bbox_max_abs_delta_mm": 0.0,
+          "volume_abs_delta_mm3": 0.07530796646460658,
+          "surface_distance_a_to_b_mm": {
+            "p95": 0.00037516311008811183,
+            "max_sampled": 0.0010093162604355422,
+            "max_point_mm": [
+              20.73357791762028,
+              75.36171651462037,
+              2.162491530584218
+            ],
+            "closest_point_mm": [
+              20.732841253943796,
+              75.36102655379443,
+              2.162491530584218
+            ]
+          },
+          "surface_distance_b_to_a_mm": {
+            "p95": 0.00047910635814982244,
+            "max_sampled": 0.0009995456160538652,
+            "max_point_mm": [
+              -0.0494103254024751,
+              -91.00161752657309,
+              1.9853016483258183
+            ],
+            "closest_point_mm": [
+              -0.04941032540247509,
+              -91.00061798095703,
+              1.9853016483258183
+            ]
+          },
+          "components_a": 1,
+          "components_b": 1,
+          "watertight_a": true,
+          "watertight_b": true,
+          "topology_passed": true,
+          "surface_sampling": {
+            "random_points_per_direction": 10000,
+            "total_points_a": 14664,
+            "total_points_b": 13572,
+            "certified_hausdorff_upper_bound": false
+          },
+          "symmetric_difference_method": "manifold3d_tessellated_mesh_boolean",
+          "symmetric_difference_mesh_mm3": 0.10201188254063709,
+          "a_minus_b_mesh_mm3": 0.013340339298451909,
+          "b_minus_a_mesh_mm3": 0.08867154324218518,
+          "symmetric_difference_limitations": "Finite-precision boolean of tessellated inputs, not an exact BRep proof."
+        },
+        "within_0_05_mm": true,
+        "distance_tolerance_mm": 0.05,
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "inputs_sha256": {
+      "freecad": "d802f398143987c46d609d4f0b25f8c2594be70b00e12cc8c2fa8a9c43ae7539",
+      "openscad": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00"
+    },
+    "source_validation": {
+      "classification": "recomputed_valid",
+      "parameterized": true,
+      "parameter_equivalence_eligible": true,
+      "comparison_allowed": true,
+      "problems": [],
+      "object_states": [
+        {
+          "object": "Sketch",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Body",
+          "type": "PartDesign::Body",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin001",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis001",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane001",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Thickness",
+          "type": "PartDesign::Thickness",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Spreadsheet001",
+          "type": "Spreadsheet::Sheet",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch001",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "ShapeBinder",
+          "type": "PartDesign::ShapeBinder",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pocket",
+          "type": "PartDesign::Pocket",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Body001",
+          "type": "PartDesign::Body",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Part",
+          "type": "App::Part",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Origin002",
+          "type": "App::Origin",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "X_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Y_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Z_Axis002",
+          "type": "App::Line",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XY_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "XZ_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "YZ_Plane002",
+          "type": "App::Plane",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch003",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad002",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch006",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch007",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad004",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad005",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Sketch008",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch009",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch010",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Sketch011",
+          "type": "Sketcher::SketchObject",
+          "state": [
+            "Up-to-date"
+          ],
+          "solver": {
+            "fully_constrained": true,
+            "degrees_of_freedom": 0,
+            "state": [
+              "Up-to-date"
+            ]
+          }
+        },
+        {
+          "object": "Pad006",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad007",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pad008",
+          "type": "PartDesign::Pad",
+          "state": [
+            "Up-to-date"
+          ]
+        },
+        {
+          "object": "Pocket001",
+          "type": "PartDesign::Pocket",
+          "state": [
+            "Up-to-date"
+          ]
+        }
+      ]
+    }
   }
 ]

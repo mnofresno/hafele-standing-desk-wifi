@@ -88,7 +88,7 @@ module cap() {
             translate([0, side * bolt_offset, -0.01])
                 cylinder(d=m3_clearance_d, h=cap_thickness + 0.02);
             translate([0, side * bolt_offset,
-                       cap_thickness / 2 - cap_screw_head_h])
+                       cap_thickness - cap_screw_head_h])
                 cylinder(d=cap_screw_head_d, h=cap_screw_head_h + 0.02);
         }
     }

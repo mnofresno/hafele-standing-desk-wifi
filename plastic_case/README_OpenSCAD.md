@@ -1,6 +1,8 @@
 # Häfele control box: OpenSCAD reconstruction
 
-This folder contains an editable OpenSCAD CSG reconstruction of the FreeCAD case and lid, plus a hardware rework revision. The FreeCAD document remains the geometric reference. The `baseline` reconstruction matches the default case/lid within the measured sampled 0.05 mm surface threshold, but still has a residual on a longer valid configuration and does not establish general parameter equivalence. The `rework` revision intentionally changes hardware interfaces and is still a fit-test prototype. Do not treat either OpenSCAD revision as physically validated for fabrication yet.
+This folder contains the native OpenSCAD reconstruction (`baseline`) and the hardware-retention prototype (`rework`). The measured baseline checks pass the sampled 0.05 mm threshold for the saved default geometry and two recomputed variants. The default FreeCAD support sketches are invalid, so its saved solid is a snapshot reference, not proof of a valid recompute. General parametric equivalence and physical component fit remain unproven.
+
+For the improved enclosure use the eight STL files in [print_candidate](print_candidate/README.md). `control_box.stl` and `control_box_lid.stl` are the historical FreeCAD exports and do not contain the rework features. [The post-merge audit](CAD_AUDIT.md) records the corrected assembly and validation defects.
 
 ## Source selection
 
@@ -32,11 +34,11 @@ All spreadsheet aliases are exposed in OpenSCAD Customizer. The source labels ar
 | B18 | `separacion_torres_tornillos` | 6 | `separacion_torres_tornillos` | Tower spacing and near support plane offset; underconstrained support-profile points remain explicit extra parameters |
 | B19 | `dia_interno_torres_tornillos` | 4.25 | `dia_interno_torres_tornillos` | Tower bore diameter |
 
-The complete 45-object inventory, sketch geometry, constraints, object properties, expressions, and final-body measurements are in `freecad_model_inventory.json`.
+The 45-object inventory in `freecad_model_inventory.json` includes source SHA256, dependencies/dependents, object states and placements, construction flags, sketch/constraint positions, expressions, spreadsheet contents, and final BRep measurements. Construction geometry is explicitly distinguished from solid-profile geometry.
 
 ## OpenSCAD use
 
-Open `hafele_control_box.scad` in OpenSCAD. In Customizer, choose `design_revision="baseline"` to view/export the FreeCAD reconstruction or `design_revision="rework"` for the hardware-retention prototype. The rework mode is the default. Choose `case`, `lid`, `assembly`, `oled_retainer`, or `encoder_retainer` with `show_part`. All dimensions are millimetres. CLI exports:
+Open `hafele_control_box.scad` in OpenSCAD. In Customizer, choose `design_revision="baseline"` to view/export the FreeCAD reconstruction or `design_revision="rework"` for the hardware-retention prototype. The rework mode is the default. Choose `case`, `lid`, `assembly`, `oled_retainer`, `encoder_retainer`, `electronics_carrier`, or `button_cap` with `show_part`. All dimensions are millimetres. CLI exports:
 
 ```sh
 openscad -o /tmp/control-box-case.stl -D 'show_part="case"' plastic_case/hafele_control_box.scad
@@ -49,7 +51,7 @@ openscad -o /tmp/control-box-baseline.stl -D 'design_revision="baseline"' -D 'sh
 
 ## Extraction and comparison
 
-FreeCAD 1.0.2, OpenSCAD CLI, Python with `trimesh`, `numpy`, and `rtree` are required. On this macOS install:
+FreeCAD 1.0.2 and OpenSCAD CLI are required. Install the tested Python dependencies with `python3 -m pip install -r plastic_case/tools/requirements-cad.txt` in a Python 3.9 environment. FreeCAD exports use its separate bundled Python. On this macOS install:
 
 ```sh
 export PYTHONPATH=/Applications/FreeCAD.app/Contents/Resources/lib
@@ -62,43 +64,51 @@ python3 plastic_case/tools/validate_geometry.py \
   --configs plastic_case/tests/configurations.json \
   --freecad-python "$FC_PY" \
   --out plastic_case/tests/geometry-validation.json
-python3 -m pytest -q plastic_case/tests/test_model.py
+python3 -m pytest -q plastic_case/tests
 python3 plastic_case/tools/validate_rework.py \
   --scad plastic_case/hafele_control_box.scad \
   --configs plastic_case/tests/rework_configurations.json \
-  --out /tmp/hafele-rework-validation.json
-python3 plastic_case/tools/validate_clearance.py
+  --out plastic_case/tests/rework-validation.json
+python3 plastic_case/tools/validate_clearance.py \
+  --configs plastic_case/tests/assembly_configurations.json \
+  --out plastic_case/tests/assembly-clearance.json
+python3 plastic_case/tools/build_print_set.py
+python3 plastic_case/tools/build_print_set.py --verify
 ```
 
-`export_freecad.py` exports final body tips as STL and STEP and writes an inventory. The validator compares bounds, volume, surface area, connected components, watertightness, sampled bidirectional surface distances, and a 1 mm shared-grid voxel symmetric-difference estimate. Sampled maximum distance and voxel difference are estimates; increase sample count and refine mesh tessellation for a formal tolerance certification.
+`export_freecad.py` exports final body tips as fine STL and STEP plus the inventory. `validate_geometry.py` fails with a nonzero exit code for failed topology, excessive sampled distance, tool errors, or an invalid parameterized FreeCAD recompute. A saved default with invalid sketches is classified `source_snapshot_only`; variants require a valid recompute. Reports include object/solver states.
 
+The comparator measures bounds, volume, surface area, connected solids, watertightness/winding, and sampled bidirectional surface distances. It computes symmetric differences with a finite-precision mesh Boolean using `manifold3d`. If unavailable, a clearly labeled shared-lattice occupancy estimate is used instead. Neither method proves exact BRep identity.
 ## Baseline geometry measurements
 
-FreeCAD's exact BRep metrics and a fine STL inventory are in `freecad_model_inventory.json`. The validator exports FreeCAD with 0.01 mm linear tessellation, samples 10,000 random surface points plus up to 50,000 mesh vertices and face centers in each direction, and estimates symmetric difference on a shared 1 mm voxel grid. The surface maxima are measured samples, not a mathematical upper bound.
+FreeCAD's exact BRep metrics and a fine STL inventory are in `freecad_model_inventory.json`. The validator exports FreeCAD with 0.01 mm linear tessellation, samples 10,000 random surface points plus up to 50,000 mesh vertices and face centers in each direction, and computes symmetric difference between the two tessellated meshes. The surface maxima are measured samples, not a mathematical upper bound.
 
-| Configuration | Part | BBox max delta (mm) | Volume delta (mm³) | Sampled surface max A→B / B→A (mm) | Components / watertight | 0.05 mm check |
-|---|---|---:|---:|---:|---|---|
-| Default | Case | 0.00051 | 23.93 | 0.04374 / 0.03307 | 1 / yes | Pass |
-| Default | Lid | 0.00000 | 0.056 | 0.00099 / 0.00103 | 1 / yes | Pass |
-| Longer, thicker, support sketch coordinates transcribed | Case | 0.00051 | 26.71 | 0.020 / 0.020 | 1 / yes | Pass |
-| Longer, thicker | Lid | 0.00000 | 0.075 | 0.00101 / 0.00103 | 1 / yes | Pass |
+| Configuration | Part | BBox max delta (mm) | Volume delta (mm³) | Mesh symmetric difference (mm³) | Sampled surface max A→B / B→A (mm) | 0.05 mm check |
+|---|---|---:|---:|---:|---:|---|
+| Default saved snapshot | case | 0.000502 | 6.7285 | 12.1150 | 0.043642 / 0.034062 | Pass |
+| Default saved snapshot | lid | 0.000000 | 0.0565 | 0.0765 | 0.000987 / 0.001026 | Pass |
+| Longer / thicker | case | 0.000502 | 7.2524 | 13.3299 | 0.004557 / 0.004524 | Pass |
+| Longer / thicker | lid | 0.000000 | 0.0753 | 0.1020 | 0.001009 / 0.001026 | Pass |
+| 78.5° / source edge remap | case | 0.000111 | 9.4283 | 15.0947 | 0.004557 / 0.004496 | Pass |
+| 78.5° / source edge remap | lid | 0.000000 | 0.0753 | 0.1020 | 0.001009 / 0.001000 | Pass |
 
-The longer configuration explicitly sets `support_floor_left_x=7.12701665379` and `support_inner_offset=8` from the recomputed FreeCAD sketches. Its prior 0.127 mm residual came from the four tower profiles: Sketch003 uses instance-specific arc/chord boundaries. The OpenSCAD towers now reproduce those chords from `dia_torres_tornillos` and `ancho_pared`; the measured longer-configuration maximum is now 0.020 mm in both sample directions. These are finite tessellated surface samples and the 1 mm voxel symmetric-difference estimate is coarse; they support the stated checks but are not a mathematical proof of identity.
+The longer configuration explicitly sets `support_floor_left_x=7.12701665379` and `support_inner_offset=8` from the recomputed FreeCAD sketches. Its prior 0.127 mm residual came from the four tower profiles: Sketch003 uses instance-specific arc/chord boundaries. The OpenSCAD towers now reproduce those chords from `dia_torres_tornillos` and `ancho_pared`; the measured longer-configuration maximum is below 0.0046 mm in both sample directions after restoring exact end-skin positions and reducing the internal CSG overlap to 0.001 mm. The finite surface samples and mesh Boolean support the stated checks but are not a certified Hausdorff bound or a mathematical proof of identity.
 
-The earlier short-boundary probe (`alto=30`, `longitud=120`, `ancho_pared=1.2`, `profundidad=62`, `angulo_del_panel=72`, `radio_curvaturas=4`) is excluded from the valid comparison matrix. FreeCAD reported Sketch006 `Invalid`, 1 DoF and Sketch007 `Invalid`, 4 DoF after recompute, retaining stale 33.5 mm support geometry above the 30 mm case. Raising `alto` to 33.5 made both sketches `Up-to-date` with 0 DoF, but that point is not included until its geometry comparison is run. The default source also reports Sketch007 invalid with 1 DoF. Do not claim general parametric equivalence. The original FreeCAD document and tracked STL exports remain unchanged.
+The earlier short-boundary probe (`alto=30`, `longitud=120`, `ancho_pared=1.2`, `profundidad=62`, `angulo_del_panel=72`, `radio_curvaturas=4`) is excluded from the valid comparison matrix. FreeCAD reported Sketch006 `Invalid`, 1 DoF and Sketch007 `Invalid`, 4 DoF after recompute, retaining stale 33.5 mm support geometry above the 30 mm case. Raising `alto` to 33.5 made both sketches `Up-to-date` with 0 DoF, but that point is not included until its geometry comparison is run. The default source reports invalid support sketches after recompute; their states and degrees of freedom are captured in the report. Its comparison is therefore classified as a saved-solid snapshot. Do not claim general parametric equivalence. The original FreeCAD document and tracked STL exports remain unchanged.
 
 ## Parameter configurations and known gaps
 
-`tests/configurations.json` compares the default and a longer/thicker configuration. This tests two valid points, not full parametric equivalence. The additional support coordinates are exposed parameters rather than formulas of spreadsheet values. Short configurations that leave FreeCAD support sketches invalid are excluded. The original FreeCAD document and its tracked exports remain unchanged.
+`tests/configurations.json` compares the default snapshot, a valid longer/thicker recompute, and a valid 78.5° recompute with explicitly transcribed support coordinates. The angle case changes `Pad002.Edge156` from a near-left tower edge to a far-right tower edge in FreeCAD. `Sketch006` therefore moves `support_floor_left_x` from 7.12701665379 to 56.26881262189947 mm even though it remains fully constrained. The model reproduces that source snapshot using the explicit coordinate; it does not encode an edge-number jump as a design formula. `support_inner_offset` remains 8 mm. These two support coordinates are exposed parameters, so arbitrary spreadsheet variations still need a source solve and comparison. See `CAD_AUDIT.md` for the reference chain.
 
 ## Hardware fit-test coupons
 
 Parametric coupon models for the OLED pocket, EC11-family encoder body/knob, panel pushbutton, USB opening, motor cable boot, Dupont connector headroom, PCB outline/edge rails/solder clearance, and M3 brass inserts are in `plastic_case/tests/fit_test_coupons.scad`. Printing instructions, parameter ranges, and component-retention decisions are in `plastic_case/tests/FIT_TESTS.md`. Render one coupon family at a time with `-D 'test_set="m3_insert"'` (or another selector). A live read of `/info` reports ESP32 chip revision 1, 4 MB flash, no PSRAM and 240 MHz; the USB enumerates as a CP2102 bridge. Neither identifies the physical PCB outline, so the coupons keep ESP32/relay/supply profiles adjustable. Rework mode includes blind M3 insert seats; print the insert coupon and tune the pilot/boss dimensions before printing the enclosure.
 
-The hardware rework sequence is tracked in `plastic_case/REWORK_PLAN.md`, and photo/firmware identification evidence is in `plastic_case/HARDWARE_EVIDENCE.md`. In `rework` mode, the model adds a candidate OLED pocket and removable retainer, an EC11-family encoder pocket/retainer, blind M3 insert towers, four M3 carrier mounts, a removable 10 mm grid carrier, configurable USB/motor-cable openings and two photo-derived relay-indicator windows (enabled by default), and an adjustable optional button cap. Rework centers the lid plate on the case top and moves its four panel holes to the case tower coordinates; baseline retains the FreeCAD lid geometry. The standalone two-piece motor-cable clamp is in `tests/motor_cable_clamp.scad`; it mounts to the carrier grid and has a separate calibration STL pair. The cap is a separate fit candidate and does not replace the metal panel button. The grid carrier is a generic mounting surface, not a dimensioned cradle for all three boards. ESP32 PCB revision, relay/perfboard outline, supply outline, solder height and connector keep-outs still need physical checks. The USB bridge is CP2102; it does not identify the controller PCB. An eight-part print candidate set (six enclosure pieces plus a calibration clamp pair) is in `plastic_case/print_candidate/`; the folder also has assembled and exploded previews. See its README before printing. It is a prototype and does not certify physical fit.
+The hardware rework sequence is tracked in `plastic_case/REWORK_PLAN.md`, and photo/firmware identification evidence is in `plastic_case/HARDWARE_EVIDENCE.md`. In `rework` mode, the model adds a candidate OLED pocket and removable retainer, an EC11-family encoder pocket/retainer, blind M3 insert towers, four M3 carrier mounts, a removable 10 mm grid carrier, configurable USB/motor-cable openings and two photo-derived relay-indicator windows (enabled by default), and an adjustable optional button cap. Rework installs the lid with its locating lip inside the opening. The lip follows the angled walls with 0.25 mm normal clearance and its holes match the tower centers; baseline standalone geometry retains the FreeCAD lid. The standalone two-piece motor-cable clamp is in `tests/motor_cable_clamp.scad`; it mounts to the carrier grid and has a separate calibration STL pair. The cap is a separate fit candidate and does not replace the metal panel button. The grid carrier is a generic mounting surface, not a dimensioned cradle for all three boards. ESP32 PCB revision, relay/perfboard outline, supply outline, solder height and connector keep-outs still need physical checks. The USB bridge is CP2102; it does not identify the controller PCB. An eight-part print candidate set (six enclosure pieces plus a calibration clamp pair) is in `plastic_case/print_candidate/`; the folder also has assembled and exploded previews. See its README before printing. It is a prototype and does not certify physical fit.
 
 `validate_rework.py` reports mesh bounds, volume and area, watertightness, winding, connected positive-volume solids, and enclosed cavity shells across the candidate configuration matrix. The blind M3 insert bores create enclosed voids that STL represents as separate inward-wound shells; these are reported separately from printable solid components. This mesh check verifies CSG validity only, not fit to unmeasured hardware.
 
-`carrier_encoder_clearance` is the radial relief around the encoder retainer footprint in the removable grid carrier. `python3 plastic_case/tools/validate_clearance.py` exports the exact CSG intersection and requires it to be empty; the default result is 0 mm³. The relief resolves the previously measured 94.42 mm³ collision while retaining the carrier grid elsewhere. This is an internal geometry check; physical clearance still depends on printed tolerances and actual hardware.
+`carrier_encoder_clearance` now clears both control retainers, their case bosses and configurable screw-head envelopes. Each relief opens to the carrier edge so it cannot leave disconnected islands. `validate_clearance.py` first exports all five installed parts as positive controls, rejecting empty/missing/invalid meshes, then measures all ten pairwise intersections. Its 0.0001 mm³ default tolerance allows finite-precision surface contact; it does not measure printer clearance. The default and longer/thicker assemblies pass. The regression suite also checks head access to the cable-clamp recesses and retainer screw-head clearance to the case/carrier.
 
+Install the OLED and encoder and tighten their rear retainers **before** installing the carrier. The rear plates bear against the boss ends; support lips extend forward beside the bosses. A rear brace joins the OLED retainer around its header notch, while its lower lip opens around the curved shell floor. The default carrier is approximately 54.62 × 122 × 2 mm with a 7 mm plenum; its panel-side mounts sit farther inward to clear the controls. Actual board, header, Dupont and wire envelopes still require physical checks.
 The current `validate_rework.py` run reports OpenSCAD `NoError`, one connected positive-volume component, and watertight meshes for the case, OLED retainer, encoder retainer, electronics carrier and button cap configurations. These checks establish valid CSG output, not fit or electrical clearance. The standalone clamp saddle/cap also rendered at 6, 8, 10 and 12 mm cable candidates; all eight meshes were watertight, consistently wound, and one positive-volume component.

@@ -1,6 +1,7 @@
 [
   {
     "configuration": "rework_case_default_candidates",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "case"
@@ -18,8 +19,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 44974.943865284644,
-      "area_mm2": 57025.1236906237,
+      "volume_mm3": 47586.13164884905,
+      "area_mm2": 57778.78708707768,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -30,6 +31,7 @@
   },
   {
     "configuration": "rework_ports_enabled",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "case",
@@ -51,8 +53,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 44974.943865284644,
-      "area_mm2": 57025.1236906237,
+      "volume_mm3": 47586.13164884905,
+      "area_mm2": 57778.78708707768,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -63,6 +65,7 @@
   },
   {
     "configuration": "short_m3_insert_and_tighter_pockets",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "case",
@@ -84,8 +87,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 45240.81807765169,
-      "area_mm2": 56828.46156170449,
+      "volume_mm3": 47850.079187053976,
+      "area_mm2": 57584.64513898475,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -96,6 +99,7 @@
   },
   {
     "configuration": "oled_retainer_print_part",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "oled_retainer"
@@ -104,17 +108,17 @@
       "bounds_mm": [
         [
           -26.7,
-          -16.75,
+          -15.448198774913028,
           0.0
         ],
         [
           26.7,
           16.75,
-          8.8
+          17.400000000000002
         ]
       ],
-      "volume_mm3": 1692.578167405467,
-      "area_mm2": 2533.86791488348,
+      "volume_mm3": 2603.7736678880233,
+      "area_mm2": 4410.272553372764,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -125,6 +129,7 @@
   },
   {
     "configuration": "encoder_retainer_print_part",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "encoder_retainer"
@@ -132,18 +137,18 @@
     "metrics": {
       "bounds_mm": [
         [
-          -14.25,
-          -13.85,
+          -14.75,
+          -12.984068777917688,
           0.0
         ],
         [
-          14.25,
-          13.85,
-          4.199999999999999
+          14.75,
+          14.35,
+          12.799999999999999
         ]
       ],
-      "volume_mm3": 1169.4015651003904,
-      "area_mm2": 1828.8528655879245,
+      "volume_mm3": 1341.527735395891,
+      "area_mm2": 2425.1139053260827,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -154,6 +159,7 @@
   },
   {
     "configuration": "electronics_carrier_print_part",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "electronics_carrier"
@@ -161,18 +167,18 @@
     "metrics": {
       "bounds_mm": [
         [
-          2.810889132455351,
-          -134.0,
+          3.0,
+          -136.0,
           8.5
         ],
         [
-          57.81088913245535,
-          -16.0,
+          57.6217782649107,
+          -14.0,
           10.5
         ]
       ],
-      "volume_mm3": 12268.30165927849,
-      "area_mm2": 13848.648398381123,
+      "volume_mm3": 9779.694966706242,
+      "area_mm2": 11381.000602116157,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -183,6 +189,7 @@
   },
   {
     "configuration": "button_cap_print_part",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "button_cap"
@@ -212,6 +219,7 @@
   },
   {
     "configuration": "rework_lid_print_part",
+    "scad_sha256": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
     "parameters": {
       "design_revision": "rework",
       "show_part": "lid"
@@ -229,8 +237,8 @@
           3.0
         ]
       ],
-      "volume_mm3": 31155.40916869792,
-      "area_mm2": 23473.31996445375,
+      "volume_mm3": 30968.152376440015,
+      "area_mm2": 23485.453445849675,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,

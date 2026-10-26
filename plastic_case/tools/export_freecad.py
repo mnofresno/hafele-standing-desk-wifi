@@ -2,7 +2,7 @@
 """Extract a FreeCAD document inventory and export final body solids to STL/STEP.
 Run with FreeCAD's bundled Python: FreeCAD Python export_freecad.py file.FCStd outdir.
 """
-import json, os, sys
+import hashlib, json, os, sys
 import FreeCAD as App
 import Part, Mesh, MeshPart
 
@@ -18,6 +18,19 @@ def geom(g):
     if hasattr(g,'FirstParameter'): d.update(first_parameter=float(g.FirstParameter),last_parameter=float(g.LastParameter))
     return d
 
+def constraint_record(sketch, constraint, index):
+    data = {'type':constraint.Type,'value':float(constraint.Value),
+            'first':int(constraint.First),'first_position':int(constraint.FirstPos),
+            'second':int(constraint.Second),'second_position':int(constraint.SecondPos),
+            'third':int(constraint.Third),'third_position':int(constraint.ThirdPos),
+            'name':str(constraint.Name)}
+    try:
+        data['driving'] = bool(sketch.getDriving(index))
+    except (ValueError,RuntimeError):
+        # FreeCAD does not expose driving state for every constraint type.
+        data['driving'] = None
+    return data
+
 def main(path,outdir,param_path=None):
     os.makedirs(outdir,exist_ok=True)
     doc=App.openDocument(os.path.abspath(path))
@@ -27,25 +40,46 @@ def main(path,outdir,param_path=None):
             cell=sheet.getCellFromAlias(alias)
             if not cell: raise ValueError('Unknown spreadsheet alias: '+alias)
             sheet.set(cell,str(value))
-    doc.recompute()
-    for _ in range(3):
+    recompute={'calls':[],'errors':[]}
+    def recompute_document(phase):
+        try:
+            result=doc.recompute()
+            recompute['calls'].append({'phase':phase,'success':result})
+            if result is False:
+                recompute['errors'].append({'phase':phase,'error':'Document recompute returned False'})
+        except Exception as error:
+            recompute['errors'].append({'phase':phase,'error':str(error)})
+    recompute_document('initial')
+    for iteration in range(3):
         for obj in doc.Objects:
             try:
                 if 'Touched' in obj.State: obj.recompute()
-            except Exception: pass
-        doc.recompute()
-    data={'source':os.path.abspath(path),'freecad_version':App.Version(),'document':doc.Name,'objects':[],'spreadsheet':[],'final_solids':[]}
+            except Exception as error:
+                recompute['errors'].append({'object':obj.Name,'iteration':iteration,'error':str(error)})
+        recompute_document('settle_'+str(iteration))
+    with open(path,'rb') as source:
+        source_sha256=hashlib.sha256(source.read()).hexdigest()
+    data={'source':os.path.abspath(path),'source_sha256':source_sha256,'freecad_version':App.Version(),
+          'document':doc.Name,'recompute':recompute,'objects':[],'spreadsheet':[],'final_solids':[]}
     for o in doc.Objects:
-        rec={'name':o.Name,'label':o.Label,'type':o.TypeId,'properties':{},'expressions':[]}
+        rec={'name':o.Name,'label':o.Label,'type':o.TypeId,'state':list(o.State),'properties':{},'expressions':[],
+             'dependencies':[x.Name for x in o.OutList],
+             'dependents':[x.Name for x in o.InList]}
+        if hasattr(o,'Placement'):
+            rec['placement']={'base':vector(o.Placement.Base),
+                              'rotation_quaternion':list(o.Placement.Rotation.Q)}
         try: rec['expressions']=[[str(a),str(b)] for a,b in o.ExpressionEngine]
         except: pass
         if o.TypeId=='Sketcher::SketchObject':
-            rec['placement']={'base':vector(o.Placement.Base),'rotation':str(o.Placement.Rotation)}
+            rec['placement']['rotation']=str(o.Placement.Rotation)
             rec['solver']={'fully_constrained':bool(getattr(o,'FullyConstrained',False)),
                            'degrees_of_freedom':int(getattr(o,'DoF',-1)),
                            'state':list(o.State)}
-            rec['geometry']=[geom(g) for g in o.Geometry]
-            rec['constraints']=[{'type':c.Type,'value':float(c.Value),'first':int(c.First), 'second':int(c.Second), 'third':int(c.Third)} for c in o.Constraints]
+            rec['geometry']=[{**geom(g),'construction':bool(o.getConstruction(i))}
+                             for i,g in enumerate(o.Geometry)]
+            rec['external_geometry']=[{'object':obj.Name,'subelements':list(subelements)}
+                                      for obj,subelements in o.ExternalGeometry]
+            rec['constraints']=[constraint_record(o,c,i) for i,c in enumerate(o.Constraints)]
         if o.TypeId=='Spreadsheet::Sheet':
             for cell in o.getNonEmptyCells():
                 rec['cells'].append({'cell':cell,'contents':o.getContents(cell),'alias':o.getAlias(cell) or None}) if 'cells' in rec else rec.update(cells=[{'cell':cell,'contents':o.getContents(cell),'alias':o.getAlias(cell) or None}])

@@ -19,5 +19,21 @@
       "support_floor_left_x": 7.12701665379,
       "support_inner_offset": 8.0
     }
+  },
+  {
+    "name": "fractional_angle_source_edge_remap",
+    "parameters": {
+      "design_revision": "baseline",
+      "longitud": 170,
+      "ancho_pared": 2,
+      "alto": 38,
+      "profundidad": 76,
+      "dia_botones": 9,
+      "dia_torres_tornillos": 8,
+      "separacion_torres_tornillos": 7,
+      "support_floor_left_x": 56.26881262189947,
+      "support_inner_offset": 8.0,
+      "angulo_del_panel": 78.5
+    }
   }
 ]

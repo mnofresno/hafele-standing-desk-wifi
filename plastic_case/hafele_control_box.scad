@@ -55,7 +55,7 @@ encoder_shaft_diameter = 6.0;
 encoder_shaft_clearance = 0.35; // Radial clearance.
 encoder_retainer_overlap = 0.8;
 encoder_retainer_thickness = 1.6;
-encoder_retainer_fastener_offset = 4.0;
+encoder_retainer_fastener_offset = 4.5; // Leaves 0.5 mm between body-support lip and Ø8 boss.
 encoder_terminal_edge = "top"; // [top,bottom,left,right]
 encoder_terminal_notch_width = 8;
 encoder_terminal_notch_depth = 4;
@@ -74,8 +74,11 @@ m3_insert_pilot_diameter = 4.0; // Candidate only; tune to the actual insert and
 m3_insert_length = 5.7;
 m3_insert_bottom_clearance = 1.0;
 m3_insert_leadin = 0.4;
-control_boss_depth = 11.0; // Axial depth behind the angled panel for the retainer standoffs.
+control_boss_depth = 18.0; // Rear screw plate clears the existing lid towers.
+retainer_bridge_width = 3; // Rear brace joins both sides without crossing the header notch.
 m3_lid_clearance_diameter = 3.4;
+m3_screw_head_diameter = 6;
+m3_screw_head_height = 2.4;
 
 /* [External cable and USB openings: placement provisional] */
 enable_motor_cable_exit = true;
@@ -107,9 +110,18 @@ support_inner_offset = 7.25; // Sketch007 constrained profile offset.
 support_profile_base_radius = 5; // Hardcoded 5 mm sketch datum, retained from FreeCAD.
 support_minimum_top = 33.5; // Hardcoded support height retained by short source configurations.
 
+/* [Fastener towers] */
+dia_torres_tornillos = 7;
+long_torres_tornillos = alto - ancho_pared;
+separacion_torres_tornillos = 6;
+dia_interno_torres_tornillos = 4.25;
+
 /* [Removable electronics carrier: adjustable layout] */
-carrier_width = 55;
-carrier_length = 118;
+carrier_edge_margin = 3;
+carrier_tower_clearance = 0.5;
+carrier_width = panel_inset()-2*carrier_edge_margin;
+carrier_length = longitud-2*(separacion_torres_tornillos+dia_torres_tornillos/2
+    +max(dia_torres_tornillos,m3_insert_boss_diameter)/2+carrier_tower_clearance);
 carrier_thickness = 2;
 carrier_mount_height = 7;
 carrier_mount_boss_diameter = 8;
@@ -117,17 +129,14 @@ carrier_mount_insert_length = 5.7;
 carrier_grid_pitch = 10;
 carrier_grid_hole_diameter = 3.2;
 carrier_mount_edge_x = 7;
-carrier_mount_end_y = 18;
-carrier_encoder_clearance = 0.35; // Radial clearance around the installed encoder retainer.
+carrier_mount_panel_edge_x = 26; // Inset panel-side mounts to clear control retainers.
+carrier_mount_end_y = (longitud-carrier_length)/2+carrier_mount_boss_diameter/2;
+carrier_encoder_clearance = 0.35; // Relief around both control retainers and their case bosses.
+retainer_floor_clearance = 0.35; // Retainer clearance to the shell cavity; OLED lower lip is open.
 
 /* [Lid] */
 espesor_tapa = 1.5; // Preserved spreadsheet parameter; no final feature references it.
-
-/* [Fastener towers] */
-dia_torres_tornillos = 7;
-long_torres_tornillos = alto - ancho_pared;
-separacion_torres_tornillos = 6;
-dia_interno_torres_tornillos = 4.25;
+lid_rim_clearance = 0.25; // Normal clearance for the rework locating lip inside the shell.
 
 /* [Display selection] */
 // Spreadsheet aliases kept verbatim for compatibility with the FreeCAD parameter names.
@@ -145,6 +154,9 @@ function display_center_x() = display_panel_x() + ancho_display/2 + oled_window_
 function display_center_y() = display_panel_y() + alto_display/2 + oled_window_offset_y;
 function pushbutton_center_x() = -longitud + pos_x_botones;
 function encoder_center_x() = -longitud + pos_x_botones + distancia_botones;
+function panel_plane_constant() =
+    case_top_center_x()+profundidad/2+alto/tan(angulo_del_panel);
+function panel_origin_z() = panel_plane_constant()*sin(angulo_del_panel)*cos(angulo_del_panel);
 
 module panel_coordinate_frame() {
     theta = 90-angulo_del_panel;
@@ -155,7 +167,7 @@ module panel_coordinate_frame() {
     x_top_right = x_top_left+profundidad;
     // FlatFace maps the sketch origin to the orthogonal projection of the
     // global origin onto the inclined panel plane.
-    plane_constant = x_top_right+alto/tan(a);
+    plane_constant = panel_plane_constant();
     ox = plane_constant*sin(a)*sin(a);
     oz = plane_constant*sin(a)*cos(a);
     multmatrix([[0,-sin(theta),cos(theta),ox],
@@ -164,30 +176,44 @@ module panel_coordinate_frame() {
                 [0,0,0,1]]) children();
 }
 
+module inverse_panel_coordinate_frame() {
+    theta = 90-angulo_del_panel;
+    ox = panel_plane_constant()*sin(angulo_del_panel)*sin(angulo_del_panel);
+    oz = panel_origin_z();
+    multmatrix([[0,1,0,0],
+                [-sin(theta),0,cos(theta),sin(theta)*ox-cos(theta)*oz],
+                [cos(theta),0,sin(theta),-cos(theta)*ox-sin(theta)*oz],
+                [0,0,0,1]]) children();
+}
+
 module rounded_rectangle_2d(width,height,radius) {
     offset(r=radius) square([width-2*radius,height-2*radius],center=true);
 }
+
+function profile_arc_points(cx,cz,r,start,end) =
+    let(steps=max(1,ceil(abs(end-start))))
+    [for (i=[0:steps]) let(angle=start+(end-start)*i/steps)
+        [cx+r*cos(angle),cz+r*sin(angle)]];
 
 module panel_m3_boss(x,y) {
     translate([x,y,-ancho_pared-control_boss_depth])
         cylinder(d=m3_insert_boss_diameter,h=control_boss_depth+0.03,$fn=48);
 }
 
-module panel_retainer_bosses() {
+module panel_retainer_bosses(control="all") {
     if (design_revision == "rework") panel_coordinate_frame() {
         oled_screw_x = oled_pcb_width/2+oled_retainer_fastener_offset;
-        panel_m3_boss(display_center_x()-oled_screw_x,display_center_y());
-        panel_m3_boss(display_center_x()+oled_screw_x,display_center_y());
+        if (control == "all" || control == "oled") {
+            panel_m3_boss(display_center_x()-oled_screw_x,display_center_y());
+            panel_m3_boss(display_center_x()+oled_screw_x,display_center_y());
+        }
 
         encoder_screw_x = encoder_body_width/2+encoder_retainer_fastener_offset;
-        panel_m3_boss(encoder_center_x()-encoder_screw_x,altura_botones);
-        panel_m3_boss(encoder_center_x()+encoder_screw_x,altura_botones);
+        if (control == "all" || control == "encoder") {
+            panel_m3_boss(encoder_center_x()-encoder_screw_x,altura_botones);
+            panel_m3_boss(encoder_center_x()+encoder_screw_x,altura_botones);
+        }
     }
-}
-
-module m3_case_tower() {
-    if (design_revision == "baseline") screw_tower(0,0);
-    else cylinder(d=m3_insert_boss_diameter,h=long_torres_tornillos,$fn=48);
 }
 
 module m3_insert_bore(drive_z,depth,lead_in_at_start=false) {
@@ -214,7 +240,7 @@ module case_m3_insert_cutouts() {
             translate([x,y,0])
                 m3_insert_bore(long_torres_tornillos-tower_depth,tower_depth);
 
-        carrier_mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_edge_x];
+        carrier_mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_panel_edge_x];
         carrier_mount_y = [-carrier_mount_end_y,-longitud+carrier_mount_end_y];
         for (x=carrier_mount_x,y=carrier_mount_y)
             translate([x,y,ancho_pared])
@@ -234,7 +260,7 @@ module case_m3_insert_cutouts() {
 
 module carrier_mount_bosses() {
     if (design_revision == "rework") {
-        carrier_mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_edge_x];
+        carrier_mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_panel_edge_x];
         carrier_mount_y = [-carrier_mount_end_y,-longitud+carrier_mount_end_y];
         for (x=carrier_mount_x,y=carrier_mount_y)
             translate([x,y,ancho_pared])
@@ -260,11 +286,11 @@ module rounded_profile_2d() {
     x_right_center = x_right_tan - r*cos(90-a);
     points = concat(
         [[x_top_left,alto],[x_top_right,alto],[x_right_tan,z_right_tan]],
-        [for (angle=[375:-1:270]) [x_right_center+r*cos(angle),r+r*sin(angle)]],
+        profile_arc_points(x_right_center,r,r,360+(90-a),270),
         [[0,0]],
         // The left profile corner is centred at x=0 (the right corner has its
         // own translated centre at x_right_center).
-        [for (angle=[270:-1:195]) [r*cos(angle),r+r*sin(angle)]],
+        profile_arc_points(0,r,r,270,180+(90-a)),
         [[x_left_tan,z_left_tan]]
     );
     polygon(points);
@@ -296,11 +322,9 @@ module inner_profile_2d() {
         [[x_inner_top_left,alto],
          [x_inner_top_right,alto],
          [x_right_inner,z_right_inner]],
-        [for (angle=[375:-1:270])
-            [x_right_center+inner_radius*cos(angle),r+inner_radius*sin(angle)]],
+        profile_arc_points(x_right_center,r,inner_radius,360+(90-a),270),
         [[0,t]],
-        [for (angle=[270:-1:195])
-            [inner_radius*cos(angle),r+inner_radius*sin(angle)]]));
+        profile_arc_points(0,r,inner_radius,270,180+(90-a))));
 }
 
 module enclosure_shell() {
@@ -315,7 +339,7 @@ module enclosure_shell() {
 
 module end_closures() {
     // Closing skins at extrusion ends are retained separately from the open shell profile.
-    for (y=[-0.02,-longitud+ancho_pared+0.02])
+    for (y=[0,-longitud+ancho_pared])
         translate([0,y,0]) rotate([90,0,0]) linear_extrude(height=ancho_pared,convexity=5)
             rounded_profile_2d();
 }
@@ -326,9 +350,9 @@ module support_wall_profiles() {
     a = angulo_del_panel;
     t = ancho_pared;
     r = support_profile_base_radius;
-    // A 0.01 mm overlap at the shared inner-floor arc prevents a coincident
+    // A 0.001 mm overlap at the shared inner-floor arc prevents a coincident
     // CSG face from surviving where the source additive pads meet the shell.
-    csg_overlap = 0.01;
+    csg_overlap = 0.001;
     support_radius = min(3.5,r-t)+csg_overlap;
     z_support_top = max(support_minimum_top,long_torres_tornillos);
     z_left_tan = r-support_radius*sin(90-a);
@@ -352,20 +376,16 @@ module support_wall_profiles() {
          [support_inner_offset,t],[support_right_x,t],
          [support_right_x,z_support_top],[x_right_top,z_support_top],
          [x_right_tan,z_right_tan]],
-        [for (angle=[right_arc_end:-1:270])
-            [x_right_center+support_radius*cos(angle),r+support_radius*sin(angle)]],
+        profile_arc_points(x_right_center,r,support_radius,right_arc_end,270),
         [[x_right_center,0],[0,0],[0,t]],
-        [for (angle=[270:-1:left_arc_start])
-            [support_radius*cos(angle),r+support_radius*sin(angle)]],
+        profile_arc_points(0,r,support_radius,270,left_arc_start),
         [[x_left_top,z_support_top]]);
     far_support_profile = concat(
         [[support_floor_left_x,z_support_top],[x_left_top,z_support_top],
          [x_left_tan,z_left_tan]],
-        [for (angle=[left_arc_start:1:270])
-            [support_radius*cos(angle),r+support_radius*sin(angle)]],
+        profile_arc_points(0,r,support_radius,left_arc_start,270),
         [[0,0],[x_right_center,0],[x_right_center,t]],
-        [for (angle=[270:1:right_arc_end])
-            [x_right_center+support_radius*cos(angle),r+support_radius*sin(angle)]],
+        profile_arc_points(x_right_center,r,support_radius,270,right_arc_end),
         [[x_right_top,z_support_top],[support_right_x,z_support_top],
          [support_right_x,t],[support_floor_left_x,t]]);
 
@@ -489,7 +509,10 @@ module screw_tower(x,y) {
 
 module m3_case_tower(x,y) {
     if (design_revision == "baseline") screw_tower(x,y);
-    else tower_land_and_ribs(x,y);
+    else union() {
+        tower_land_and_ribs(x,y);
+        cylinder(d=m3_insert_boss_diameter,h=long_torres_tornillos,$fn=96);
+    }
 }
 
 module case_body() {
@@ -518,10 +541,21 @@ module lid_plate() {
 }
 
 module lid_rim() {
+    if (design_revision == "rework") {
+        // The lip enters the opening when installed face-down. Its sides
+        // follow the angled walls instead of wedging a vertical rectangle.
+        rim_width = profundidad-2*(ancho_pared+lid_rim_clearance)/sin(angulo_del_panel);
+        rim_length = longitud-2*(ancho_pared+lid_rim_clearance);
+        multmatrix([[1,0,1/tan(angulo_del_panel),-ancho_pared/tan(angulo_del_panel)],
+                    [0,1,0,0],[0,0,1,0],[0,0,0,1]])
+            translate([-rim_width/2,-rim_length/2,ancho_pared])
+                cube([rim_width,rim_length,ancho_pared]);
+    } else {
     // Sketch009 retains a solver-selected extension for the 1.2 mm boundary case.
     rim_length = longitud + (ancho_pared < 1.5 ? 2*ancho_pared : -2*ancho_pared);
     translate([-(profundidad-2*ancho_pared)/2,-rim_length/2,ancho_pared])
         cube([profundidad-2*ancho_pared,rim_length,ancho_pared]);
+    }
 }
 
 module lid_end_tabs() {
@@ -555,9 +589,35 @@ module case_lid() {
     }
 }
 
+module control_carrier_slice(control,plate_z) {
+    projection(cut=false) intersection() {
+        union() {
+            if (control == "encoder") encoder_retainer_installed();
+            else oled_retainer_installed();
+            panel_retainer_bosses(control);
+            retainer_screw_head_keepouts(control);
+        }
+        translate([-profundidad,-longitud,plate_z-0.1])
+            cube([3*profundidad,longitud,carrier_thickness+0.2]);
+    }
+}
+
+module retainer_screw_head_keepouts(control) {
+    is_oled = control == "oled";
+    center_x = is_oled ? display_center_x() : encoder_center_x();
+    center_y = is_oled ? display_center_y() : altura_botones;
+    screw_x = is_oled ? oled_pcb_width/2+oled_retainer_fastener_offset
+                      : encoder_body_width/2+encoder_retainer_fastener_offset;
+    plate_t = is_oled ? oled_retainer_thickness : encoder_retainer_thickness;
+    panel_coordinate_frame()
+        for (x=[center_x-screw_x,center_x+screw_x])
+            translate([x,center_y,-(ancho_pared+control_boss_depth+plate_t+m3_screw_head_height)])
+                cylinder(d=m3_screw_head_diameter,h=m3_screw_head_height,$fn=64);
+}
+
 module electronics_carrier() {
     plate_z = ancho_pared+carrier_mount_height;
-    mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_edge_x];
+    mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_panel_edge_x];
     mount_y = [-carrier_mount_end_y,-longitud+carrier_mount_end_y];
     carrier_x = (panel_inset())/2;
     difference() {
@@ -572,17 +632,16 @@ module electronics_carrier() {
                 carrier_grid_pitch:-longitud/2+carrier_length/2-carrier_grid_pitch])
             translate([x,y,plate_z-0.1])
                 cylinder(d=carrier_grid_hole_diameter,h=carrier_thickness+0.2,$fn=32);
-        // Relieve only the portion of the carrier crossed by the encoder retainer.
-        // The projected intersection preserves the remainder of the grid plate.
+        // Each swept relief opens to the panel-side edge. A closed ring cut
+        // would leave a disconnected island of carrier inside the retainer.
+        for (control=["oled","encoder"])
         translate([0,0,plate_z-0.1])
             linear_extrude(height=carrier_thickness+0.2)
                 offset(delta=carrier_encoder_clearance)
-                    projection(cut=false)
-                        intersection() {
-                            encoder_retainer_installed();
-                            translate([-1000,-1000,plate_z-0.1])
-                                cube([2000,2000,carrier_thickness+0.2]);
-                        }
+                    hull() {
+                        control_carrier_slice(control,plate_z);
+                        translate([profundidad,0]) control_carrier_slice(control,plate_z);
+                    }
     }
 }
 
@@ -601,57 +660,75 @@ module button_cap() {
 }
 
 module service_retainer_frame(outer_w,outer_h,inner_w,inner_h,thickness,
-                              screw_x,spacer_h,notch_edge,notch_width,notch_depth) {
+                              screw_x,spacer_h,notch_edge,notch_width,notch_depth,
+                              support_w,support_h) {
     total_h = thickness+spacer_h;
-    head_d = 6.0;
-    head_recess = 2.0;
     difference() {
         union() {
+            // Rear screw plate seats against the rear faces of the case bosses.
             linear_extrude(height=thickness)
                 square([outer_w,outer_h],center=true);
-            for (x=[-screw_x,screw_x])
-                translate([x,0,thickness])
-                    cylinder(d=m3_insert_boss_diameter,h=spacer_h,$fn=48);
+            // PCB support extends toward the panel, beside the bosses instead
+            // of occupying their screw axes. The front edge contacts the PCB.
+            translate([0,0,thickness])
+                linear_extrude(height=spacer_h)
+                    square([support_w,support_h],center=true);
         }
-        translate([0,0,-0.01])
-            linear_extrude(height=thickness+0.02)
-                square([inner_w,inner_h],center=true);
-        for (x=[-screw_x,screw_x]) {
+        difference() {
+            translate([0,0,-0.01])
+                linear_extrude(height=total_h+0.02)
+                    square([inner_w,inner_h],center=true);
+            // Keep a brace in the rear plate. A through header notch and an
+            // open lower lip otherwise separate the OLED retainer into halves.
+            linear_extrude(height=thickness)
+                if (notch_edge == "top" || notch_edge == "bottom")
+                    square([outer_w,retainer_bridge_width],center=true);
+                else square([retainer_bridge_width,outer_h],center=true);
+        }
+        // Screw heads remain outside the thin rear plate, with no blind recess.
+        for (x=[-screw_x,screw_x])
             translate([x,0,-0.01])
                 cylinder(d=m3_lid_clearance_diameter,h=total_h+0.02,$fn=48);
-            translate([x,0,total_h-head_recess])
-                cylinder(d=head_d,h=head_recess+0.02,$fn=48);
-        }
         if (notch_edge == "top")
-            translate([0,outer_h/2-notch_depth/2,-0.01])
-                cube([notch_width,notch_depth,thickness+0.02],center=true);
+            translate([-notch_width/2,support_h/2-notch_depth,-0.01])
+                cube([notch_width,(outer_h-support_h)/2+notch_depth+0.02,total_h+0.02]);
         if (notch_edge == "bottom")
-            translate([0,-outer_h/2+notch_depth/2,-0.01])
-                cube([notch_width,notch_depth,thickness+0.02],center=true);
+            translate([-notch_width/2,-outer_h/2-0.01,-0.01])
+                cube([notch_width,(outer_h-support_h)/2+notch_depth+0.02,total_h+0.02]);
         if (notch_edge == "left")
-            translate([-outer_w/2+notch_depth/2,0,-0.01])
-                cube([notch_depth,notch_width,thickness+0.02],center=true);
+            translate([-outer_w/2-0.01,-notch_width/2,-0.01])
+                cube([(outer_w-support_w)/2+notch_depth+0.02,notch_width,total_h+0.02]);
         if (notch_edge == "right")
-            translate([outer_w/2-notch_depth/2,0,-0.01])
-                cube([notch_depth,notch_width,thickness+0.02],center=true);
+            translate([support_w/2-notch_depth,-notch_width/2,-0.01])
+                cube([(outer_w-support_w)/2+notch_depth+0.02,notch_width,total_h+0.02]);
     }
+}
+
+module retainer_shell_envelope(panel_x,panel_y,plate_base) {
+    // Express the inset shell cavity in print coordinates. This opens the
+    // OLED's lower lip around the curved floor without cutting the shell.
+    translate([-panel_x,-panel_y,-plate_base])
+        inverse_panel_coordinate_frame()
+            translate([0,-ancho_pared-retainer_floor_clearance,0])
+                rotate([90,0,0])
+                    linear_extrude(height=longitud-2*(ancho_pared+retainer_floor_clearance))
+                        offset(delta=-retainer_floor_clearance) inner_profile_2d();
 }
 
 function oled_retainer_outer_width() =
     oled_pcb_width+2*(oled_retainer_fastener_offset+m3_insert_boss_diameter/2);
-// The PCB nearly fills the shell height along the angled panel; keep the
-// retainer within its outline so it does not protrude below the case floor.
 function oled_retainer_outer_height() = oled_pcb_height;
 function oled_retainer_spacer_height() =
-    max(0,control_boss_depth+ancho_pared-(oled_front_skin+oled_module_depth)-oled_retainer_thickness);
+    max(0,control_boss_depth+ancho_pared-(oled_front_skin+oled_module_depth));
 function encoder_retainer_outer_width() =
     encoder_body_width+2*(encoder_retainer_fastener_offset+m3_insert_boss_diameter/2);
 function encoder_retainer_outer_height() =
     encoder_body_height+2*(encoder_retainer_fastener_offset+m3_insert_boss_diameter/2);
 function encoder_retainer_spacer_height() =
-    max(0,control_boss_depth+ancho_pared-(encoder_front_skin+encoder_body_depth)-encoder_retainer_thickness);
+    max(0,control_boss_depth+ancho_pared-(encoder_front_skin+encoder_body_depth));
 
 module oled_retainer_frame() {
+    intersection() {
     service_retainer_frame(
         oled_retainer_outer_width(),oled_retainer_outer_height(),
         oled_pcb_width-2*oled_retainer_overlap,
@@ -659,10 +736,15 @@ module oled_retainer_frame() {
         oled_retainer_thickness,
         oled_pcb_width/2+oled_retainer_fastener_offset,
         oled_retainer_spacer_height(),
-        oled_header_edge,oled_header_notch_width,oled_header_notch_depth);
+        oled_header_edge,oled_header_notch_width,oled_header_notch_depth,
+        oled_pcb_width,oled_pcb_height);
+    retainer_shell_envelope(display_center_x(),display_center_y(),
+        -(ancho_pared+control_boss_depth+oled_retainer_thickness));
+    }
 }
 
 module encoder_retainer_frame() {
+    intersection() {
     service_retainer_frame(
         encoder_retainer_outer_width(),encoder_retainer_outer_height(),
         encoder_body_width-2*encoder_retainer_overlap,
@@ -670,29 +752,39 @@ module encoder_retainer_frame() {
         encoder_retainer_thickness,
         encoder_body_width/2+encoder_retainer_fastener_offset,
         encoder_retainer_spacer_height(),
-        encoder_terminal_edge,encoder_terminal_notch_width,encoder_terminal_notch_depth);
+        encoder_terminal_edge,encoder_terminal_notch_width,encoder_terminal_notch_depth,
+        encoder_body_width,encoder_body_height);
+    retainer_shell_envelope(encoder_center_x(),altura_botones,
+        -(ancho_pared+control_boss_depth+encoder_retainer_thickness));
+    }
 }
 
 module oled_retainer_installed() {
     if (design_revision == "rework") panel_coordinate_frame()
         translate([display_center_x(),display_center_y(),
-                   -(oled_front_skin+oled_module_depth)])
-            rotate([180,0,0]) oled_retainer_frame();
+                   -(ancho_pared+control_boss_depth+oled_retainer_thickness)])
+            oled_retainer_frame();
 }
 
 module encoder_retainer_installed() {
     if (design_revision == "rework") panel_coordinate_frame()
         translate([encoder_center_x(),altura_botones,
-                   -(encoder_front_skin+encoder_body_depth)])
-            rotate([180,0,0]) encoder_retainer_frame();
+                   -(ancho_pared+control_boss_depth+encoder_retainer_thickness)])
+            encoder_retainer_frame();
+}
+
+module case_lid_installed() {
+    if (design_revision == "rework")
+        translate([case_top_center_x(),-longitud/2,
+                   alto+ancho_pared+(show_exploded ? explode_gap : 0)])
+            rotate([180,0,0]) case_lid();
+    else translate([case_top_center_x(),-longitud/2,
+                    show_exploded ? alto+explode_gap : alto]) case_lid();
 }
 
 module assembly() {
     case_body();
-    // Center the independent lid plate on the case's top opening. Rework mode
-    // also moves its panel holes into the case tower coordinates.
-    translate([case_top_center_x(),-longitud/2,
-               show_exploded ? alto+explode_gap : alto]) case_lid();
+    case_lid_installed();
     if (design_revision == "rework") {
         oled_retainer_installed();
         encoder_retainer_installed();
