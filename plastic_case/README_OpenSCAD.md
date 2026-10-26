@@ -79,16 +79,16 @@ FreeCAD's exact BRep metrics and a fine STL inventory are in `freecad_model_inve
 |---|---|---:|---:|---:|---|---|
 | Default | Case | 0.00051 | 15.00 | 0.042 / 0.035 | 1 / yes | Pass |
 | Default | Lid | 0.00000 | 0.056 | 0.0010 / 0.0010 | 1 / yes | Pass |
-| Longer, thicker | Case | 0.00051 | 55.07 | 3.999 / 3.260 | 1 / yes | Fail |
+| Longer, thicker, support sketch coordinates transcribed | Case | 0.00051 | 17.30 | 0.127 / 0.115 | 1 / yes | Fail |
 | Longer, thicker | Lid | 0.00000 | 0.075 | 0.0010 / 0.0010 | 1 / yes | Pass |
-| Short boundary | Case | 5.55859 | 101.37 | 7.196 / 4.664 | 1 / yes | Fail |
-| Short boundary | Lid | 0.00000 | 150.69 | 1.766 / 1.162 | 1 / yes | Fail |
 
-The default reconstruction meets the measured surface threshold, but the larger case volume delta remains 15.00 mm³ (0.036%). Longer and short parameter configurations do not match. The FreeCAD source also reports `Sketch007` as `Invalid` with one degree of freedom at its default recompute; the inventory records sketch solver state. Its dependent support sketches can produce different geometry after parameter changes, so the source itself does not provide a stable reference for a strict parametric guarantee. The original FreeCAD document and tracked STL exports remain unchanged.
+For the longer case, the validation config explicitly sets the two additional OpenSCAD support-profile parameters to the coordinates returned by the recomputed FreeCAD sketches: `support_floor_left_x=7.12701665379` and `support_inner_offset=8`. The case still has a sampled surface residual of 0.127 mm at approximately (7.127, -11, 2) mm and a 17.30 mm³ volume difference; the default case passes the sampled 0.05 mm threshold. This residual is localized at a support/floor intersection and remains an unresolved geometry difference. It is not explained by solver drift: five clean FreeCAD exports of the longer configuration all reported Sketch006/007 `Up-to-date`, 0 DoF, support coordinates 7.12701665/8.0 mm, and case volume 68,141.249454 mm³ (coordinate/volume variation below 1e-6 mm/mm³).
+
+The earlier short-boundary probe (`alto=30`, `longitud=120`, `ancho_pared=1.2`, `profundidad=62`, `angulo_del_panel=72`, `radio_curvaturas=4`) is excluded from the valid comparison matrix. FreeCAD reported Sketch006 `Invalid`, 1 DoF and Sketch007 `Invalid`, 4 DoF after recompute, retaining stale 33.5 mm support geometry above the 30 mm case. Raising `alto` to 33.5 made both sketches `Up-to-date` with 0 DoF, but that point is not included until its geometry comparison is run. The default source also reports Sketch007 invalid with 1 DoF. Do not claim general parametric equivalence. The original FreeCAD document and tracked STL exports remain unchanged.
 
 ## Parameter configurations and known gaps
 
-`tests/configurations.json` applies values to the FreeCAD spreadsheet and OpenSCAD independently. The case support profiles now use native CSG and retain the raised support height, and the lid holes follow the source tower offsets. The validation results above still fail on longer/short case geometry and short lid geometry. Do not describe the reconstruction as fully equivalent or parametric equivalence as guaranteed. Making the FreeCAD sketch solver deterministic or restricting the supported parameter domain is required before that claim can be made.
+`tests/configurations.json` compares the default and a longer/thicker configuration whose two extra support coordinates are transcribed from the valid FreeCAD sketch solve. This demonstrates the exposed support parameters but does not make them formulas of the spreadsheet values. The longer case remains outside tolerance by 0.077 mm over the sampled maximum target; keep that configuration outside any equivalence claim until the floor/support intersection is corrected and revalidated.
 
 ## Hardware fit-test coupons
 
