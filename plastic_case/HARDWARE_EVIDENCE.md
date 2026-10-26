@@ -6,10 +6,19 @@ uncertain, and how the current CAD treats each interface. The photos are
 silkscreen/part numbers are not legible. Dimensions marked as candidates must be
 checked with the corresponding fit coupon before the full enclosure is printed.
 
+New interior photos supplied on 2026-10-26 supersede several exterior-photo
+assumptions below. See `COMMON_BRACKET_DESIGN.md` for their observations and the
+requested measurements. The encoder must be retained by its full body/PCB,
+according to the user's report that it cannot be fixed with a shaft nut. The
+new revision replaces the metal cancel switch with a 12×12 tactile switch and
+printed actuator; the currently exported enclosure still uses the older design.
+The long rear-wall USB/cable placement and shaped boot are now visible. Their
+existing end-face candidate positions are not measured locations.
+
 | Part/interface | Evidence | Identification confidence | CAD decision |
 |---|---|---|---|
 | OLED | Firmware configures a 128×64 SSD1306 display. The photo shows a square 4-pin I²C module, with a PCB larger than the visible screen. | Display protocol/resolution are supported by firmware; exact physical module and PCB outline are not established. The board may use another compatible controller. | Preserve the FreeCAD active window (26.64 × 14.46 mm). Use an adjustable rear pocket, header notch and retainer; the 35.4 × 33.5 mm envelope is a fit candidate only. |
-| Rotary encoder | Photo shows a panel bushing with nut, plastic unthreaded shaft and wired terminals. Firmware uses `ESP32Encoder`. | Encoder family and exact variant are unconfirmed. EC11 is a plausible family, not a verified part number. | Retain the threaded bushing at the panel; capture the body in a rear pocket/retainer. Keep body, shaft and terminal clearance adjustable. |
+| Rotary encoder | User reports no usable shaft-nut retention; interior photos show a board/header envelope that must be captured. Firmware uses `ESP32Encoder`. | Encoder family and exact PCB variant are unconfirmed. EC11 is a plausible mechanism family, not a complete module envelope. | Capture the full body/PCB using the combined bracket; keep shaft, solder and connected-header clearance adjustable. |
 | Pushbutton | Photo shows a metal panel button, hex nut and black actuator. | Thread, head diameter and travel are unknown. | Keep the nut as the primary panel retention. The printed cap remains optional and adjustable; it must not limit the button travel. |
 | ESP32 board | Repository calls it “Wemos D1 ESP32”; `/info` reports ESP32 SoC properties. The serial bridge was identified as CP2102. | Development PCB is not identified. A D1 R32 drawing lists CH340G, so the CP2102 observation does not support choosing that board outline. | Use the perforated carrier grid and adjustable board profiles. Do not treat a D1 R32, DevKitC or D1-mini outline as confirmed. |
 | Relay/perforated board | Interior photo shows blue relays on a perforated board and long Dupont wires. | Board dimensions, relay type, solder-tail height and connector positions are unknown. | Use the removable carrier's 10 mm grid for M3 screws or small cable ties. Preserve adjustable solder and Dupont clearance; no board-specific cradle is claimed. |

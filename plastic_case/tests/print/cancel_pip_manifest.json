@@ -1,0 +1,66 @@
+{
+  "status": "experimental print-in-place coupon; not installed in enclosure",
+  "sources_sha256": {
+    "lib/captive_cancel_button.scad": "ba7620bc673eb1b97e5a16a23e9b313d85545e7111ad0718725af353fb75a6b6",
+    "tests/cancel_pip_coupon.scad": "6b3d0af0406d8ea7165787fc0df9150fb57484b11b39bd4510553d838d94559e"
+  },
+  "artifacts": {
+    "cancel_pip_clearance_0p25.stl": {
+      "sha256": "d493355d8ef58c85dc4c54601ff80b69dea18126de6ff07f05b99108587d0a8c",
+      "radial_clearance_mm": 0.25,
+      "volume_mm3": 3614.1124157904364,
+      "bounds_mm": [
+        [
+          -14.0,
+          -11.0,
+          0.0
+        ],
+        [
+          14.0,
+          11.0,
+          27.434151703747695
+        ]
+      ],
+      "watertight": true,
+      "positive_solids": 1
+    },
+    "cancel_pip_clearance_0p30.stl": {
+      "sha256": "0b6c72668d5fa1ce2b1e9eec99a93693941bf150969635391d76dc180a212659",
+      "radial_clearance_mm": 0.3,
+      "volume_mm3": 3617.095334324726,
+      "bounds_mm": [
+        [
+          -14.0,
+          -11.0,
+          0.0
+        ],
+        [
+          14.0,
+          11.0,
+          27.434151703747695
+        ]
+      ],
+      "watertight": true,
+      "positive_solids": 1
+    },
+    "cancel_pip_clearance_0p35.stl": {
+      "sha256": "13f85ece119f7c2be84c51514797320d4a169e8865b73a9ba9d351262fa4a573",
+      "radial_clearance_mm": 0.35,
+      "volume_mm3": 3620.0782511713915,
+      "bounds_mm": [
+        [
+          -14.0,
+          -11.0,
+          0.0
+        ],
+        [
+          14.0,
+          11.0,
+          27.434151703747695
+        ]
+      ],
+      "watertight": true,
+      "positive_solids": 1
+    }
+  }
+}
