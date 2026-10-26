@@ -94,7 +94,6 @@ usb_access_corner_radius = 1.5;
 /* [Internal support walls] */
 support_floor_left_x = 6.0813014172; // Sketch006 constrained profile point.
 support_inner_offset = 7.25; // Sketch007 constrained profile offset.
-support_near_offset = 9; // Near support sketch plane from the Y=0 end.
 support_profile_base_radius = 5; // Hardcoded 5 mm sketch datum, retained from FreeCAD.
 support_minimum_top = 33.5; // Hardcoded support height retained by short source configurations.
 
@@ -124,12 +123,13 @@ dia_interno_torres_tornillos = 4.25;
 // The old label pos_y_botones maps to alias altura_botones; pos_x_botones maps to x=75.
 
 function panel_inset() = profundidad - alto / tan(angulo_del_panel);
+function support_near_offset() = separacion_torres_tornillos + 2*ancho_pared;
 function display_panel_x() = -longitud + pos_display_x;
 function display_panel_y() = pos_display_y - alto + alto_display;
 function display_center_x() = display_panel_x() + ancho_display/2 + oled_window_offset_x;
 function display_center_y() = display_panel_y() + alto_display/2 + oled_window_offset_y;
-function pushbutton_center_x() = -pos_x_botones;
-function encoder_center_x() = -pos_x_botones + distancia_botones;
+function pushbutton_center_x() = -longitud + pos_x_botones;
+function encoder_center_x() = -longitud + pos_x_botones + distancia_botones;
 
 module panel_coordinate_frame() {
     theta = 90-angulo_del_panel;
@@ -354,8 +354,8 @@ module support_wall_profiles() {
         [[x_right_top,z_support_top],[support_right_x,z_support_top],
          [support_right_x,t],[support_floor_left_x,t]]);
 
-    // Near support: Y=-9 mm, pad proceeds 1.5 mm toward the enclosure interior.
-    translate([0,-support_near_offset+csg_overlap,0]) rotate([90,0,0]) linear_extrude(height=t+2*csg_overlap,convexity=5)
+    // Source Sketch007 plane is offset by separation + two wall thicknesses.
+    translate([0,-support_near_offset()+csg_overlap,0]) rotate([90,0,0]) linear_extrude(height=t+2*csg_overlap,convexity=5)
         polygon(near_support_profile);
 
     // Far support position is linked to the tower separation in the source sketch.
