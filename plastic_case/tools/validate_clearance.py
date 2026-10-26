@@ -25,9 +25,9 @@ import trimesh
 PARTS = {
     "case": "case_body();",
     "lid": "case_lid_installed();",
-    "oled_retainer": "oled_retainer_installed();",
-    "encoder_retainer": "encoder_retainer_installed();",
-    "electronics_carrier": "electronics_carrier_installed();",
+    "controls_bracket": "controls_bracket();",
+    "proto_clamp": "board_clamp(0);",
+    "supply_clamp": "board_clamp(1);",
 }
 DIAGNOSTIC = re.compile(r"^\s*(?:WARNING|ERROR|Parser error|Fatal error)\s*:", re.M | re.I)
 
@@ -36,7 +36,7 @@ class ValidationError(RuntimeError):
     """The exported geometry or clearance does not meet the requested check."""
 
 
-def export_part(source, expression, target, openscad, parameters):
+def export_part(source, expression, target, openscad, parameters, expected_components=1):
     """Export a positive control; reject empty output and all CLI diagnostics."""
     wrapper = target.with_suffix(".scad")
     if any(character in str(source) for character in (">", "\n", "\r")):
@@ -77,9 +77,23 @@ def export_part(source, expression, target, openscad, parameters):
         "shells": len(shells),
     }
     if (metrics["volume_mm3"] <= 0 or not metrics["watertight"]
-            or not metrics["winding_consistent"] or positive_components != 1):
-        raise ValidationError(f"{target.stem} is not one positive watertight solid: {metrics}")
+            or not metrics["winding_consistent"] or positive_components != expected_components):
+        expected = "one positive watertight solid" if expected_components == 1 else f"{expected_components} positive watertight solids"
+        raise ValidationError(f"{target.stem} is not {expected}: {metrics}")
     return mesh, metrics
+
+
+def intersection_volume(first, second):
+    intersection = trimesh.boolean.intersection(
+        [first, second], engine="manifold", check_volume=True)
+    if not isinstance(intersection, trimesh.Trimesh):
+        raise ValidationError("Boolean engine returned no intersection mesh")
+    # A permitted zero-volume contact has no finite centre of mass.
+    with np.errstate(divide="ignore", invalid="ignore"):
+        volume = abs(float(intersection.volume))
+    if not math.isfinite(volume):
+        raise ValidationError("Non-finite intersection volume")
+    return volume
 
 
 def validate_configuration(source, config, openscad, tolerance):
@@ -94,18 +108,7 @@ def validate_configuration(source, config, openscad, tolerance):
                     config["parameters"],
                 )
             for first, second in itertools.combinations(PARTS, 2):
-                intersection = trimesh.boolean.intersection(
-                    [meshes[first], meshes[second]], engine="manifold", check_volume=True,
-                )
-                if not isinstance(intersection, trimesh.Trimesh):
-                    raise ValidationError(f"Boolean engine returned no mesh for {first}/{second}")
-                # Trimesh also computes center of mass when requesting volume.
-                # A permitted zero-volume contact has no finite center of mass;
-                # suppress only that divide/invalid warning, then validate volume.
-                with np.errstate(divide="ignore", invalid="ignore"):
-                    volume = abs(float(intersection.volume))
-                if not math.isfinite(volume):
-                    raise ValidationError(f"Non-finite intersection volume for {first}/{second}")
+                volume = intersection_volume(meshes[first], meshes[second])
                 result["pairs"].append({
                     "first": first, "second": second,
                     "intersection_volume_mm3": volume,

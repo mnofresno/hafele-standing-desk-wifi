@@ -1,1 +1,13 @@
-[{"name": "default", "parameters": {}}, {"name": "longer_thicker", "parameters": {"longitud": 170, "ancho_pared": 2, "alto": 38, "profundidad": 76, "dia_botones": 9, "dia_torres_tornillos": 8, "separacion_torres_tornillos": 7, "support_floor_left_x": 7.12701665379, "support_inner_offset": 8.0}}]
+[
+  {
+    "name": "measured_default",
+    "parameters": {}
+  },
+  {
+    "name": "shorter_inserts_M3x20_closure",
+    "parameters": {
+      "m3_insert_length": 4,
+      "lid_screw_length": 20
+    }
+  }
+]

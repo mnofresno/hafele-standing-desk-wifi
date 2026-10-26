@@ -29,38 +29,39 @@
     }
   },
   {
-    "name": "oled_retainer_print_part",
-    "parameters": {
-      "design_revision": "rework",
-      "show_part": "oled_retainer"
-    }
-  },
-  {
-    "name": "encoder_retainer_print_part",
-    "parameters": {
-      "design_revision": "rework",
-      "show_part": "encoder_retainer"
-    }
-  },
-  {
-    "name": "electronics_carrier_print_part",
-    "parameters": {
-      "design_revision": "rework",
-      "show_part": "electronics_carrier"
-    }
-  },
-  {
-    "name": "button_cap_print_part",
-    "parameters": {
-      "design_revision": "rework",
-      "show_part": "button_cap"
-    }
-  },
-  {
     "name": "rework_lid_print_part",
     "parameters": {
       "design_revision": "rework",
       "show_part": "lid"
+    }
+  },
+  {
+    "name": "combined_controls",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "controls_bracket"
+    }
+  },
+  {
+    "name": "proto_clamp",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "proto_clamp"
+    }
+  },
+  {
+    "name": "power_clamp",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "supply_clamp"
+    }
+  },
+  {
+    "name": "case_with_M3x20_closure",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "case",
+      "lid_screw_length": 20
     }
   }
 ]

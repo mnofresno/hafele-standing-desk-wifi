@@ -13,6 +13,7 @@ import tempfile
 from pathlib import Path
 
 import trimesh
+from cad_sources import source_hashes
 
 
 def mesh_metrics(path):
@@ -67,6 +68,7 @@ def main():
             results.append({
                 "configuration": config["name"],
                 "scad_sha256":hashlib.sha256(scad.read_bytes()).hexdigest(),
+                "scad_dependencies":source_hashes([scad],scad.parent),
                 "parameters": config["parameters"],
                 "metrics": metrics,
                 "openscad_status": "NoError",

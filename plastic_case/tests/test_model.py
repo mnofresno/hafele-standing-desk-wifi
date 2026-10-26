@@ -23,10 +23,11 @@ def test_model_has_case_lid_and_assembly_selector():
     assert 'translate([case_top_center_x(),-longitud/2,' in s
     assert 'module rework_panel_pockets(' in s
     assert 'module external_access_cutouts(' in s
-    assert 'module electronics_carrier(' in s
+    assert 'include <lib/combined_controls.scad>' in s
     assert 'module button_cap(' in s
     assert 'module external_access_cutouts(' in s
-    assert 'enable_relay_indicator_windows' in s
+    assert 'rework_display_window_width = 27;' in s
+    assert 'wood_mount_spacing = 166;' in s
 
 def test_hardware_evidence_and_cable_clamp_are_documented():
     assert (ROOT/'HARDWARE_EVIDENCE.md').is_file()
@@ -49,7 +50,7 @@ def test_rework_plan_marks_unverified_board_and_component_dimensions():
     assert 'CP2102' in s
     assert 'does not identify the PCB' in s
     assert 'still unknown' in s.lower() or 'unknown' in s.lower()
-    assert 'removable internal electronics carrier' in s
+    assert 'two' in s.lower() or 'two' in (ROOT/'HARDWARE_MEASUREMENTS.md').read_text().lower()
 
 @pytest.mark.parametrize('definitions', [
     ['-D', 'show_part="case"'],
@@ -59,8 +60,9 @@ def test_rework_plan_marks_unverified_board_and_component_dimensions():
      '-D', 'usb_access_end="near"'],
     ['-D', 'show_part="case"', '-D', 'm3_insert_pilot_diameter=3.8',
      '-D', 'm3_insert_length=4.0'],
-    ['-D', 'show_part="oled_retainer"'],
-    ['-D', 'show_part="encoder_retainer"'],
+    ['-D', 'show_part="controls_bracket"'],
+    ['-D', 'show_part="proto_clamp"'],
+    ['-D', 'show_part="supply_clamp"'],
     ['-D', 'design_revision="baseline"', '-D', 'show_part="case"'],
 ])
 def test_case_revision_and_hardware_retainer_meshes_are_manifold(tmp_path,definitions):

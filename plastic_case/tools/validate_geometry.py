@@ -6,6 +6,7 @@ import argparse, hashlib, importlib.util, json, os, subprocess, sys, tempfile
 from pathlib import Path
 import numpy as np
 import trimesh
+from cad_sources import source_hashes
 
 
 def metrics(path):
@@ -149,6 +150,7 @@ def validate_configurations(args):
                     results.append(record)
                     continue
                 record['inputs_sha256']['openscad']=hashlib.sha256(Path(args.scad).read_bytes()).hexdigest()
+                record['inputs_sha256']['scad_dependencies']=source_hashes([Path(args.scad)],Path(args.scad).parent)
                 for part in ('case','lid'):
                     fc, sc = Path(td)/(part+'.stl'), Path(td)/('openscad_'+part+'.stl')
                     definitions=[]

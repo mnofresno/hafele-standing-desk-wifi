@@ -1,13 +1,17 @@
 /* Häfele standing desk control box and lid.
- * Reconstructed as editable OpenSCAD CSG from the fully constrained FreeCAD sketches.
+ * Editable native OpenSCAD CSG from extracted FreeCAD geometry and measured hardware.
  * Units are millimetres. See README_OpenSCAD.md for source and measured limits.
  */
 
 /* [Design revision] */
 design_revision = "rework"; // [baseline:FreeCAD reconstruction,rework:hardware-retention revision]
+include <lib/combined_controls.scad>;
+include <lib/measured_ports.scad>;
+use <lib/rounded_mount_tabs.scad>;
+use <lib/captive_cancel_button.scad>;
 
 /* [Assembly] */
-show_part = "assembly"; // [case:Case,lid:Lid,assembly:Case and lid,oled_retainer:OLED retainer,encoder_retainer:Encoder retainer,electronics_carrier:Electronics carrier,button_cap:Button cap]
+show_part = "assembly"; // [case,lid,assembly,controls_bracket,electronics_carrier,proto_clamp,supply_clamp,button_cap,hardware_preview]
 show_exploded = false;
 explode_gap = 8;
 $fn = 96;
@@ -30,79 +34,127 @@ altura_botones = 3;
 pos_x_botones = 75;
 dia_botones = 8.68;
 
-/* [OLED pocket and retainer: candidate module envelope] */
-oled_pcb_width = 35.4; // Common 1.3-inch breakout candidate; verify actual PCB.
-oled_pcb_height = 33.5;
+/* [Measured controls: 2026-10-26] */
+rework_display_window_width = 27;
+rework_display_window_height = 14.5;
+oled_pcb_width = 27.5;
+oled_pcb_height = 28;
 oled_pcb_clearance = 0.3; // Per side; calibrate with the OLED coupon.
 oled_front_skin = 0.8; // Material left behind the front mask around the window.
-oled_module_depth = 2.9; // Common 1.3-inch I2C module drawing; verify actual board/header.
+oled_module_depth = 3.5;
+oled_dupont_depth = 15; // Normal to the PCB, excludes cable bend.
+connector_wire_bend = 5; // Added routing allowance, not a measured component dimension.
 oled_retainer_overlap = 1.2; // Retainer lip over the PCB perimeter.
-oled_retainer_thickness = 1.6;
-oled_retainer_fastener_offset = 5.0;
 oled_header_edge = "top"; // [top,bottom,left,right]
 oled_header_notch_width = 14;
 oled_header_notch_depth = 5;
 oled_window_offset_x = 0; // Adjustable alignment of module glass to source-derived window.
-oled_window_offset_y = 0;
+oled_window_offset_y = -1; // Derived from reported 9 mm lower / 7 mm upper viewing margins.
 
 /* [Encoder cradle and retainer: EC11-family candidate] */
 encoder_body_width = 12.5;
 encoder_body_height = 11.7;
 encoder_body_depth = 7.5;
 encoder_body_clearance = 0.25; // Per side; calibrate with the encoder coupon.
-encoder_front_skin = 0.8;
+encoder_front_skin = ancho_pared;
 encoder_shaft_diameter = 6.0;
 encoder_shaft_clearance = 0.35; // Radial clearance.
-encoder_retainer_overlap = 0.8;
-encoder_retainer_thickness = 1.6;
-encoder_retainer_fastener_offset = 4.5; // Leaves 0.5 mm between body-support lip and Ø8 boss.
-encoder_terminal_edge = "top"; // [top,bottom,left,right]
-encoder_terminal_notch_width = 8;
-encoder_terminal_notch_depth = 4;
+encoder_pcb_width = 26;
+encoder_pcb_height = 18.5;
+encoder_axis_from_left = 10.5; // Non-connector end of the 26 mm direction.
+encoder_axis_from_bottom = 8; // User approximation; opposite side is about 10 mm.
+encoder_internal_depth = 8; // Inner case face to deepest solder tip, measured.
+encoder_solder_relief = 1.8; // Measured: flat PCB at 6.2 mm, deepest tip at 8 mm.
+encoder_dupont_extension = 11.5; // Right-angle connector, along the long PCB direction.
 
-/* [Threaded panel button: optional printed actuator cap] */
-button_cap_diameter = 10;
-button_cap_height = 4;
-button_cap_socket_diameter = 6;
-button_cap_socket_clearance = 0.3;
-button_cap_socket_depth = 2.6;
-button_cap_roof = 1.2;
+/* [Low-profile cancel switch and captive cap] */
+cancel_switch_width = 12;
+cancel_switch_height = 12;
+cancel_switch_total_depth = 5; // Body bottom to unpressed actuator tip, measured.
+cancel_switch_body_depth = 3.3; // Unmeasured body-only height; adjustable.
+cancel_cap_diameter = 13;
+cancel_flange_diameter = 16.5;
+cancel_radial_gap = 0.3;
+cancel_axial_gap = 0.3;
+cancel_flange_thickness = 1.8;
+cancel_press_travel = 0.65; // Physical coupon must verify actuation and permitted overtravel.
+cancel_cap_projection = 1.3;
+cancel_stem_diameter = 4.5;
+cancel_stem_length = 2.6;
+cancel_guide_wall = 1.6;
+cancel_guide_back = 1.5;
+cancel_stem_hole = 8;
+cancel_break_width = 0.4;
+cancel_break_height = 0.2;
+cancel_state = "as_printed"; // [as_printed,released,pressed]
+
+/* [Combined controls bracket: upright base screws] */
+controls_screw_length = 15;
+controls_insert_engagement = 4.5;
+controls_boss_diameter = 10;
+controls_boss_floor = 1;
+controls_frame_wall = 2;
+controls_frame_thickness = 2.4;
+retainer_floor_clearance = 0.35;
+controls_rail_x = 43;
+controls_rail_width = 8;
+controls_rail_height = 6;
+driver_access_diameter = 8;
+iron_access_diameter = 12;
+
+/* [Measured electronics: two assemblies] */
+electronics_rear_extension = 25; // Includes full OLED Dupont + 5 mm wire bend; front/desk holes fixed.
+proto_length = 100;
+proto_width = 50;
+proto_total_height = 21;
+supply_length = 54;
+supply_width = 24;
+supply_total_height = 17;
+board_floor_clearance = 2;
+board_solder_height = 3; // Adjustable underside allowance, not separately measured.
+board_pcb_thickness = 1.6;
+board_edge_clearance = 0.3;
+board_clamp_screw_length = 15;
+usb_above_assembly_bottom = 18; // Approximate user datum; treated as socket lower edge.
+usb_socket_height = 3.5;
+
+/* [Desk mounting: original fixed Parker centers] */
+wood_mount_spacing = 166;
+wood_mount_head_diameter = 7;
+wood_mount_hole_diameter = 4; // Adjustable through-clearance, thread size unspecified.
+wood_mount_screw_length = 15;
+wood_mount_tab_thickness = 5;
+wood_mount_root_width = 24;
+wood_mount_root_embed = 12;
+wood_mount_clearance = 0.3;
+lid_screw_length = 15;
+
+/* [Measured molded cable boot] */
+boot_neck_width = 8.5;
+boot_neck_height = 10.5;
+boot_wall_thickness = 2.5;
+boot_fit_clearance = 0.2;
+boot_from_near_end = 26;
 
 /* [M3 heat-set insert mounting] */
-m3_insert_boss_diameter = 8.0; // Candidate reinforced boss; test the 7-8 mm coupon series.
+m3_insert_boss_diameter = 10; // Closure barrels; Ø7.2 tool wells leave 1.4 mm wall.
 m3_insert_pilot_diameter = 4.0; // Candidate only; tune to the actual insert and printed coupon.
 m3_insert_length = 5.7;
 m3_insert_bottom_clearance = 1.0;
 m3_insert_leadin = 0.4;
-control_boss_depth = 18.0; // Rear screw plate clears the existing lid towers.
-retainer_bridge_width = 3; // Rear brace joins both sides without crossing the header notch.
 m3_lid_clearance_diameter = 3.4;
-m3_screw_head_diameter = 6;
-m3_screw_head_height = 2.4;
+m3_screw_head_diameter = 6.2;
 
-/* [External cable and USB openings: placement provisional] */
+/* [Rear-wall access] */
 enable_motor_cable_exit = true;
-motor_cable_end = "far"; // [near,far]
-motor_cable_x = 30;
-motor_cable_z = 8;
-motor_cable_opening_diameter = 12;
 enable_usb_access = true;
-usb_access_end = "near"; // [near,far]
-usb_access_x = 30;
-usb_access_z = 20;
 usb_access_width = 14;
-usb_access_height = 9;
+usb_access_height = 10;
 usb_access_corner_radius = 1.5;
-
-/* [Relay indicator windows: inferred from rear photo, location provisional] */
-enable_relay_indicator_windows = true;
-relay_indicator_end = "far"; // [near,far]
-relay_indicator_center_x = 48;
-relay_indicator_spacing = 9;
-relay_indicator_z = 10;
-relay_indicator_width = 5;
-relay_indicator_height = 7;
-relay_indicator_corner_radius = 2;
+usb_proto_offset_y = 15; // Layout inference along proto PCB, adjustable after connector check.
+boot_wall_clearance = 0.1;
+boot_pad_margin = 5;
+boot_rear_flange_margin = 2.5; // Flange margin unmeasured; verify with actual molded boot.
 
 /* [Internal support walls] */
 support_floor_left_x = 6.0813014172; // Sketch006 constrained profile point.
@@ -116,24 +168,6 @@ long_torres_tornillos = alto - ancho_pared;
 separacion_torres_tornillos = 6;
 dia_interno_torres_tornillos = 4.25;
 
-/* [Removable electronics carrier: adjustable layout] */
-carrier_edge_margin = 3;
-carrier_tower_clearance = 0.5;
-carrier_width = panel_inset()-2*carrier_edge_margin;
-carrier_length = longitud-2*(separacion_torres_tornillos+dia_torres_tornillos/2
-    +max(dia_torres_tornillos,m3_insert_boss_diameter)/2+carrier_tower_clearance);
-carrier_thickness = 2;
-carrier_mount_height = 7;
-carrier_mount_boss_diameter = 8;
-carrier_mount_insert_length = 5.7;
-carrier_grid_pitch = 10;
-carrier_grid_hole_diameter = 3.2;
-carrier_mount_edge_x = 7;
-carrier_mount_panel_edge_x = 26; // Inset panel-side mounts to clear control retainers.
-carrier_mount_end_y = (longitud-carrier_length)/2+carrier_mount_boss_diameter/2;
-carrier_encoder_clearance = 0.35; // Relief around both control retainers and their case bosses.
-retainer_floor_clearance = 0.35; // Retainer clearance to the shell cavity; OLED lower lip is open.
-
 /* [Lid] */
 espesor_tapa = 1.5; // Preserved spreadsheet parameter; no final feature references it.
 lid_rim_clearance = 0.25; // Normal clearance for the rework locating lip inside the shell.
@@ -142,20 +176,25 @@ lid_rim_clearance = 0.25; // Normal clearance for the rework locating lip inside
 // Spreadsheet aliases kept verbatim for compatibility with the FreeCAD parameter names.
 // The old label pos_y_botones maps to alias altura_botones; pos_x_botones maps to x=75.
 
+function rear_extension() = design_revision == "rework" ? electronics_rear_extension : 0;
+function case_top_span() = profundidad+rear_extension();
 function panel_inset() = profundidad - alto / tan(angulo_del_panel);
-function case_top_center_x() =
+function source_top_center_x() =
     -radio_curvaturas*cos(90-angulo_del_panel)
     -(alto-(radio_curvaturas-radio_curvaturas*sin(90-angulo_del_panel)))
       /tan(angulo_del_panel)+profundidad/2;
+function case_top_center_x() = source_top_center_x()-rear_extension()/2;
+function window_width() = design_revision == "rework" ? rework_display_window_width : ancho_display;
+function window_height() = design_revision == "rework" ? rework_display_window_height : alto_display;
 function support_near_offset() = separacion_torres_tornillos + 2*ancho_pared;
 function display_panel_x() = -longitud + pos_display_x;
-function display_panel_y() = pos_display_y - alto + alto_display;
-function display_center_x() = display_panel_x() + ancho_display/2 + oled_window_offset_x;
-function display_center_y() = display_panel_y() + alto_display/2 + oled_window_offset_y;
+function display_panel_y() = pos_display_y - alto + window_height();
+function display_center_x() = display_panel_x() + window_width()/2 + oled_window_offset_x;
+function display_center_y() = display_panel_y() + window_height()/2 + oled_window_offset_y;
 function pushbutton_center_x() = -longitud + pos_x_botones;
 function encoder_center_x() = -longitud + pos_x_botones + distancia_botones;
 function panel_plane_constant() =
-    case_top_center_x()+profundidad/2+alto/tan(angulo_del_panel);
+    source_top_center_x()+profundidad/2+alto/tan(angulo_del_panel);
 function panel_origin_z() = panel_plane_constant()*sin(angulo_del_panel)*cos(angulo_del_panel);
 
 module panel_coordinate_frame() {
@@ -195,26 +234,7 @@ function profile_arc_points(cx,cz,r,start,end) =
     [for (i=[0:steps]) let(angle=start+(end-start)*i/steps)
         [cx+r*cos(angle),cz+r*sin(angle)]];
 
-module panel_m3_boss(x,y) {
-    translate([x,y,-ancho_pared-control_boss_depth])
-        cylinder(d=m3_insert_boss_diameter,h=control_boss_depth+0.03,$fn=48);
-}
 
-module panel_retainer_bosses(control="all") {
-    if (design_revision == "rework") panel_coordinate_frame() {
-        oled_screw_x = oled_pcb_width/2+oled_retainer_fastener_offset;
-        if (control == "all" || control == "oled") {
-            panel_m3_boss(display_center_x()-oled_screw_x,display_center_y());
-            panel_m3_boss(display_center_x()+oled_screw_x,display_center_y());
-        }
-
-        encoder_screw_x = encoder_body_width/2+encoder_retainer_fastener_offset;
-        if (control == "all" || control == "encoder") {
-            panel_m3_boss(encoder_center_x()-encoder_screw_x,altura_botones);
-            panel_m3_boss(encoder_center_x()+encoder_screw_x,altura_botones);
-        }
-    }
-}
 
 module m3_insert_bore(drive_z,depth,lead_in_at_start=false) {
     translate([0,0,drive_z])
@@ -232,45 +252,18 @@ module m3_insert_bore(drive_z,depth,lead_in_at_start=false) {
 }
 
 module case_m3_insert_cutouts() {
-    if (design_revision == "rework") {
-        tower_edge_offset = separacion_torres_tornillos+dia_torres_tornillos/2;
-        tower_depth = m3_insert_length+m3_insert_bottom_clearance;
-        for (x=[tower_edge_offset,panel_inset()-tower_edge_offset],
-             y=[-tower_edge_offset,-longitud+tower_edge_offset])
-            translate([x,y,0])
-                m3_insert_bore(long_torres_tornillos-tower_depth,tower_depth);
-
-        carrier_mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_panel_edge_x];
-        carrier_mount_y = [-carrier_mount_end_y,-longitud+carrier_mount_end_y];
-        for (x=carrier_mount_x,y=carrier_mount_y)
-            translate([x,y,ancho_pared])
-                m3_insert_bore(carrier_mount_height-carrier_mount_insert_length-1,
-                               carrier_mount_insert_length+1);
-
-        panel_coordinate_frame() {
-            oled_screw_x = oled_pcb_width/2+oled_retainer_fastener_offset;
-            panel_m3_insert_bore(display_center_x()-oled_screw_x,display_center_y());
-            panel_m3_insert_bore(display_center_x()+oled_screw_x,display_center_y());
-            encoder_screw_x = encoder_body_width/2+encoder_retainer_fastener_offset;
-            panel_m3_insert_bore(encoder_center_x()-encoder_screw_x,altura_botones);
-            panel_m3_insert_bore(encoder_center_x()+encoder_screw_x,altura_botones);
-        }
+    if (design_revision=="rework") {
+        controls_floor_bores();
+        board_insert_bores();
+        for (x=lid_tower_xs(), y=[-source_tower_edge(),-longitud+source_tower_edge()])
+            translate([x,y,0]) {
+                translate([0,0,-0.1]) cylinder(d=m3_lid_clearance_diameter,h=closure_joint_z()+0.2,$fn=64);
+                translate([0,0,-0.1]) cylinder(d=m3_screw_head_diameter+1.2,h=closure_head_z()+0.1,$fn=64);
+                translate([0,0,closure_head_z()])
+                    cylinder(d1=m3_screw_head_diameter,d2=m3_lid_clearance_diameter,
+                             h=(m3_screw_head_diameter-m3_lid_clearance_diameter)/2,$fn=64);
+            }
     }
-}
-
-module carrier_mount_bosses() {
-    if (design_revision == "rework") {
-        carrier_mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_panel_edge_x];
-        carrier_mount_y = [-carrier_mount_end_y,-longitud+carrier_mount_end_y];
-        for (x=carrier_mount_x,y=carrier_mount_y)
-            translate([x,y,ancho_pared])
-                cylinder(d=carrier_mount_boss_diameter,h=carrier_mount_height,$fn=48);
-    }
-}
-
-module panel_m3_insert_bore(x,y) {
-    translate([x,y,-ancho_pared-control_boss_depth-0.02])
-        m3_insert_bore(0,m3_insert_length+m3_insert_bottom_clearance,true);
 }
 
 module rounded_profile_2d() {
@@ -279,18 +272,19 @@ module rounded_profile_2d() {
     a = angulo_del_panel;
     z_left_tan = r - r*sin(90-a);
     z_right_tan = r + r*sin(90-a);
-    x_left_tan = -r*cos(90-a);
+    back=-rear_extension();
+    x_left_tan = back-r*cos(90-a);
     x_top_left = x_left_tan - (alto-z_left_tan)/tan(a);
-    x_top_right = x_top_left + profundidad;
+    x_top_right = x_top_left + case_top_span();
     x_right_tan = x_top_right + (alto-z_right_tan)/tan(a);
     x_right_center = x_right_tan - r*cos(90-a);
     points = concat(
         [[x_top_left,alto],[x_top_right,alto],[x_right_tan,z_right_tan]],
         profile_arc_points(x_right_center,r,r,360+(90-a),270),
-        [[0,0]],
+        [[back,0]],
         // The left profile corner is centred at x=0 (the right corner has its
         // own translated centre at x_right_center).
-        profile_arc_points(0,r,r,270,180+(90-a)),
+        profile_arc_points(back,r,r,270,180+(90-a)),
         [[x_left_tan,z_left_tan]]
     );
     polygon(points);
@@ -305,9 +299,10 @@ module inner_profile_2d() {
     a = angulo_del_panel;
     z_left_tan = r-r*sin(90-a);
     z_right_tan = r+r*sin(90-a);
-    x_left_tan = -r*cos(90-a);
+    back=-rear_extension();
+    x_left_tan = back-r*cos(90-a);
     x_top_left = x_left_tan-(alto-z_left_tan)/tan(a);
-    x_top_right = x_top_left+profundidad;
+    x_top_right = x_top_left+case_top_span();
     x_right_tan = x_top_right+(alto-z_right_tan)/tan(a);
     x_right_center = x_right_tan-r*cos(90-a);
     x_inner_top_left = x_top_left+t/sin(a);
@@ -323,8 +318,8 @@ module inner_profile_2d() {
          [x_inner_top_right,alto],
          [x_right_inner,z_right_inner]],
         profile_arc_points(x_right_center,r,inner_radius,360+(90-a),270),
-        [[0,t]],
-        profile_arc_points(0,r,inner_radius,270,180+(90-a))));
+        [[back,t]],
+        profile_arc_points(back,r,inner_radius,270,180+(90-a))));
 }
 
 module enclosure_shell() {
@@ -403,9 +398,9 @@ module display_and_button_openings() {
     // Source-derived display and pushbutton locations in the angled panel frame.
     panel_coordinate_frame() {
         translate([display_panel_x(),display_panel_y(),-8])
-            cube([ancho_display,alto_display,16]);
+            cube([window_width(),window_height(),16]);
         translate([pushbutton_center_x(),altura_botones,-8])
-            cylinder(d=dia_botones,h=16,$fn=96);
+            cylinder(d=design_revision=="baseline" ? dia_botones : cancel_cap_diameter+2*cancel_radial_gap,h=16,$fn=96);
         encoder_hole = design_revision == "baseline"
             ? dia_botones : encoder_shaft_diameter+2*encoder_shaft_clearance;
         translate([encoder_center_x(),altura_botones,-8])
@@ -435,35 +430,7 @@ module rework_panel_pockets() {
 }
 
 module external_access_cutouts() {
-    cable_y = motor_cable_end == "near" ? 0.1 : -longitud-0.1;
-    cable_rotation = motor_cable_end == "near" ? 90 : -90;
-    usb_y = usb_access_end == "near" ? 0.1 : -longitud-0.1;
-    usb_rotation = usb_access_end == "near" ? 90 : -90;
-    indicator_y = relay_indicator_end == "near" ? 0.1 : -longitud-0.1;
-    indicator_rotation = relay_indicator_end == "near" ? 90 : -90;
-
-    if (design_revision == "rework" && enable_motor_cable_exit)
-        translate([motor_cable_x,cable_y,motor_cable_z])
-            rotate([cable_rotation,0,0])
-                linear_extrude(height=ancho_pared+0.4)
-                    circle(d=motor_cable_opening_diameter,$fn=64);
-
-    if (design_revision == "rework" && enable_usb_access)
-        translate([usb_access_x,usb_y,usb_access_z])
-            rotate([usb_rotation,0,0])
-                linear_extrude(height=ancho_pared+0.4)
-                    rounded_rectangle_2d(usb_access_width,usb_access_height,
-                                         usb_access_corner_radius);
-
-    if (design_revision == "rework" && enable_relay_indicator_windows)
-        for (x=[relay_indicator_center_x-relay_indicator_spacing/2,
-                relay_indicator_center_x+relay_indicator_spacing/2])
-            translate([x,indicator_y,relay_indicator_z])
-                rotate([indicator_rotation,0,0])
-                    linear_extrude(height=ancho_pared+0.4)
-                        rounded_rectangle_2d(relay_indicator_width,
-                                             relay_indicator_height,
-                                             relay_indicator_corner_radius);
+    if (design_revision=="rework") measured_port_cutouts();
 }
 
 module tower_land_and_ribs(x,y) {
@@ -508,43 +475,84 @@ module screw_tower(x,y) {
 }
 
 module m3_case_tower(x,y) {
-    if (design_revision == "baseline") screw_tower(x,y);
-    else union() {
-        tower_land_and_ribs(x,y);
-        cylinder(d=m3_insert_boss_diameter,h=long_torres_tornillos,$fn=96);
+    if (design_revision=="baseline") screw_tower(x,y);
+    else intersection() {
+        union() {
+            cylinder(d=m3_insert_boss_diameter,h=closure_joint_z(),$fn=96);
+            near=y>-longitud/2;
+            if (near) translate([-1.2,0,0]) cube([2.4,-y-ancho_pared+0.02,closure_joint_z()]);
+            else translate([-1.2,-(y+longitud-ancho_pared+0.02),0])
+                cube([2.4,y+longitud-ancho_pared+0.02,closure_joint_z()]);
+        }
+        translate([-x,-y,0]) outer_case_volume(0.001);
     }
 }
 
+module outer_case_volume(inset=0) {
+    translate([0,-inset,0]) rotate([90,0,0]) linear_extrude(height=longitud-2*inset)
+        offset(delta=-inset) rounded_profile_2d();
+}
+
+module lid_to_world(exploded=false) {
+    translate([case_top_center_x(),-longitud/2,
+               alto+ancho_pared+(exploded ? explode_gap : 0)])
+        rotate([180,0,0]) children();
+}
+
+module cancel_button_fixed() {
+    panel_coordinate_frame() translate([pushbutton_center_x(),altura_botones,0]) {
+        captive_cancel_guide(ancho_pared,cancel_cap_diameter,cancel_flange_diameter,
+            cancel_radial_gap,cancel_axial_gap,cancel_flange_thickness,cancel_press_travel,
+            cancel_guide_wall,cancel_guide_back,cancel_stem_hole);
+        captive_cancel_break_tabs(ancho_pared,cancel_cap_diameter,cancel_radial_gap,
+            cancel_break_width,cancel_break_height,cancel_state=="as_printed");
+    }
+}
+
+module cancel_button_moving() {
+    panel_coordinate_frame() translate([pushbutton_center_x(),altura_botones,0])
+        captive_cancel_cap(ancho_pared,cancel_cap_diameter,cancel_flange_diameter,
+            cancel_axial_gap,cancel_flange_thickness,cancel_cap_projection,
+            cancel_stem_diameter,cancel_stem_length,cancel_state=="pressed" ? cancel_press_travel : 0);
+}
+
 module case_body() {
-    tower_edge_offset = separacion_torres_tornillos + dia_torres_tornillos/2;
     difference() {
         union() {
             enclosure_shell();
             end_closures();
-            // Four screw lands and the webs from Sketch003.
-            for (x=[tower_edge_offset,panel_inset()-tower_edge_offset], y=[-tower_edge_offset,-longitud+tower_edge_offset])
+            for (x=lid_tower_xs(), y=[-source_tower_edge(),-longitud+source_tower_edge()])
                 translate([x,y,0]) m3_case_tower(x,y);
-            support_wall_profiles();
-            panel_retainer_bosses();
-            carrier_mount_bosses();
+            if (design_revision=="baseline") support_wall_profiles();
+            else {
+                controls_floor_bosses();
+                control_locating_rails();
+                board_supports();
+                measured_ports_positive();
+            }
         }
         display_and_button_openings();
         rework_panel_pockets();
         external_access_cutouts();
         case_m3_insert_cutouts();
+        if (design_revision=="rework") lid_to_world()
+            translate([wood_local_x(),0,0])
+                tab_root_relief(longitud,wood_mount_spacing,wood_mount_root_width,wood_mount_root_embed,
+                                thickness=wood_mount_tab_thickness,assembly_clearance=wood_mount_clearance);
     }
+    if (design_revision=="rework") { cancel_button_fixed(); cancel_button_moving(); }
 }
 
 module lid_plate() {
     // FreeCAD lid pad: 70 x 150 x 1.5, centred on XY.
-    translate([-profundidad/2,-longitud/2,0]) cube([profundidad,longitud,ancho_pared]);
+    translate([-case_top_span()/2,-longitud/2,0]) cube([case_top_span(),longitud,ancho_pared]);
 }
 
 module lid_rim() {
     if (design_revision == "rework") {
         // The lip enters the opening when installed face-down. Its sides
         // follow the angled walls instead of wedging a vertical rectangle.
-        rim_width = profundidad-2*(ancho_pared+lid_rim_clearance)/sin(angulo_del_panel);
+        rim_width = case_top_span()-2*(ancho_pared+lid_rim_clearance)/sin(angulo_del_panel);
         rim_length = longitud-2*(ancho_pared+lid_rim_clearance);
         multmatrix([[1,0,1/tan(angulo_del_panel),-ancho_pared/tan(angulo_del_panel)],
                     [0,1,0,0],[0,0,1,0],[0,0,0,1]])
@@ -559,11 +567,26 @@ module lid_rim() {
 }
 
 module lid_end_tabs() {
+    if (design_revision=="rework") translate([wood_local_x(),0,0])
+        rounded_mount_tabs(longitud,wood_mount_spacing,wood_mount_root_width,wood_mount_root_embed,
+                           thickness=wood_mount_tab_thickness);
+    else
     for (y=[-longitud/2-8,longitud/2+8])
         translate([-8,y-8,0]) cube([16,16,ancho_pared]);
 }
 
 module lid_fastener_holes() {
+    if (design_revision=="rework") {
+        translate([wood_local_x(),0,0])
+            wood_mount_hole_cutouts(wood_mount_spacing,wood_mount_tab_thickness,
+                wood_mount_hole_diameter,wood_mount_head_diameter);
+        for (x=lid_tower_xs(), y=[-longitud/2+source_tower_edge(),longitud/2-source_tower_edge()])
+            translate([x-case_top_center_x(),y,0]) {
+                depth=max(m3_insert_length+m3_insert_bottom_clearance,
+                    closure_wood_z()-3-closure_joint_z()+0.5);
+                m3_insert_bore(11-depth,depth);
+            }
+    } else {
     // Four panel holes pierce the 3 mm raised panel; tab holes pierce the 1.5 mm base only.
     lid_hole_d = design_revision == "baseline" ? 4 : m3_lid_clearance_diameter;
     tower_edge = separacion_torres_tornillos+dia_torres_tornillos/2;
@@ -580,197 +603,34 @@ module lid_fastener_holes() {
         translate([x,y,-0.1]) cylinder(d=lid_hole_d,h=2*ancho_pared+0.2,$fn=96);
     for (y=[-longitud/2-8,longitud/2+8])
         translate([0,y,-0.1]) cylinder(d=lid_hole_d,h=ancho_pared+0.2,$fn=96);
+    }
+}
+
+module world_to_lid() {
+    rotate([180,0,0]) translate([-case_top_center_x(),longitud/2,-closure_wood_z()]) children();
+}
+
+module lid_closure_bosses() {
+    intersection() {
+        for (x=lid_tower_xs(),y=[-longitud/2+source_tower_edge(),longitud/2-source_tower_edge()])
+            translate([x-case_top_center_x(),y,0]) cylinder(d=m3_insert_boss_diameter,h=11,$fn=96);
+        world_to_lid() shell_cavity(lid_rim_clearance+0.1);
+    }
 }
 
 module case_lid() {
     difference() {
-        union() { lid_plate(); lid_rim(); lid_end_tabs(); }
+        union() { lid_plate(); lid_rim(); lid_end_tabs();
+            if (design_revision=="rework") lid_closure_bosses(); }
         lid_fastener_holes();
+        if (design_revision=="rework") world_to_lid() boot_lid_relief();
     }
-}
-
-module control_carrier_slice(control,plate_z) {
-    projection(cut=false) intersection() {
-        union() {
-            if (control == "encoder") encoder_retainer_installed();
-            else oled_retainer_installed();
-            panel_retainer_bosses(control);
-            retainer_screw_head_keepouts(control);
-        }
-        translate([-profundidad,-longitud,plate_z-0.1])
-            cube([3*profundidad,longitud,carrier_thickness+0.2]);
-    }
-}
-
-module retainer_screw_head_keepouts(control) {
-    is_oled = control == "oled";
-    center_x = is_oled ? display_center_x() : encoder_center_x();
-    center_y = is_oled ? display_center_y() : altura_botones;
-    screw_x = is_oled ? oled_pcb_width/2+oled_retainer_fastener_offset
-                      : encoder_body_width/2+encoder_retainer_fastener_offset;
-    plate_t = is_oled ? oled_retainer_thickness : encoder_retainer_thickness;
-    panel_coordinate_frame()
-        for (x=[center_x-screw_x,center_x+screw_x])
-            translate([x,center_y,-(ancho_pared+control_boss_depth+plate_t+m3_screw_head_height)])
-                cylinder(d=m3_screw_head_diameter,h=m3_screw_head_height,$fn=64);
-}
-
-module electronics_carrier() {
-    plate_z = ancho_pared+carrier_mount_height;
-    mount_x = [carrier_mount_edge_x,panel_inset()-carrier_mount_panel_edge_x];
-    mount_y = [-carrier_mount_end_y,-longitud+carrier_mount_end_y];
-    carrier_x = (panel_inset())/2;
-    difference() {
-        translate([carrier_x-carrier_width/2,-longitud/2-carrier_length/2,plate_z])
-            cube([carrier_width,carrier_length,carrier_thickness]);
-        for (x=mount_x,y=mount_y)
-            translate([x,y,plate_z-0.1])
-                cylinder(d=m3_lid_clearance_diameter,h=carrier_thickness+0.2,$fn=48);
-        for (x=[carrier_x-carrier_width/2+carrier_grid_pitch:
-                carrier_grid_pitch:carrier_x+carrier_width/2-carrier_grid_pitch],
-             y=[-longitud/2-carrier_length/2+carrier_grid_pitch:
-                carrier_grid_pitch:-longitud/2+carrier_length/2-carrier_grid_pitch])
-            translate([x,y,plate_z-0.1])
-                cylinder(d=carrier_grid_hole_diameter,h=carrier_thickness+0.2,$fn=32);
-        // Each swept relief opens to the panel-side edge. A closed ring cut
-        // would leave a disconnected island of carrier inside the retainer.
-        for (control=["oled","encoder"])
-        translate([0,0,plate_z-0.1])
-            linear_extrude(height=carrier_thickness+0.2)
-                offset(delta=carrier_encoder_clearance)
-                    hull() {
-                        control_carrier_slice(control,plate_z);
-                        translate([profundidad,0]) control_carrier_slice(control,plate_z);
-                    }
-    }
-}
-
-module electronics_carrier_installed() {
-    if (design_revision == "rework") electronics_carrier();
 }
 
 module button_cap() {
-    socket_depth = min(button_cap_socket_depth,button_cap_height-button_cap_roof);
-    difference() {
-        cylinder(d=button_cap_diameter,h=button_cap_height,$fn=64);
-        translate([0,0,-0.01])
-            cylinder(d=button_cap_socket_diameter+2*button_cap_socket_clearance,
-                     h=socket_depth+0.01,$fn=48);
-    }
-}
-
-module service_retainer_frame(outer_w,outer_h,inner_w,inner_h,thickness,
-                              screw_x,spacer_h,notch_edge,notch_width,notch_depth,
-                              support_w,support_h) {
-    total_h = thickness+spacer_h;
-    difference() {
-        union() {
-            // Rear screw plate seats against the rear faces of the case bosses.
-            linear_extrude(height=thickness)
-                square([outer_w,outer_h],center=true);
-            // PCB support extends toward the panel, beside the bosses instead
-            // of occupying their screw axes. The front edge contacts the PCB.
-            translate([0,0,thickness])
-                linear_extrude(height=spacer_h)
-                    square([support_w,support_h],center=true);
-        }
-        difference() {
-            translate([0,0,-0.01])
-                linear_extrude(height=total_h+0.02)
-                    square([inner_w,inner_h],center=true);
-            // Keep a brace in the rear plate. A through header notch and an
-            // open lower lip otherwise separate the OLED retainer into halves.
-            linear_extrude(height=thickness)
-                if (notch_edge == "top" || notch_edge == "bottom")
-                    square([outer_w,retainer_bridge_width],center=true);
-                else square([retainer_bridge_width,outer_h],center=true);
-        }
-        // Screw heads remain outside the thin rear plate, with no blind recess.
-        for (x=[-screw_x,screw_x])
-            translate([x,0,-0.01])
-                cylinder(d=m3_lid_clearance_diameter,h=total_h+0.02,$fn=48);
-        if (notch_edge == "top")
-            translate([-notch_width/2,support_h/2-notch_depth,-0.01])
-                cube([notch_width,(outer_h-support_h)/2+notch_depth+0.02,total_h+0.02]);
-        if (notch_edge == "bottom")
-            translate([-notch_width/2,-outer_h/2-0.01,-0.01])
-                cube([notch_width,(outer_h-support_h)/2+notch_depth+0.02,total_h+0.02]);
-        if (notch_edge == "left")
-            translate([-outer_w/2-0.01,-notch_width/2,-0.01])
-                cube([(outer_w-support_w)/2+notch_depth+0.02,notch_width,total_h+0.02]);
-        if (notch_edge == "right")
-            translate([support_w/2-notch_depth,-notch_width/2,-0.01])
-                cube([(outer_w-support_w)/2+notch_depth+0.02,notch_width,total_h+0.02]);
-    }
-}
-
-module retainer_shell_envelope(panel_x,panel_y,plate_base) {
-    // Express the inset shell cavity in print coordinates. This opens the
-    // OLED's lower lip around the curved floor without cutting the shell.
-    translate([-panel_x,-panel_y,-plate_base])
-        inverse_panel_coordinate_frame()
-            translate([0,-ancho_pared-retainer_floor_clearance,0])
-                rotate([90,0,0])
-                    linear_extrude(height=longitud-2*(ancho_pared+retainer_floor_clearance))
-                        offset(delta=-retainer_floor_clearance) inner_profile_2d();
-}
-
-function oled_retainer_outer_width() =
-    oled_pcb_width+2*(oled_retainer_fastener_offset+m3_insert_boss_diameter/2);
-function oled_retainer_outer_height() = oled_pcb_height;
-function oled_retainer_spacer_height() =
-    max(0,control_boss_depth+ancho_pared-(oled_front_skin+oled_module_depth));
-function encoder_retainer_outer_width() =
-    encoder_body_width+2*(encoder_retainer_fastener_offset+m3_insert_boss_diameter/2);
-function encoder_retainer_outer_height() =
-    encoder_body_height+2*(encoder_retainer_fastener_offset+m3_insert_boss_diameter/2);
-function encoder_retainer_spacer_height() =
-    max(0,control_boss_depth+ancho_pared-(encoder_front_skin+encoder_body_depth));
-
-module oled_retainer_frame() {
-    intersection() {
-    service_retainer_frame(
-        oled_retainer_outer_width(),oled_retainer_outer_height(),
-        oled_pcb_width-2*oled_retainer_overlap,
-        oled_pcb_height-2*oled_retainer_overlap,
-        oled_retainer_thickness,
-        oled_pcb_width/2+oled_retainer_fastener_offset,
-        oled_retainer_spacer_height(),
-        oled_header_edge,oled_header_notch_width,oled_header_notch_depth,
-        oled_pcb_width,oled_pcb_height);
-    retainer_shell_envelope(display_center_x(),display_center_y(),
-        -(ancho_pared+control_boss_depth+oled_retainer_thickness));
-    }
-}
-
-module encoder_retainer_frame() {
-    intersection() {
-    service_retainer_frame(
-        encoder_retainer_outer_width(),encoder_retainer_outer_height(),
-        encoder_body_width-2*encoder_retainer_overlap,
-        encoder_body_height-2*encoder_retainer_overlap,
-        encoder_retainer_thickness,
-        encoder_body_width/2+encoder_retainer_fastener_offset,
-        encoder_retainer_spacer_height(),
-        encoder_terminal_edge,encoder_terminal_notch_width,encoder_terminal_notch_depth,
-        encoder_body_width,encoder_body_height);
-    retainer_shell_envelope(encoder_center_x(),altura_botones,
-        -(ancho_pared+control_boss_depth+encoder_retainer_thickness));
-    }
-}
-
-module oled_retainer_installed() {
-    if (design_revision == "rework") panel_coordinate_frame()
-        translate([display_center_x(),display_center_y(),
-                   -(ancho_pared+control_boss_depth+oled_retainer_thickness)])
-            oled_retainer_frame();
-}
-
-module encoder_retainer_installed() {
-    if (design_revision == "rework") panel_coordinate_frame()
-        translate([encoder_center_x(),altura_botones,
-                   -(ancho_pared+control_boss_depth+encoder_retainer_thickness)])
-            encoder_retainer_frame();
+    translate([0,0,ancho_pared+cancel_axial_gap+cancel_flange_thickness+cancel_stem_length])
+        captive_cancel_cap(ancho_pared,cancel_cap_diameter,cancel_flange_diameter,
+            cancel_axial_gap,cancel_flange_thickness,cancel_cap_projection,cancel_stem_diameter,cancel_stem_length);
 }
 
 module case_lid_installed() {
@@ -785,18 +645,19 @@ module case_lid_installed() {
 module assembly() {
     case_body();
     case_lid_installed();
-    if (design_revision == "rework") {
-        oled_retainer_installed();
-        encoder_retainer_installed();
-        electronics_carrier_installed();
+    if (design_revision=="rework") {
+        controls_bracket();
+        board_clamp(0);
+        board_clamp(1);
     }
 }
 
 if (show_part == "case") case_body();
 else if (show_part == "lid") case_lid();
-else if (show_part == "oled_retainer") oled_retainer_frame();
-else if (show_part == "encoder_retainer") encoder_retainer_frame();
-else if (show_part == "electronics_carrier") electronics_carrier();
+else if (show_part == "controls_bracket") controls_bracket();
+else if (show_part == "proto_clamp") board_clamp(0);
+else if (show_part == "supply_clamp") board_clamp(1);
 else if (show_part == "button_cap") button_cap();
+else if (show_part == "hardware_preview") { assembly(); %electronics_envelopes(); %control_connector_envelopes(); }
 else if (show_part == "none") { }
 else assembly();

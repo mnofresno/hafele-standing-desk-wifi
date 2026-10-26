@@ -2,6 +2,7 @@
 import importlib.util
 import json
 import subprocess
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -10,6 +11,7 @@ import trimesh
 
 
 TOOLS = Path(__file__).resolve().parents[1]/'tools'
+sys.path.insert(0,str(TOOLS))
 SPEC = importlib.util.spec_from_file_location('geometry_validator', TOOLS/'validate_geometry.py')
 validator = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(validator)

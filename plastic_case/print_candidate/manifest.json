@@ -1,18 +1,21 @@
 {
   "design_revision": "rework",
-  "parameters": "source defaults; cable_od=8 for clamp",
+  "parameters": "source defaults; PIP cap as_printed",
   "openscad_version": "OpenSCAD version 2026.06.12",
   "sources_sha256": {
-    "hafele_control_box.scad": "8dc730344c21d9708f8a5ebac357f04bc7fd30f858f6f0f583eb14164513ed00",
-    "tests/motor_cable_clamp.scad": "29196aa4072c7e1a2e6d936ddf93a85e6c504b295000c10d0466d208cc4e82e4"
+    "hafele_control_box.scad": "04488dff8bfc6cf7db801f7d05cb2b5e3ec20818865709e57deeb3e4b496966a",
+    "lib/captive_cancel_button.scad": "ba7620bc673eb1b97e5a16a23e9b313d85545e7111ad0718725af353fb75a6b6",
+    "lib/combined_controls.scad": "adc5a55b77d9500e6f328a1bc9f7a7291b4fb8cfe323207bed166559cb55ed35",
+    "lib/measured_ports.scad": "6572f2893666439d816a8792a537697c8e79c97fa041780b12a3fb4bdc189f96",
+    "lib/rounded_mount_tabs.scad": "5ee5403271ee90f654d24e5126b0a542a1207dfa504e23bdd0bfdccc4dce8fcc"
   },
   "artifacts": {
     "case_rework_candidate.stl": {
-      "sha256": "3c1ea3614c978cc92098fa603447a11d7cb46eb1b9f0a16e3adb06542e23641a",
+      "sha256": "d724b00687f2f63796160b383208fd0e035a1367a656ad120f64839de3980ce5",
       "metrics": {
         "bounds_mm": [
           [
-            -13.214856676757336,
+            -38.214856676757336,
             -150.0,
             0.0
           ],
@@ -22,8 +25,8 @@
             35.0
           ]
         ],
-        "volume_mm3": 47586.13164884905,
-        "area_mm2": 57778.78708707768,
+        "volume_mm3": 53196.80859672761,
+        "area_mm2": 69218.80992365081,
         "shells": 1,
         "solid_components": 1,
         "enclosed_cavity_shells": 0,
@@ -32,22 +35,22 @@
       }
     },
     "lid_rework_candidate.stl": {
-      "sha256": "8a9154308278ee5327a1598823f3197cf979595ef8754c7ab29b3ca1801098ff",
+      "sha256": "decaea28c964a44d6fb3c15b2a35b1a1d03c5df62173c5e6e6ed6f8736a8c04f",
       "metrics": {
         "bounds_mm": [
           [
-            -35.0,
-            -91.0,
+            -47.5,
+            -92.0,
             0.0
           ],
           [
-            35.0,
-            91.0,
-            3.0
+            47.5,
+            92.0,
+            11.0
           ]
         ],
-        "volume_mm3": 30968.152376440015,
-        "area_mm2": 23485.453445849675,
+        "volume_mm3": 47062.095190646454,
+        "area_mm2": 33206.88509077737,
         "shells": 1,
         "solid_components": 1,
         "enclosed_cavity_shells": 0,
@@ -55,23 +58,23 @@
         "winding_consistent": true
       }
     },
-    "oled_retainer_candidate.stl": {
-      "sha256": "8654894a69b3726e22d608151207237215fc010280afaf74cd73bdd011e2b006",
+    "controls_bracket.stl": {
+      "sha256": "30a32d0bc1e8db28a23fcbb69121d9cec47a5aa6735753e0363461da452fde21",
       "metrics": {
         "bounds_mm": [
           [
-            -26.7,
-            -15.448198774913028,
-            0.0
+            34.0,
+            -137.5,
+            2.008236464509258
           ],
           [
-            26.7,
-            16.75,
-            17.400000000000002
+            61.00713129557543,
+            -15.0,
+            29.675325308849217
           ]
         ],
-        "volume_mm3": 2603.7736678880233,
-        "area_mm2": 4410.272553372764,
+        "volume_mm3": 8038.653850188285,
+        "area_mm2": 6263.041033910424,
         "shells": 1,
         "solid_components": 1,
         "enclosed_cavity_shells": 0,
@@ -79,23 +82,23 @@
         "winding_consistent": true
       }
     },
-    "encoder_retainer_candidate.stl": {
-      "sha256": "a20df37e0b2aa2a7447d9bf1013a085c0dec93fee3de97089bf9cb089889521d",
+    "proto_board_clamp.stl": {
+      "sha256": "e5bfd16ade05bdb5c3b34ca74fc1dcb95018f7482c0bc9420bb30d639b874c1b",
       "metrics": {
         "bounds_mm": [
           [
-            -14.75,
-            -12.984068777917688,
-            0.0
+            27.700000000000003,
+            -66.5,
+            9.7
           ],
           [
-            14.75,
-            14.35,
-            12.799999999999999
+            36.7,
+            -57.5,
+            20.2
           ]
         ],
-        "volume_mm3": 1341.527735395891,
-        "area_mm2": 2425.1139053260827,
+        "volume_mm3": 536.3809852623648,
+        "area_mm2": 524.47161960382,
         "shells": 1,
         "solid_components": 1,
         "enclosed_cavity_shells": 0,
@@ -103,95 +106,23 @@
         "winding_consistent": true
       }
     },
-    "electronics_carrier_candidate.stl": {
-      "sha256": "35535926d916ad86ec2d311a7228f43db0872aee83e6afe22763ed81406b1c18",
+    "power_board_clamp.stl": {
+      "sha256": "a2550abddedf1a4d34d9ec4f22af4fb69bd39ef6c8fc7383cc144ef9f714d2cd",
       "metrics": {
         "bounds_mm": [
           [
-            3.0,
-            -136.0,
-            8.5
+            0.5,
+            -145.7,
+            9.7
           ],
           [
-            57.6217782649107,
-            -14.0,
-            10.5
+            9.5,
+            -134.2,
+            20.2
           ]
         ],
-        "volume_mm3": 9779.694966706242,
-        "area_mm2": 11381.000602116157,
-        "shells": 1,
-        "solid_components": 1,
-        "enclosed_cavity_shells": 0,
-        "watertight": true,
-        "winding_consistent": true
-      }
-    },
-    "button_cap_candidate.stl": {
-      "sha256": "8874eab0d180776f5eac734aa818b93ea7ae60d53457b3f35aaeb39835327203",
-      "metrics": {
-        "bounds_mm": [
-          [
-            -5.0,
-            -5.0,
-            0.0
-          ],
-          [
-            5.0,
-            5.0,
-            4.0
-          ]
-        ],
-        "volume_mm3": 224.95760249814896,
-        "area_mm2": 336.31192028977136,
-        "shells": 1,
-        "solid_components": 1,
-        "enclosed_cavity_shells": 0,
-        "watertight": true,
-        "winding_consistent": true
-      }
-    },
-    "motor_cable_saddle_8mm_calibration.stl": {
-      "sha256": "5cc87c00965cab49891ccebef5dfc0331d81252022340dd04510f3659c8f9834",
-      "metrics": {
-        "bounds_mm": [
-          [
-            -16.0,
-            -14.0,
-            0.0
-          ],
-          [
-            16.0,
-            14.0,
-            7.0
-          ]
-        ],
-        "volume_mm3": 5068.031037715553,
-        "area_mm2": 3091.4340559101447,
-        "shells": 1,
-        "solid_components": 1,
-        "enclosed_cavity_shells": 0,
-        "watertight": true,
-        "winding_consistent": true
-      }
-    },
-    "motor_cable_cap_8mm_calibration.stl": {
-      "sha256": "779f21e18a0d50ab290038b569d72aca5dc02b865627c2e96ce03769caff9739",
-      "metrics": {
-        "bounds_mm": [
-          [
-            -16.0,
-            -14.0,
-            0.0
-          ],
-          [
-            16.0,
-            14.0,
-            6.0
-          ]
-        ],
-        "volume_mm3": 4380.273459998407,
-        "area_mm2": 2735.870389788605,
+        "volume_mm3": 609.6443986644642,
+        "area_mm2": 578.8628259089595,
         "shells": 1,
         "solid_components": 1,
         "enclosed_cavity_shells": 0,
@@ -200,10 +131,10 @@
       }
     },
     "assembly_preview.png": {
-      "sha256": "f2a68fedf9aa94426d586c7d81724428f59fd03d4dafccd3e52eec5c82300de6"
+      "sha256": "5a61831a144372cda6811888addde62188af463ddfb16041be3f96dfffc4b1a7"
     },
     "assembly_exploded_preview.png": {
-      "sha256": "550d30e16a94c665aaa5271940be5ce2d7c395164238cc7984cdd3e2b2d3df12"
+      "sha256": "45399902c9d3d8a3353c0f09719222e060bef408c25b33e3e33fe5320565cba2"
     }
   }
 }

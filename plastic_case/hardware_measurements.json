@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-10-26",
+  "units": "mm unless stated otherwise",
+  "authority": "User measurements supersede catalog candidates and previous CAD assumptions for the measured envelope only.",
+  "transcription_note": "Measurements were relayed by the primary agent from the current conversation. Descriptions below preserve ambiguities; they are summaries, not invented verbatim user quotations.",
+  "provenance_definitions": {
+    "user_measured": "Dimension reported by the user from the physical component; independent measurement by the agent is not claimed.",
+    "user_reported_hardware": "Available hardware or preferred nominal size reported by the user.",
+    "user_requirement": "Requested design behavior, not a measured dimension.",
+    "source_geometry": "Coordinate retained from original CAD; not a new physical user measurement.",
+    "derived": "Arithmetic from explicitly identified inputs; not independently measured.",
+    "unconfirmed": "Not supplied, ambiguous, or inconsistent. Do not substitute a previous catalog assumption.",
+    "design_choice": "CAD design choice made for this iteration, not a physical dimension measured by the user.",
+    "cad_validation": "Numerical CAD/mesh clearance result reported during this iteration; not a physical user measurement."
+  },
+  "motor_cable_boot": {
+    "neck_width_mm": {
+      "value": 8.5,
+      "provenance": "user_measured"
+    },
+    "neck_height_mm": {
+      "value": 10.5,
+      "provenance": "user_measured"
+    },
+    "wall_slot_gap_mm": {
+      "value": 2.5,
+      "provenance": "user_measured",
+      "note": "Gap/slot that receives the printed enclosure wall; do not interpret as neck diameter."
+    },
+    "cross_section_shape": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Only width and height of the neck are confirmed; corner profile/radius is unspecified."
+    },
+    "opening_direction": {
+      "value": "upward",
+      "provenance": "user_requirement"
+    },
+    "opening_location": {
+      "value": "flush with lid seam",
+      "provenance": "user_requirement"
+    },
+    "fit_clearance_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Printing clearance must be added deliberately; it is not included in the measured neck dimensions."
+    },
+    "description": "Neck 8.5 wide by 10.5 high; wall slot 2.5; opening must reach the lid seam and remain open upward."
+  },
+  "tactile_button": {
+    "footprint_width_mm": {
+      "value": 12,
+      "provenance": "user_measured"
+    },
+    "footprint_length_mm": {
+      "value": 12,
+      "provenance": "user_measured"
+    },
+    "total_unpressed_height_mm": {
+      "value": 5,
+      "provenance": "user_measured",
+      "note": "Total height in the unpressed state, not the height of the switch body alone."
+    },
+    "body_height_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied; do not equate it with the 5 mm total unpressed height."
+    },
+    "actuation_travel_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied."
+    },
+    "terminal_and_solder_keepout_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied."
+    },
+    "description": "Tactile 12 by 12, total unpressed height 5. Body height was not provided."
+  },
+  "oled_module": {
+    "pcb_width_mm": {
+      "value": 27.5,
+      "provenance": "user_measured"
+    },
+    "pcb_height_mm": {
+      "value": 28,
+      "provenance": "user_measured"
+    },
+    "module_total_depth_mm": {
+      "value": 3.5,
+      "provenance": "user_measured",
+      "note": "Reported total depth; PCB laminate thickness alone is not established."
+    },
+    "pcb_laminate_thickness_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Do not use the 3.5 mm total module depth as PCB thickness."
+    },
+    "visible_window_width_mm": {
+      "value": 27,
+      "provenance": "user_requirement",
+      "note": "Preserve this requested window while resolving the margin discrepancy."
+    },
+    "visible_window_height_mm": {
+      "value": 14.5,
+      "provenance": "user_requirement",
+      "note": "Preserve this requested window while resolving the margin discrepancy."
+    },
+    "bottom_margin_to_visible_area_mm": {
+      "value": 9,
+      "provenance": "user_measured",
+      "note": "Reported bottom-to-visible-area margin; datum/axis needs confirmation."
+    },
+    "top_margin_to_visible_area_mm": {
+      "value": 7,
+      "provenance": "user_measured",
+      "note": "Approximate reported top margin, not an exact value."
+    },
+    "top_margin_is_approximate": true,
+    "margin_sum_with_window_height_mm": {
+      "value": 30.5,
+      "provenance": "derived",
+      "note": "9 + approximately 7 + 14.5; exceeds the reported 28 mm PCB height."
+    },
+    "margin_sum_excess_over_pcb_height_mm": {
+      "value": 2.5,
+      "provenance": "derived",
+      "note": "Approximately 30.5 - 28; indicates incompatible/ambiguous margin datums."
+    },
+    "window_alignment_confirmed": false,
+    "connected_dupont_extent_mm": {
+      "value": 15,
+      "provenance": "user_measured",
+      "note": "15 mm normal to the PCB, rearward to the outside of connected Dupont plastic; cable bend excluded. Axis clarified by the user."
+    },
+    "dupont_extent_axis_and_edge": {
+      "value": "normal_to_PCB_rearward",
+      "provenance": "user_measured",
+      "note": "The 15 mm dimension is rearward along the PCB normal, not an in-plane extension. Specific header XY position is not supplied."
+    },
+    "dupont_cable_bend_envelope_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Excluded from the reported 15 mm and not supplied."
+    },
+    "exact_module_sku": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Measured envelope does not identify controller or vendor."
+    },
+    "description": "PCB 27.5 by 28; total depth 3.5. Connected Dupont adds 15 mm rearward NORMAL to the PCB, excluding cable bend. Bottom margin 9 and top about 7 still conflict with the 28 mm board height and 27 by 14.5 window."
+  },
+  "encoder_module": {
+    "pcb_length_mm": {
+      "value": 26,
+      "provenance": "user_measured"
+    },
+    "pcb_width_mm": {
+      "value": 18.5,
+      "provenance": "user_measured"
+    },
+    "connected_dupont_extension_beyond_pcb_edge_mm": {
+      "value": 11.5,
+      "provenance": "user_measured",
+      "note": "11.5 mm beyond the PCB edge, in the PCB plane along its 26 mm direction, through the 90-degree Dupont connector."
+    },
+    "dupont_edge_and_direction": {
+      "value": "in_PCB_plane_along_26mm_length_at_connector_end",
+      "provenance": "user_measured",
+      "note": "User clarified the right-angle (90-degree) Dupont extends along the long PCB direction; it is not a normal-to-PCB depth."
+    },
+    "dupont_cable_bend_envelope_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied; do not treat the connector plastic extension as the complete cable envelope."
+    },
+    "shaft_axis_from_nonconnector_end_mm": {
+      "value": 10.5,
+      "provenance": "user_measured",
+      "note": "Measured along the 26 mm direction, from the end without the connector."
+    },
+    "shaft_axis_from_connector_end_mm": {
+      "value": 15.5,
+      "provenance": "derived",
+      "note": "26 - 10.5, assuming the connector end is opposite the reported nonconnector end."
+    },
+    "shaft_axis_transverse_margin_a_mm": {
+      "value": 8,
+      "provenance": "user_measured",
+      "note": "Approximate; physical side A has not been identified in CAD."
+    },
+    "shaft_axis_transverse_margin_b_mm": {
+      "value": 10,
+      "provenance": "user_measured",
+      "note": "Approximate; physical side B has not been identified in CAD."
+    },
+    "transverse_margins_are_approximate": true,
+    "transverse_margin_sum_mm": {
+      "value": 18,
+      "provenance": "derived",
+      "note": "Approximately 8 + approximately 10; differs from the reported 18.5 mm PCB width by 0.5 mm."
+    },
+    "transverse_side_orientation": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Do not silently center the shaft or choose which edge is 8 mm."
+    },
+    "body_height_and_terminal_keepout_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Bare encoder body height alone is not isolated; installed flat PCB plane 6.2 mm and deepest solder tip 8 mm are confirmed separately, giving 1.8 mm solder protrusion."
+    },
+    "description": "PCB 26 by 18.5; 90-degree Dupont adds 11.5 in-plane along the 26 mm direction. Shaft 10.5 from the nonconnector end; transverse about 8 and about 10 without side identification. Flat PCB/contact plane is 6.2 mm from the inner enclosure face and deepest solder tip is 8 mm from that same face, giving 1.8 mm solder protrusion.",
+    "dupont_connector_angle_degrees": {
+      "value": 90,
+      "provenance": "user_reported_hardware",
+      "note": "Right-angle connector as clarified by the user."
+    },
+    "assembly_depth_from_inner_case_face_to_deepest_solder_tip_mm": {
+      "value": 8,
+      "provenance": "user_measured",
+      "note": "Measured from the INNER enclosure face to the deepest solder tip; not the thickness of the bare PCB or distance from its bare face."
+    },
+    "pcb_bare_face_contact_offset_from_inner_case_face_mm": {
+      "value": 6.2,
+      "provenance": "user_measured",
+      "note": "User confirmed the flat PCB/contact plane is 6.2 mm from the inner enclosure face."
+    },
+    "solder_protrusion_beyond_flat_pcb_face_mm": {
+      "value": 1.8,
+      "provenance": "derived",
+      "note": "8.0 mm deepest solder tip minus 6.2 mm flat PCB plane, both measured from the same inner case face; replaces the former unmeasured 0.6 mm relief."
+    }
+  },
+  "m3_fasteners": {
+    "head_style": {
+      "value": "countersunk",
+      "provenance": "user_reported_hardware"
+    },
+    "nominal_thread": {
+      "value": "M3",
+      "provenance": "user_reported_hardware"
+    },
+    "available_nominal_lengths_mm": {
+      "value": [
+        10,
+        12,
+        15,
+        20,
+        25
+      ],
+      "provenance": "user_reported_hardware"
+    },
+    "preferred_nominal_length_mm": {
+      "value": 15,
+      "provenance": "user_reported_hardware",
+      "note": "Preferred option, not a derived engagement calculation."
+    },
+    "head_diameter_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied."
+    },
+    "countersink_angle_degrees": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied."
+    },
+    "insert_outer_diameter_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied by the user; existing pilot/boss defaults are not measurements."
+    },
+    "insert_length_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied by the user; no validated screw/insert engagement calculation yet."
+    }
+  },
+  "desk_mounting_screws": {
+    "type_reported": {
+      "value": "Parker / self-tapping screw",
+      "provenance": "user_reported_hardware"
+    },
+    "head_diameter_mm": {
+      "value": 7,
+      "provenance": "user_measured"
+    },
+    "reported_length_mm": {
+      "value": 15,
+      "provenance": "user_measured",
+      "note": "Length reference (total or under-head) was not specified."
+    },
+    "thread_diameter_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied."
+    },
+    "thread_pitch_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied."
+    },
+    "wood_thickness_mm": {
+      "value": null,
+      "provenance": "unconfirmed",
+      "note": "Not supplied; safe screw penetration/engagement cannot be derived."
+    },
+    "original_hole_centers_mm": {
+      "value": [
+        [
+          0,
+          -83
+        ],
+        [
+          0,
+          83
+        ]
+      ],
+      "provenance": "source_geometry",
+      "note": "Original X/Y centres; do not relocate them based on the screw-head measurement."
+    },
+    "original_center_spacing_mm": {
+      "value": 166,
+      "provenance": "derived",
+      "note": "83 - (-83), from original CAD centres; not newly measured by the user."
+    }
+  },
+  "internal_board_assemblies": {
+    "count": {
+      "value": 2,
+      "provenance": "user_reported_hardware",
+      "note": "Exactly two assemblies. ESP32 and relays share the same protoboard assembly."
+    },
+    "power_supply": {
+      "length_mm": {
+        "value": 54,
+        "provenance": "user_measured"
+      },
+      "width_mm": {
+        "value": 24,
+        "provenance": "user_measured"
+      },
+      "reported_height_mm": {
+        "value": 17,
+        "provenance": "user_measured",
+        "note": "Maximum total assembly height, including solder."
+      },
+      "solder_and_terminal_keepouts_mm": {
+        "value": null,
+        "provenance": "unconfirmed",
+        "note": "Solder is included in the measured overall 17 mm height; separate terminal, wire insertion and cable-bend envelopes are not supplied."
+      },
+      "overall_height_includes_solder": true
+    },
+    "esp32_and_relays_on_protoboard": {
+      "length_mm": {
+        "value": 100,
+        "provenance": "user_measured"
+      },
+      "width_mm": {
+        "value": 50,
+        "provenance": "user_measured"
+      },
+      "reported_maximum_height_mm": {
+        "value": 21,
+        "provenance": "user_measured",
+        "note": "Maximum total assembly height is 21 mm at the relay, including solder; keep the complete lower solder/wire-wrap envelope in the assembly datum."
+      },
+      "separate_esp32_board_mount_required": false,
+      "lowest_point_definition": {
+        "value": "Assembly includes underside solder and wire-wrap",
+        "provenance": "user_measured"
+      },
+      "usb_socket_type": {
+        "value": "micro USB",
+        "provenance": "user_reported_hardware"
+      },
+      "usb_socket_height_mm": {
+        "value": 3.5,
+        "provenance": "user_measured",
+        "note": "Socket height does not establish plug overmold or insertion corridor."
+      },
+      "usb_reported_height_above_lowest_assembly_point_mm": {
+        "value": 18,
+        "provenance": "user_measured",
+        "note": "Approximate. The reference lowest point includes solder/wire-wrap; user did not say whether 18 denotes socket centre or bottom."
+      },
+      "usb_height_is_approximate": true,
+      "usb_height_targets_socket_center_or_bottom": {
+        "value": null,
+        "provenance": "unconfirmed",
+        "note": "Do not silently choose a centre/bottom datum or derive the cutout centre."
+      },
+      "usb_plug_overmold_and_bend_envelope_mm": {
+        "value": null,
+        "provenance": "unconfirmed",
+        "note": "Not supplied."
+      },
+      "overall_height_includes_solder": true
+    }
+  },
+  "superseded_assumptions": [
+    {
+      "assumption": "OLED PCB 35.4 by 33.5 mm",
+      "replacement": "Measured PCB 27.5 by 28 mm; total module depth 3.5 mm."
+    },
+    {
+      "assumption": "Mount full encoder module using bare EC11 body envelope",
+      "replacement": "Measured encoder PCB 26 by 18.5 mm and connector extension 11.5 mm; bare body depth is still unconfirmed."
+    },
+    {
+      "assumption": "Three independently mounted boards: ESP32, relays and supply",
+      "replacement": "Two assemblies: 100 by 50 ESP32+relay protoboard, and 54 by 24 supply."
+    },
+    {
+      "assumption": "Infer insert OD/length, button body height or USB centre from nominal hardware",
+      "replacement": "Keep these quantities unconfirmed until their specific datum/dimension is supplied."
+    }
+  ],
+  "enclosure_design_choices": {
+    "rearward_case_extension_mm": {
+      "value": 25,
+      "provenance": "design_choice",
+      "note": "25 mm rearward extension chosen to clear measured boards and OLED Dupont plus the configured wire bend. The earlier 20 mm candidate had a reported 68.1 mm3 envelope overlap; this is a design choice, not a user-measured dimension."
+    },
+    "preserve_front_control_positions": {
+      "value": true,
+      "provenance": "design_choice",
+      "note": "Extend rearward while retaining the front controls at their original positions."
+    },
+    "preserve_original_desk_hole_centres": {
+      "value": true,
+      "provenance": "design_choice",
+      "note": "Keep the original source centres X=0,Y=-83 and X=0,Y=83; do not move them with the rearward extension."
+    },
+    "rejected_20mm_candidate_overlap_mm3": {
+      "value": 68.1,
+      "provenance": "cad_validation",
+      "note": "Reported overlap between a board maximum envelope and the OLED connector/wire-bend envelope at the 20 mm extension; the extension was increased to 25 mm."
+    },
+    "expected_rear_routing_gap_mm": {
+      "value": 2.4,
+      "provenance": "design_choice",
+      "note": "Approximate design estimate for the 25 mm extension, not a physical measurement or a certified minimum surface-distance bound."
+    }
+  }
+}

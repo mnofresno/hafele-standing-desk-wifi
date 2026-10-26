@@ -9,17 +9,15 @@ import tempfile
 from pathlib import Path
 
 from validate_rework import mesh_metrics
+from cad_sources import source_hashes
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTS = {
     'case_rework_candidate.stl': ('hafele_control_box.scad', 'case'),
     'lid_rework_candidate.stl': ('hafele_control_box.scad', 'lid'),
-    'oled_retainer_candidate.stl': ('hafele_control_box.scad', 'oled_retainer'),
-    'encoder_retainer_candidate.stl': ('hafele_control_box.scad', 'encoder_retainer'),
-    'electronics_carrier_candidate.stl': ('hafele_control_box.scad', 'electronics_carrier'),
-    'button_cap_candidate.stl': ('hafele_control_box.scad', 'button_cap'),
-    'motor_cable_saddle_8mm_calibration.stl': ('tests/motor_cable_clamp.scad', 'saddle'),
-    'motor_cable_cap_8mm_calibration.stl': ('tests/motor_cable_clamp.scad', 'cap'),
+    'controls_bracket.stl': ('hafele_control_box.scad', 'controls_bracket'),
+    'proto_board_clamp.stl': ('hafele_control_box.scad', 'proto_clamp'),
+    'power_board_clamp.stl': ('hafele_control_box.scad', 'supply_clamp'),
 }
 
 
@@ -36,6 +34,9 @@ def run_openscad(command):
 
 def verify(destination):
     manifest = json.loads((destination/'manifest.json').read_text())
+    expected=source_hashes([ROOT/p for p in {x[0] for x in PARTS.values()}],ROOT)
+    if manifest['sources_sha256']!=expected:
+        raise RuntimeError('Stale print set: entry SCAD or included library has changed')
     for source, checksum in manifest['sources_sha256'].items():
         if sha256(ROOT/source) != checksum:
             raise RuntimeError(f'Stale print set: source {source} has changed')
@@ -57,16 +58,16 @@ def main():
         verify(args.out)
         return
     version = subprocess.run([args.openscad, '--version'], capture_output=True, text=True, check=True)
-    manifest = {'design_revision':'rework', 'parameters':'source defaults; cable_od=8 for clamp',
+    manifest = {'design_revision':'rework', 'parameters':'source defaults; PIP cap as_printed',
                 'openscad_version':(version.stdout+version.stderr).strip(),
-                'sources_sha256':{p:sha256(ROOT/p) for p in sorted({x[0] for x in PARTS.values()})},
+                'sources_sha256':source_hashes([ROOT/p for p in {x[0] for x in PARTS.values()}],ROOT),
                 'artifacts':{}}
     with tempfile.TemporaryDirectory(prefix='hafele-print-build-') as temp:
         directory = Path(temp)
         for name, (source, selector) in PARTS.items():
             output = directory/name
             run_openscad([args.openscad, '-o', str(output), '-D', f'show_part="{selector}"',
-                          '-D', 'design_revision="rework"', '-D', 'cable_od=8', str(ROOT/source)])
+                          '-D', 'design_revision="rework"', '-D', 'cancel_state="as_printed"', str(ROOT/source)])
             metrics = mesh_metrics(output)
             if not (metrics['watertight'] and metrics['winding_consistent']
                     and metrics['solid_components'] == 1 and metrics['volume_mm3'] > 0):
@@ -78,9 +79,19 @@ def main():
             run_openscad([args.openscad, '--render', '--autocenter', '--viewall', '--projection=o',
                           '--imgsize=900,700', '-o', str(output), '-D', 'show_part="assembly"',
                           '-D', 'design_revision="rework"', '-D', f'show_exploded={str(exploded).lower()}',
+                          '-D', 'explode_gap=30',
                           str(ROOT/'hafele_control_box.scad')])
             manifest['artifacts'][name] = {'sha256':sha256(output)}
         args.out.mkdir(parents=True, exist_ok=True)
+        previous=args.out/'manifest.json'
+        if previous.exists():
+            old=json.loads(previous.read_text())
+            for name,record in old.get('artifacts',{}).items():
+                target=args.out/name
+                if name not in manifest['artifacts'] and target.is_file():
+                    if Path(name).name!=name or sha256(target)!=record['sha256']:
+                        raise RuntimeError(f'Preserved independently edited obsolete artifact: {name}')
+                    target.unlink()
         for name in manifest['artifacts']:
             shutil.copyfile(directory/name, args.out/name)
         (args.out/'manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')

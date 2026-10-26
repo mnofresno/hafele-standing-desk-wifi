@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import trimesh
+import numpy as np
 
 import pytest
 
@@ -16,19 +17,18 @@ VALIDATOR = ROOT / "tools" / "validate_clearance.py"
 MODEL = ROOT / "hafele_control_box.scad"
 
 
-def source_fixture(tmp_path, *, collision=False, omit_oled=False, bad_include=False,
-                   split_oled=False):
+def source_fixture(tmp_path, *, collision=False, omit_controls=False, bad_include=False,
+                   split_controls=False):
     source = tmp_path / "fixture.scad"
     text = """
 show_part="none";
 module case_body() { cube([1,1,1]); }
 module case_lid_installed() { translate([10,0,0]) cube([1,1,1]); }
-module encoder_retainer_installed() { translate([30,0,0]) cube([1,1,1]); }
-module electronics_carrier_installed() { translate([40,0,0]) cube([1,1,1]); }
+module board_clamp(board=0) { translate([30+10*board,0,0]) cube([1,1,1]); }
 """
-    if not omit_oled:
-        extra = "translate([22,0,0]) cube([1,1,1]);" if split_oled else ""
-        text += f"module oled_retainer_installed() {{ translate([{0 if collision else 20},0,0]) cube([1,1,1]); {extra} }}\n"
+    if not omit_controls:
+        extra = "translate([22,0,0]) cube([1,1,1]);" if split_controls else ""
+        text += f"module controls_bracket() {{ translate([{0 if collision else 20},0,0]) cube([1,1,1]); {extra} }}\n"
     if bad_include:
         text = "include <nonexistent-clearance-fixture.scad>;\n" + text
     source.write_text(text)
@@ -54,11 +54,11 @@ def test_default_assembly_has_five_controls_and_ten_clear_pairs(tmp_path):
                for pair in result["pairs"])
 
 
-def test_retainer_screw_heads_clear_case_and_carrier(tmp_path):
+def test_common_controls_screw_heads_clear_case_and_bracket(tmp_path):
     meshes = {}
     for name, expression in {
-        'heads':'retainer_screw_head_keepouts("oled"); retainer_screw_head_keepouts("encoder");',
-        'case':'case_body();', 'carrier':'electronics_carrier_installed();',
+        'heads':'for (p=controls_mounts()) translate([p[0],p[1],controls_head_z()-(m3_screw_head_diameter-m3_lid_clearance_diameter)/2]) cylinder(d1=m3_lid_clearance_diameter,d2=m3_screw_head_diameter,h=(m3_screw_head_diameter-m3_lid_clearance_diameter)/2,$fn=64);',
+        'case':'case_body();', 'bracket':'controls_bracket();',
     }.items():
         wrapper = tmp_path/f'{name}.scad'
         wrapper.write_text(f'include <{MODEL}>;\n{expression}\n')
@@ -68,22 +68,32 @@ def test_retainer_screw_heads_clear_case_and_carrier(tmp_path):
         assert run.returncode == 0 and 'WARNING:' not in run.stderr, run.stderr
         meshes[name] = trimesh.load_mesh(output)
         assert meshes[name].is_volume and meshes[name].volume > 0
-    for name in ('case','carrier'):
+    for name in ('case','bracket'):
         overlap = trimesh.boolean.intersection([meshes['heads'],meshes[name]],engine='manifold')
-        assert abs(overlap.volume) <= 1e-4, f'Screw heads collide with {name}: {overlap.volume}'
+        with np.errstate(divide='ignore',invalid='ignore'):
+            volume = abs(float(overlap.volume))
+        assert np.isfinite(volume) and volume <= 1e-4, f'Screw heads collide with {name}: {volume}'
 
 
-def test_encoder_terminal_slot_reaches_body_lip_not_only_outer_plate(tmp_path):
-    output = tmp_path/'encoder.stl'
-    subprocess.run(['openscad','-o',str(output),'-D','show_part="encoder_retainer"',str(MODEL)],
-                   capture_output=True,text=True,check=True)
-    mesh = trimesh.load_mesh(output)
-    assert mesh.is_volume
-    assert mesh.contains([[5.85,0,6]])[0], 'Positive control on the body-support lip is absent'
-    assert not mesh.contains([[0,5.4,z] for z in (2,6,12)]).any(), 'Terminal passage is blocked'
+def test_common_bracket_clears_both_connected_control_envelopes(tmp_path):
+    meshes = {}
+    for name, expression in {'connectors':'control_connector_envelopes(wire_allowance=true);',
+                             'bracket':'controls_bracket();'}.items():
+        wrapper = tmp_path/f'{name}.scad'
+        wrapper.write_text(f'include <{MODEL}>;\n{expression}\n')
+        output = wrapper.with_suffix('.stl')
+        run = subprocess.run(['openscad','-o',str(output),'-D','show_part="none"',str(wrapper)],
+                             capture_output=True,text=True)
+        assert run.returncode == 0 and 'WARNING:' not in run.stderr, run.stderr
+        meshes[name] = trimesh.load_mesh(output)
+        assert meshes[name].is_volume and meshes[name].volume > 0
+    overlap = trimesh.boolean.intersection([meshes['connectors'],meshes['bracket']],engine='manifold')
+    with np.errstate(divide='ignore',invalid='ignore'):
+        volume = abs(float(overlap.volume))
+    assert np.isfinite(volume) and volume <= 1e-4, f'Connector passage is blocked: {volume}'
 
 
-@pytest.mark.parametrize("defect", ["omit_oled", "bad_include"])
+@pytest.mark.parametrize("defect", ["omit_controls", "bad_include"])
 def test_missing_geometry_or_include_cannot_pass_as_clearance(tmp_path, defect):
     source = source_fixture(tmp_path, **{defect: True})
     run, report = run_validator(tmp_path, source)
@@ -99,14 +109,14 @@ def test_real_overlap_fails_and_configured_volume_tolerance_is_used(tmp_path):
     pairs = report["configurations"][0]["pairs"]
     assert len(pairs) == 10
     collision = next(pair for pair in pairs if not pair["passed"])
-    assert {collision["first"], collision["second"]} == {"case", "oled_retainer"}
+    assert {collision["first"], collision["second"]} == {"case", "controls_bracket"}
     assert collision["intersection_volume_mm3"] == pytest.approx(1)
     run, report = run_validator(tmp_path, source, "--tolerance-mm3", "1.1")
     assert run.returncode == 0 and report["passed"]
 
 
 def test_disconnected_print_part_fails_even_when_all_shells_are_watertight(tmp_path):
-    source = source_fixture(tmp_path, split_oled=True)
+    source = source_fixture(tmp_path, split_controls=True)
     run, report = run_validator(tmp_path, source)
     assert run.returncode == 1 and not report["passed"]
     error = report["configurations"][0]["error"]
