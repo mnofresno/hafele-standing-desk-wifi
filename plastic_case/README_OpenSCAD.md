@@ -67,6 +67,7 @@ python3 plastic_case/tools/validate_rework.py \
   --scad plastic_case/hafele_control_box.scad \
   --configs plastic_case/tests/rework_configurations.json \
   --out /tmp/hafele-rework-validation.json
+python3 plastic_case/tools/validate_clearance.py
 ```
 
 `export_freecad.py` exports final body tips as STL and STEP and writes an inventory. The validator compares bounds, volume, surface area, connected components, watertightness, sampled bidirectional surface distances, and a 1 mm shared-grid voxel symmetric-difference estimate. Sampled maximum distance and voxel difference are estimates; increase sample count and refine mesh tessellation for a formal tolerance certification.
@@ -77,18 +78,18 @@ FreeCAD's exact BRep metrics and a fine STL inventory are in `freecad_model_inve
 
 | Configuration | Part | BBox max delta (mm) | Volume delta (mm³) | Sampled surface max A→B / B→A (mm) | Components / watertight | 0.05 mm check |
 |---|---|---:|---:|---:|---|---|
-| Default | Case | 0.00051 | 15.00 | 0.042 / 0.035 | 1 / yes | Pass |
-| Default | Lid | 0.00000 | 0.056 | 0.0010 / 0.0010 | 1 / yes | Pass |
-| Longer, thicker, support sketch coordinates transcribed | Case | 0.00051 | 17.30 | 0.127 / 0.115 | 1 / yes | Fail |
-| Longer, thicker | Lid | 0.00000 | 0.075 | 0.0010 / 0.0010 | 1 / yes | Pass |
+| Default | Case | 0.00051 | 23.93 | 0.04374 / 0.03307 | 1 / yes | Pass |
+| Default | Lid | 0.00000 | 0.056 | 0.00099 / 0.00103 | 1 / yes | Pass |
+| Longer, thicker, support sketch coordinates transcribed | Case | 0.00051 | 26.71 | 0.020 / 0.020 | 1 / yes | Pass |
+| Longer, thicker | Lid | 0.00000 | 0.075 | 0.00101 / 0.00103 | 1 / yes | Pass |
 
-For the longer case, the validation config explicitly sets the two additional OpenSCAD support-profile parameters to the coordinates returned by the recomputed FreeCAD sketches: `support_floor_left_x=7.12701665379` and `support_inner_offset=8`. The case still has a sampled surface residual of 0.127 mm at approximately (7.127, -11, 2) mm and a 17.30 mm³ volume difference; the default case passes the sampled 0.05 mm threshold. This residual is localized at a support/floor intersection and remains an unresolved geometry difference. It is not explained by solver drift: five clean FreeCAD exports of the longer configuration all reported Sketch006/007 `Up-to-date`, 0 DoF, support coordinates 7.12701665/8.0 mm, and case volume 68,141.249454 mm³ (coordinate/volume variation below 1e-6 mm/mm³).
+The longer configuration explicitly sets `support_floor_left_x=7.12701665379` and `support_inner_offset=8` from the recomputed FreeCAD sketches. Its prior 0.127 mm residual came from the four tower profiles: Sketch003 uses instance-specific arc/chord boundaries. The OpenSCAD towers now reproduce those chords from `dia_torres_tornillos` and `ancho_pared`; the measured longer-configuration maximum is now 0.020 mm in both sample directions. These are finite tessellated surface samples and the 1 mm voxel symmetric-difference estimate is coarse; they support the stated checks but are not a mathematical proof of identity.
 
 The earlier short-boundary probe (`alto=30`, `longitud=120`, `ancho_pared=1.2`, `profundidad=62`, `angulo_del_panel=72`, `radio_curvaturas=4`) is excluded from the valid comparison matrix. FreeCAD reported Sketch006 `Invalid`, 1 DoF and Sketch007 `Invalid`, 4 DoF after recompute, retaining stale 33.5 mm support geometry above the 30 mm case. Raising `alto` to 33.5 made both sketches `Up-to-date` with 0 DoF, but that point is not included until its geometry comparison is run. The default source also reports Sketch007 invalid with 1 DoF. Do not claim general parametric equivalence. The original FreeCAD document and tracked STL exports remain unchanged.
 
 ## Parameter configurations and known gaps
 
-`tests/configurations.json` compares the default and a longer/thicker configuration whose two extra support coordinates are transcribed from the valid FreeCAD sketch solve. This demonstrates the exposed support parameters but does not make them formulas of the spreadsheet values. The longer case remains outside tolerance by 0.077 mm over the sampled maximum target; keep that configuration outside any equivalence claim until the floor/support intersection is corrected and revalidated.
+`tests/configurations.json` compares the default and a longer/thicker configuration. This tests two valid points, not full parametric equivalence. The additional support coordinates are exposed parameters rather than formulas of spreadsheet values. Short configurations that leave FreeCAD support sketches invalid are excluded. The original FreeCAD document and its tracked exports remain unchanged.
 
 ## Hardware fit-test coupons
 
@@ -97,5 +98,7 @@ Parametric coupon models for the OLED pocket, EC11-family encoder body/knob, pan
 The hardware rework sequence is tracked in `plastic_case/REWORK_PLAN.md`, and photo/firmware identification evidence is in `plastic_case/HARDWARE_EVIDENCE.md`. In `rework` mode, the model adds a candidate OLED pocket and removable retainer, an EC11-family encoder pocket/retainer, blind M3 insert towers, four M3 carrier mounts, a removable 10 mm grid carrier, configurable USB/motor-cable openings and two photo-derived relay-indicator windows (enabled by default), and an adjustable optional button cap. Rework centers the lid plate on the case top and moves its four panel holes to the case tower coordinates; baseline retains the FreeCAD lid geometry. The standalone two-piece motor-cable clamp is in `tests/motor_cable_clamp.scad`; it mounts to the carrier grid and has a separate calibration STL pair. The cap is a separate fit candidate and does not replace the metal panel button. The grid carrier is a generic mounting surface, not a dimensioned cradle for all three boards. ESP32 PCB revision, relay/perfboard outline, supply outline, solder height and connector keep-outs still need physical checks. The USB bridge is CP2102; it does not identify the controller PCB. An eight-part print candidate set (six enclosure pieces plus a calibration clamp pair) is in `plastic_case/print_candidate/`; the folder also has assembled and exploded previews. See its README before printing. It is a prototype and does not certify physical fit.
 
 `validate_rework.py` reports mesh bounds, volume and area, watertightness, winding, connected positive-volume solids, and enclosed cavity shells across the candidate configuration matrix. The blind M3 insert bores create enclosed voids that STL represents as separate inward-wound shells; these are reported separately from printable solid components. This mesh check verifies CSG validity only, not fit to unmeasured hardware.
+
+`carrier_encoder_clearance` is the radial relief around the encoder retainer footprint in the removable grid carrier. `python3 plastic_case/tools/validate_clearance.py` exports the exact CSG intersection and requires it to be empty; the default result is 0 mm³. The relief resolves the previously measured 94.42 mm³ collision while retaining the carrier grid elsewhere. This is an internal geometry check; physical clearance still depends on printed tolerances and actual hardware.
 
 The current `validate_rework.py` run reports OpenSCAD `NoError`, one connected positive-volume component, and watertight meshes for the case, OLED retainer, encoder retainer, electronics carrier and button cap configurations. These checks establish valid CSG output, not fit or electrical clearance. The standalone clamp saddle/cap also rendered at 6, 8, 10 and 12 mm cable candidates; all eight meshes were watertight, consistently wound, and one positive-volume component.

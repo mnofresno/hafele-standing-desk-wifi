@@ -118,6 +118,7 @@ carrier_grid_pitch = 10;
 carrier_grid_hole_diameter = 3.2;
 carrier_mount_edge_x = 7;
 carrier_mount_end_y = 18;
+carrier_encoder_clearance = 0.35; // Radial clearance around the installed encoder retainer.
 
 /* [Lid] */
 espesor_tapa = 1.5; // Preserved spreadsheet parameter; no final feature references it.
@@ -451,7 +452,22 @@ module tower_land_and_ribs(x,y) {
     near = y > -longitud/2;
 
     union() {
-        cylinder(d=dia_torres_tornillos,h=h,$fn=48);
+        // Sketch003 uses an arc plus a chord where each tower meets the
+        // side/end wall. The chord orientation differs by tower instance.
+        radius = dia_torres_tornillos/2;
+        chord = sqrt(max(0,radius*radius-(t/2)*(t/2)));
+        intersection() {
+            cylinder(d=dia_torres_tornillos,h=h,$fn=96);
+            if (near && x < panel_inset()/2)
+                translate([-chord,-radius-1,-0.1])
+                    cube([radius+1+chord,2*radius+2,h+0.2]); // near-left: X-
+            else if (near)
+                translate([-radius-1,-radius-1,-0.1])
+                    cube([2*radius+2,chord+radius+1,h+0.2]); // near-right: Y+
+            else
+                translate([-radius-1,-chord,-0.1])
+                    cube([2*radius+2,radius+1+chord,h+0.2]); // far pair: Y-
+        }
 
         // Sketch003 extends each cylindrical land to its nearest end wall
         // with a web as wide as the shell wall. The side walls intersect the
@@ -556,6 +572,17 @@ module electronics_carrier() {
                 carrier_grid_pitch:-longitud/2+carrier_length/2-carrier_grid_pitch])
             translate([x,y,plate_z-0.1])
                 cylinder(d=carrier_grid_hole_diameter,h=carrier_thickness+0.2,$fn=32);
+        // Relieve only the portion of the carrier crossed by the encoder retainer.
+        // The projected intersection preserves the remainder of the grid plate.
+        translate([0,0,plate_z-0.1])
+            linear_extrude(height=carrier_thickness+0.2)
+                offset(delta=carrier_encoder_clearance)
+                    projection(cut=false)
+                        intersection() {
+                            encoder_retainer_installed();
+                            translate([-1000,-1000,plate_z-0.1])
+                                cube([2000,2000,carrier_thickness+0.2]);
+                        }
     }
 }
 
@@ -679,4 +706,5 @@ else if (show_part == "oled_retainer") oled_retainer_frame();
 else if (show_part == "encoder_retainer") encoder_retainer_frame();
 else if (show_part == "electronics_carrier") electronics_carrier();
 else if (show_part == "button_cap") button_cap();
+else if (show_part == "none") { }
 else assembly();

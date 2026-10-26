@@ -90,3 +90,13 @@ def test_assembled_preview_renders_with_registered_rework_lid(tmp_path):
     result=subprocess.run(command,capture_output=True,text=True,check=True)
     assert 'Status:     NoError' in result.stdout+result.stderr
     assert output.is_file() and output.stat().st_size>0
+
+def test_encoder_retainer_clears_electronics_carrier(tmp_path):
+    openscad=shutil.which('openscad')
+    if not openscad:
+        pytest.skip('OpenSCAD CLI is required for the CSG intersection check')
+    diagnostic=ROOT/'tests'/'encoder_carrier_intersection.scad'
+    output=tmp_path/'intersection.stl'
+    result=subprocess.run([openscad,'-o',str(output),'-D','show_part="none"',str(diagnostic)],
+                          capture_output=True,text=True)
+    assert 'Current top level object is empty.' in result.stdout+result.stderr

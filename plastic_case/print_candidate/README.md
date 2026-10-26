@@ -12,7 +12,9 @@ Open these eight STL files as separate objects in Bambu Studio or Cura:
 - `motor_cable_cap_8mm_calibration.stl`
 
 `assembly_preview.png` shows the assembled rework lid; `assembly_exploded_preview.png` shows the interior and grid carrier. They use the default OpenSCAD rework parameters. The case includes the USB opening at the near end, the motor cable opening at the far end, and adjustable relay indicator windows. The removable
-electronics carrier has a 10 mm mounting grid and four M3 insert mounts. The
+electronics carrier has a 10 mm mounting grid, four M3 insert mounts, and a
+0.35 mm radial relief around the encoder-retainer footprint to eliminate its
+measured CSG overlap. The
 OLED and encoder use separate retainers. Original tracked FreeCAD/STL files are
 untouched.
 
@@ -32,7 +34,8 @@ openscad -o plastic_case/print_candidate/motor_cable_cap_8mm_calibration.stl -D 
 All eight meshes pass OpenSCAD's manifold render. The cable clamp is a separate 8 mm calibration candidate: measure the actual corrugated boot and tune its compression before installation. This is a coupon-first prototype
 set, not a fit-approved enclosure: print the OLED/encoder/M3/button/USB/cable
 coupons and place the actual boards on the carrier before committing to the full
-case. The rework dimensions remain candidate fit values.
+case. The rework dimensions remain candidate fit values. Rebuild the enclosure
+after changing `carrier_encoder_clearance` so the relief follows the retainer.
 The USB and cable opening ends and coordinates are configurable because the
 photos do not establish their exact locations. The carrier grid avoids bonding
 boards to the shell, but the relay/perfboard and 5 V supply still need their
