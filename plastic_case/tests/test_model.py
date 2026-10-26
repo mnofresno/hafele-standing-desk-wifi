@@ -17,8 +17,19 @@ def test_model_has_case_lid_and_assembly_selector():
         assert f'module {module}(' in s
     assert 'show_part' in s and 'linear_extrude' in s
     assert 'design_revision = "rework"' in s
+    assert 'translate([case_top_center_x(),-longitud/2,' in s
     assert 'module rework_panel_pockets(' in s
     assert 'module external_access_cutouts(' in s
+    assert 'module electronics_carrier(' in s
+    assert 'module button_cap(' in s
+    assert 'module external_access_cutouts(' in s
+    assert 'enable_relay_indicator_windows' in s
+
+def test_hardware_evidence_and_cable_clamp_are_documented():
+    assert (ROOT/'HARDWARE_EVIDENCE.md').is_file()
+    clamp=(ROOT/'tests'/'motor_cable_clamp.scad').read_text()
+    assert 'module saddle(' in clamp and 'module cap(' in clamp
+    assert 'mount_grid_pitch' in clamp and 'cable_od' in clamp
 
 def test_fit_coupons_cover_reported_hardware_interfaces():
     s=(ROOT/'tests'/'fit_test_coupons.scad').read_text()
@@ -33,12 +44,13 @@ def test_fit_coupons_cover_reported_hardware_interfaces():
 def test_rework_plan_marks_unverified_board_and_component_dimensions():
     s=(ROOT/'REWORK_PLAN.md').read_text()
     assert 'CP2102' in s
-    assert 'not the ESP32 PCB' in s
+    assert 'does not identify the PCB' in s
     assert 'still unknown' in s.lower() or 'unknown' in s.lower()
     assert 'removable internal electronics carrier' in s
 
 @pytest.mark.parametrize('definitions', [
     ['-D', 'show_part="case"'],
+    ['-D', 'show_part="lid"'],
     ['-D', 'show_part="case"', '-D', 'enable_usb_access=true',
      '-D', 'enable_motor_cable_exit=true', '-D', 'motor_cable_end="far"',
      '-D', 'usb_access_end="near"'],
@@ -66,3 +78,15 @@ def test_case_revision_and_hardware_retainer_meshes_are_manifold(tmp_path,defini
     # Blind M3 insert bores are enclosed voids and appear as inward-wound STL
     # shells. Count positive-volume solids separately from those cavity shells.
     assert sum(part.volume>0 for part in shells)==1
+
+def test_assembled_preview_renders_with_registered_rework_lid(tmp_path):
+    openscad=shutil.which('openscad')
+    if not openscad:
+        pytest.skip('OpenSCAD CLI is required for the assembly preview')
+    output=tmp_path/'assembly.png'
+    command=[openscad,'--render','--autocenter','--viewall','--projection=o',
+             '--imgsize=640,640','-o',str(output),'-D','show_part="assembly"',
+             str(ROOT/'hafele_control_box.scad')]
+    result=subprocess.run(command,capture_output=True,text=True,check=True)
+    assert 'Status:     NoError' in result.stdout+result.stderr
+    assert output.is_file() and output.stat().st_size>0

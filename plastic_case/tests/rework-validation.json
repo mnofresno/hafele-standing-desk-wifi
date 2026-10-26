@@ -18,8 +18,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 44401.87684926294,
-      "area_mm2": 54953.64029070944,
+      "volume_mm3": 44974.943865284644,
+      "area_mm2": 57025.1236906237,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -51,8 +51,8 @@
           35.0
         ]
       ],
-      "volume_mm3": 44046.40792383847,
-      "area_mm2": 54601.342328080806,
+      "volume_mm3": 44974.943865284644,
+      "area_mm2": 57025.1236906237,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -84,11 +84,11 @@
           35.0
         ]
       ],
-      "volume_mm3": 44630.93722446726,
-      "area_mm2": 54769.84426980477,
-      "shells": 2,
+      "volume_mm3": 45240.81807765169,
+      "area_mm2": 56828.46156170449,
+      "shells": 1,
       "solid_components": 1,
-      "enclosed_cavity_shells": 1,
+      "enclosed_cavity_shells": 0,
       "watertight": true,
       "winding_consistent": true
     },
@@ -104,17 +104,17 @@
       "bounds_mm": [
         [
           -26.7,
-          -19.95,
+          -16.75,
           0.0
         ],
         [
           26.7,
-          19.95,
-          9.1
+          16.75,
+          8.8
         ]
       ],
-      "volume_mm3": 2228.1954240775362,
-      "area_mm2": 3264.46107027232,
+      "volume_mm3": 1692.578167405467,
+      "area_mm2": 2533.86791488348,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,
@@ -144,6 +144,93 @@
       ],
       "volume_mm3": 1169.4015651003904,
       "area_mm2": 1828.8528655879245,
+      "shells": 1,
+      "solid_components": 1,
+      "enclosed_cavity_shells": 0,
+      "watertight": true,
+      "winding_consistent": true
+    },
+    "openscad_status": "NoError"
+  },
+  {
+    "configuration": "electronics_carrier_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "electronics_carrier"
+    },
+    "metrics": {
+      "bounds_mm": [
+        [
+          2.810889132455351,
+          -134.0,
+          8.5
+        ],
+        [
+          57.81088913245535,
+          -16.0,
+          10.5
+        ]
+      ],
+      "volume_mm3": 12268.30165927849,
+      "area_mm2": 13848.648398381123,
+      "shells": 1,
+      "solid_components": 1,
+      "enclosed_cavity_shells": 0,
+      "watertight": true,
+      "winding_consistent": true
+    },
+    "openscad_status": "NoError"
+  },
+  {
+    "configuration": "button_cap_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "button_cap"
+    },
+    "metrics": {
+      "bounds_mm": [
+        [
+          -5.0,
+          -5.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0,
+          4.0
+        ]
+      ],
+      "volume_mm3": 224.95760249814896,
+      "area_mm2": 336.31192028977136,
+      "shells": 1,
+      "solid_components": 1,
+      "enclosed_cavity_shells": 0,
+      "watertight": true,
+      "winding_consistent": true
+    },
+    "openscad_status": "NoError"
+  },
+  {
+    "configuration": "rework_lid_print_part",
+    "parameters": {
+      "design_revision": "rework",
+      "show_part": "lid"
+    },
+    "metrics": {
+      "bounds_mm": [
+        [
+          -35.0,
+          -91.0,
+          0.0
+        ],
+        [
+          35.0,
+          91.0,
+          3.0
+        ]
+      ],
+      "volume_mm3": 31155.40916869792,
+      "area_mm2": 23473.31996445375,
       "shells": 1,
       "solid_components": 1,
       "enclosed_cavity_shells": 0,

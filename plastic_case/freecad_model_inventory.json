@@ -1,5 +1,5 @@
 {
-  "source": "/tmp/hafele-standing-desk-wifi/plastic_case/hafele_control_box_with_lid.FCStd",
+  "source": "/Users/mariano.fresno/hafele-standing-desk-wifi-openscad/plastic_case/hafele_control_box_with_lid.FCStd",
   "freecad_version": [
     "1",
     "0",
@@ -56,16 +56,23 @@
         ],
         "rotation": "Rotation (0.7071067811865471, 0.0, 0.0, 0.7071067811865479)"
       },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
+      },
       "geometry": [
         {
           "type": "LineSegment",
           "StartPoint": [
-            -13.214856674984095,
+            -13.214856674984096,
             35.0,
             0.0
           ],
           "EndPoint": [
-            56.78514332501591,
+            56.7851433250159,
             35.0,
             0.0
           ],
@@ -364,7 +371,7 @@
       "expressions": [],
       "shape": {
         "solids": 1,
-        "volume_mm3": 42071.602466511846,
+        "volume_mm3": 42071.602466511875,
         "area_mm2": 56628.99839029548,
         "bbox_mm": [
           -13.214856674984098,
@@ -956,6 +963,13 @@
           16.540841265026295
         ],
         "rotation": "Rotation (0.43045933457687957, 0.43045933457687946, 0.5609855267969309, 0.5609855267969309)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
       },
       "geometry": [
         {
@@ -1576,7 +1590,7 @@
       "expressions": [],
       "shape": {
         "solids": 1,
-        "volume_mm3": 42071.602466511846,
+        "volume_mm3": 42071.602466511875,
         "area_mm2": 56628.99839029548,
         "bbox_mm": [
           -13.214856674984098,
@@ -1844,6 +1858,13 @@
           0.0
         ],
         "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
       },
       "geometry": [
         {
@@ -4000,6 +4021,14 @@
         ],
         "rotation": "Rotation (0.7071067811865475, 0.0, 0.0, 0.7071067811865476)"
       },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 1,
+        "state": [
+          "Touched",
+          "Invalid"
+        ]
+      },
       "geometry": [
         {
           "type": "LineSegment",
@@ -4562,6 +4591,14 @@
           1.9984014443252818e-15
         ],
         "rotation": "Rotation (0.7071067811865475, 0.0, 0.0, 0.7071067811865476)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 1,
+        "state": [
+          "Touched",
+          "Invalid"
+        ]
       },
       "geometry": [
         {
@@ -5357,7 +5394,7 @@
       ],
       "shape": {
         "solids": 1,
-        "volume_mm3": 42071.602466511846,
+        "volume_mm3": 42071.602466511875,
         "area_mm2": 56628.99839029548,
         "bbox_mm": [
           -13.214856674984098,
@@ -5405,6 +5442,13 @@
           0.0
         ],
         "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
       },
       "geometry": [
         {
@@ -5590,6 +5634,13 @@
           1.5
         ],
         "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
       },
       "geometry": [
         {
@@ -5924,6 +5975,13 @@
           0.0
         ],
         "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
       },
       "geometry": [
         {
@@ -6380,6 +6438,13 @@
           1.5
         ],
         "rotation": "Rotation (0.0, 0.0, 0.0, 1.0)"
+      },
+      "solver": {
+        "fully_constrained": true,
+        "degrees_of_freedom": 0,
+        "state": [
+          "Up-to-date"
+        ]
       },
       "geometry": [
         {
@@ -7350,10 +7415,10 @@
       "stl": "case.stl",
       "step": "case.step",
       "solids": 1,
-      "volume_mm3": 42071.602466511846,
+      "volume_mm3": 42071.602466511875,
       "area_mm2": 56628.99839029548,
       "bbox_mm": [
-        -13.214856674984095,
+        -13.214856674984096,
         -150.0,
         0.0,
         64.64673755473291,
@@ -7388,12 +7453,5 @@
         "Up-to-date"
       ]
     }
-  ],
-  "source_decision": {
-    "selected": "target repository plastic_case/hafele_control_box_with_lid.FCStd",
-    "comparison": "The target and workspace FreeCAD documents both contain 45 objects and 9 sketches; corresponding bodies, feature order, spreadsheet aliases/values, volumes, surface areas, and bounding boxes match after recompute.",
-    "target_cad_added": "7fd1ede32fd79ccc4e8f1e2d872f4374dcdf2647 (2024-07-30); adds the FCStd and matching STL/render files.",
-    "workspace_cad_history": "Latest CAD-specific source commit: 91452eb (2022-07-03), “Move lid holes to align them into case needs”.",
-    "conclusion": "The target copy is the most recently incorporated complete design; no newer geometry difference was observed in the workspace source."
-  }
+  ]
 }
