@@ -13,6 +13,7 @@ void DebugInfo::print() {
     if (_enabled) {
         _display_handler->anti_flickering([&]() {
             Adafruit_SSD1306 *_display = _display_handler->display();
+            _display->setTextColor(SSD1306_WHITE, SSD1306_BLACK);
             _display->setCursor(50,45);
             _display->setTextSize(1);
             _display->println(_buttons_handler->serialize_buttons_debug());

@@ -22,6 +22,8 @@ class ButtonsHandler {
         bool _state_has_changed_recently;
         unsigned long _back_button_press_start_time;
         bool _back_button_is_pressed;
+        unsigned long _enter_button_press_start_time;
+        bool _enter_button_is_pressed;
         int expected_level_for(bool inverted_button);
         bool do_read_button(uint8_t pin_number, bool invert);
         bool do_read_enter_button();
@@ -37,6 +39,9 @@ class ButtonsHandler {
         bool readEnterButton();
         bool readBackButton();
         bool readBackButtonLongPress();
+        bool readEnterButtonLongPress(unsigned long duration_ms = 5000);
+        unsigned long getEnterButtonPressDuration();
+        bool isEnterButtonPressed();
         void process(bool has_changed_state);
         String serialize_buttons_debug();
 };

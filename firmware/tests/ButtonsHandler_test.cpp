@@ -56,11 +56,25 @@ void test_button_debounce_storage() {
     assert(buttons.readBackButton());
 }
 
+void test_enter_long_press_detection() {
+    ButtonsHandler buttons(34, 35);
+    mock_digital_read_value = HIGH;
+
+    assert(!buttons.readEnterButtonLongPress(5000));
+    mock_millis = 4900;
+    assert(!buttons.readEnterButtonLongPress(5000));
+    mock_millis = 5000;
+    assert(buttons.readEnterButtonLongPress(5000));
+    assert(!buttons.readEnterButtonLongPress(5000));
+}
+
 int main() {
     test_long_press_detection();
     mock_millis = 0;
     test_long_press_interrupted();
     mock_millis = 0;
     test_button_debounce_storage();
+    mock_millis = 0;
+    test_enter_long_press_detection();
     std::cout << "ButtonsHandler tests passed\n";
 }

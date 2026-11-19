@@ -54,6 +54,7 @@ class MenuInstance {
         void updatePosition(int64_t dialPosition);
         void show();
         int get_selection();
+        int get_current_selection();
         void setTitle(String title, String subtitle = "");
         void setItems(MenuItem *menu_items);
         void setFontSize(int size);

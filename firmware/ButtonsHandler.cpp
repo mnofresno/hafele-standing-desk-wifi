@@ -18,6 +18,8 @@ ButtonsHandler::ButtonsHandler(
     _state_has_changed_recently = false;
     _back_button_is_pressed = false;
     _back_button_press_start_time = 0;
+    _enter_button_is_pressed = false;
+    _enter_button_press_start_time = 0;
     pinMode(_back_button_pin, INPUT);
     pinMode(_enter_button_pin, INPUT);
 }
@@ -51,6 +53,36 @@ bool ButtonsHandler::readBackButtonLongPress() {
     }
 
     return false;
+}
+
+bool ButtonsHandler::readEnterButtonLongPress(unsigned long duration_ms) {
+    bool button_reading = do_read_enter_button();
+    unsigned long current_time = millis();
+
+    if (button_reading && !_enter_button_is_pressed) {
+        _enter_button_is_pressed = true;
+        _enter_button_press_start_time = current_time;
+    } else if (!button_reading && _enter_button_is_pressed) {
+        _enter_button_is_pressed = false;
+    }
+
+    if (_enter_button_is_pressed && (current_time - _enter_button_press_start_time >= duration_ms)) {
+        _enter_button_is_pressed = false;
+        return true;
+    }
+
+    return false;
+}
+
+unsigned long ButtonsHandler::getEnterButtonPressDuration() {
+    if (!_enter_button_is_pressed) {
+        return 0;
+    }
+    return millis() - _enter_button_press_start_time;
+}
+
+bool ButtonsHandler::isEnterButtonPressed() {
+    return do_read_enter_button();
 }
 
 bool ButtonsHandler::debounce_state_change(int button_index, bool button_reading) {

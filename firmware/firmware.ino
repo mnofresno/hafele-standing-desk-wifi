@@ -21,7 +21,7 @@
 #include <esp_wifi.h>
 #define __ASSERT_USE_STDERR
 
-#define VERSION_STRING "v1.2.7"
+#define VERSION_STRING "v1.3.0"
 
 #define DEFAULT_HOSTNAME "hafele-standing-desk"
 #define DEFAULT_AP_NAME "WIFI_STANDING_DESK"
@@ -186,7 +186,6 @@ unsigned long last_display_activity_millis = 0;
 int64_t last_activity_encoder_position = 0;
 int last_activity_enter_level = HIGH;
 int last_activity_back_level = HIGH;
-bool display_is_off = false;
 
 void on_corrupted_eeprom() {
     display_handler.print_full_screen_with_title("Invalid Cfg.", "Restore default...");
@@ -263,7 +262,7 @@ void on_params_save() {
 
 void on_pre_ota_update() {
     disable_wdt();
-    display.clearDisplay();
+    display_handler.turn_on();
     display_handler.print_full_screen_with_title("FW UPDATE", "Please wait...");
 }
 
@@ -300,6 +299,40 @@ void toggle_lock() {
 
 void config_api_endpoints() {
     wifiManager.server->on("/status", [&]() {
+        wifiManager.server->send(200, "application/json", generate_json_status());
+    });
+
+    wifiManager.server->on("/reboot", [&]() {
+        motor_driver.stop();
+        wifiManager.server->send(200, "application/json", "{\"status\":\"rebooting\"}");
+        delay(300);
+        ESP.restart();
+    });
+
+    wifiManager.server->on("/display_reinit", [&]() {
+        display_handler.reinitialize();
+        wifiManager.server->send(200, "application/json", "{\"status\":\"ok\"}");
+    });
+
+    wifiManager.server->on("/display_on", [&]() {
+        calibration.display_timeout_seconds = 0;
+        store_calibration();
+        last_display_activity_millis = millis();
+        display_handler.turn_on();
+        wifiManager.server->send(200, "application/json", generate_json_status());
+    });
+
+    wifiManager.server->on("/display_timeout", [&]() {
+        if (wifiManager.server->hasArg("seconds")) {
+            calibration.display_timeout_seconds = constrain(
+                wifiManager.server->arg("seconds").toInt(),
+                DISPLAY_TIMEOUT_MIN_SECONDS,
+                DISPLAY_TIMEOUT_MAX_SECONDS
+            );
+            store_calibration();
+            last_display_activity_millis = millis();
+            display_handler.turn_on();
+        }
         wifiManager.server->send(200, "application/json", generate_json_status());
     });
 
@@ -428,12 +461,50 @@ String this_parameter_is_selected(int current_parameter, int selected_parameter)
 int states_transformation() {
     switch (current_state) {
         case STATE_MENU: {
+            static unsigned long enter_press_start_time = 0;
+            static bool enter_was_pressed = false;
+            static int pending_selection = 0;
+            static bool action_triggered = false;
+
             main_menu_instance.show();
-            int next = menu_item_to_state(
-                main_menu_instance.get_selection()
-            );
-            if (next != STATE_MENU) {
-                return next;
+
+            bool enter_pressed = buttons_handler.isEnterButtonPressed();
+
+            if (enter_pressed) {
+                if (!enter_was_pressed) {
+                    enter_was_pressed = true;
+                    enter_press_start_time = millis();
+                    pending_selection = main_menu_instance.get_current_selection();
+                    action_triggered = false;
+                } else if (!action_triggered) {
+                    unsigned long duration = millis() - enter_press_start_time;
+                    if (duration >= 5000) {
+                        action_triggered = true;
+                        motor_driver.stop();
+                        display_handler.print_full_screen_with_title("REBOOTING", "Please wait...");
+                        delay(500);
+                        ESP.restart();
+                    } else if (duration >= 3000) {
+                        display_handler.print_full_screen_with_title("RESET DISPLAY", "Hold 5s: Reboot\nRelease: Fix LCD");
+                    }
+                }
+            } else {
+                if (enter_was_pressed) {
+                    unsigned long duration = millis() - enter_press_start_time;
+                    enter_was_pressed = false;
+
+                    if (!action_triggered) {
+                        if (duration >= 3000 && duration < 5000) {
+                            display_handler.reinitialize();
+                            main_menu_instance.show();
+                        } else if (duration >= 50 && pending_selection != 0) {
+                            int next = menu_item_to_state(pending_selection);
+                            if (next != STATE_MENU) {
+                                return next;
+                            }
+                        }
+                    }
+                }
             }
         }
         break;
@@ -672,20 +743,14 @@ void update_display_power() {
 
     if (activity) {
         last_display_activity_millis = millis();
-        if (display_is_off) {
-            display.ssd1306_command(SSD1306_CHARGEPUMP);
-            display.ssd1306_command(0x14);
-            display.dim(false);
-            display.ssd1306_command(SSD1306_DISPLAYON);
-            display.display();
-            display_is_off = false;
+        if (display_handler.is_off()) {
+            display_handler.turn_on();
         }
-    } else if (!display_is_off
+    } else if (!display_handler.is_off()
         && calibration.display_timeout_seconds > 0
         && (millis() - last_display_activity_millis
             >= calibration.display_timeout_seconds * 1000UL)) {
-        display.ssd1306_command(SSD1306_DISPLAYOFF);
-        display_is_off = true;
+        display_handler.turn_off();
     }
 }
 

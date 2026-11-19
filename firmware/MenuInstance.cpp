@@ -64,6 +64,7 @@ void MenuInstance::assert_extra_option() {
 }
 
 void MenuInstance::show_menu_header() {
+    set_normal_color();
     _display->setTextSize(_font_size);
     _display->setCursor(0,0);             // Start at top-left corner
     _display_handler->println_with_pad(_title, padding(_font_size));
@@ -76,6 +77,10 @@ void MenuInstance::show_menu_header() {
 }
 
 void MenuInstance::do_show_menu_items() {
+    if (_display_handler->is_off()) {
+        return;
+    }
+    _display->clearDisplay();
     show_menu_header();
     for(int x = extra_option; x < _total_menu_size && x <= (totalDisplayableItems() - 1 + extra_option); x++) {
         draw_menu_item(_menu_items[x], is_item_selected(x));
@@ -113,14 +118,18 @@ void MenuInstance::set_normal_color() {
     _display->setTextColor(SSD1306_WHITE, SSD1306_BLACK);
 }
 
+int MenuInstance::get_current_selection() {
+    int array_index = (int)selected_option - 1;
+    if (array_index < 0 || array_index >= _total_menu_size) {
+        return 0;
+    }
+    assert_menu_index(array_index);
+    return _menu_items[array_index].index;
+}
+
 int MenuInstance::get_selection() {
     if (_buttons_handler->readEnterButton()) {
-        int array_index = (int)selected_option - 1;
-        if (array_index < 0) {
-            return 0;
-        }
-        assert_menu_index(array_index);
-        return _menu_items[array_index].index;
+        return get_current_selection();
     }
     return 0;
 }

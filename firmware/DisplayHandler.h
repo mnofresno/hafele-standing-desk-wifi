@@ -5,6 +5,9 @@
 
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
+#define I2C_SDA_PIN 21
+#define I2C_SCL_PIN 22
+
 #define FW_TEXT_SIZE_SMALL 1
 #define FW_TEXT_SIZE_LARGE 2
 #define DEFAULT_TEXT_SIZE 2
@@ -13,6 +16,7 @@
 class DisplayHandler {
     private:
         Adafruit_SSD1306 *_display;
+        bool _is_off = false;
         void initialize();
         String pad_string(String input, String cPadWith, const unsigned char cMaxLen);
     public:
@@ -24,6 +28,12 @@ class DisplayHandler {
         void print_with_pad(String input, int length = 20);
         void print_full_screen_with_title(String title, String body);
         void anti_flickering(std::function<void()> callback, int millis_between_calls = 180);
+        void turn_off();
+        void turn_on();
+        bool is_off() const;
+        void reinitialize();
+        void recover_i2c_bus();
 };
 
 #endif
+
